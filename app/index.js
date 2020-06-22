@@ -38,12 +38,12 @@ app.use(bodyParser.json())
 app.get('/', (req, res) => res.render('front'))
 
 app.get('/new/:cat', (req, res) => {
-    
+
     let myData = {
-        title:sentencifyArxivCategory(req.params.cat),
-        fetchURL:'/api'+req.url
-    }    
-    res.render('new',{myData})
+        title: sentencifyArxivCategory(req.params.cat),
+        fetchURL: '/api' + req.url
+    }
+    res.render('new', { myData })
 })
 
 app.get('/api/new/:cat', (req, res) => {
@@ -73,8 +73,8 @@ function sentencifyArxivCategory(cat) {
             return 'Instrumentation and Methods for Astrophysics'
         case 'astro-ph.SR':
             return 'Solar and Stellar Astrophysics'
-         default:
-         		return 'Not valid'
+        default:
+            return 'Not valid'
     }
 }
 
