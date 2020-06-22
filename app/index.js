@@ -40,7 +40,7 @@ app.get('/test/:id', (req, res) => {
 })
 
 
-app.get('/', (req, res) => res.send('Main Page'))
+app.get('/', (req, res) => res.render('front'))
 
 app.get('/new/:cat', (req, res) => {
     
