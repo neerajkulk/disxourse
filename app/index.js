@@ -83,7 +83,8 @@ function sentencifyArxivCategory(cat) {
 function parseEntry(entry) {
     return {
         title: entry.title[0].replace(/(\r\n|\n|\r)/gm, " "),
-        url: entry.id[0].slice(0, -2), // ignore arxiv versions
+        url: entry.id[0].slice(0, -2), // ignore arxiv versions,
+        pdfUrl: entry.link[1]['$'].href.slice(0, -2), // ignore arxiv versions,
         authors: entry.author.map(name => name.name[0]),
         abstract: entry.summary[0].replace(/(\r\n|\n|\r)/gm, " "),
         updated: entry.updated[0],
@@ -94,6 +95,7 @@ function parseEntry(entry) {
 
 function saveEntry(entry) {
     const paper = new Paper(parseEntry(entry))
+    console.log(paper)
     Paper.countDocuments({ url: paper.url }, function (err, count) {
         if (count === 0) {
             paper.save((err, paper) => {
@@ -124,6 +126,6 @@ function updateDB(queryString) {
     })
 }
 
-let query = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.SR&start=0&max_results=100&sortBy=submittedDate&sortOrder=descending"
+let query = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.SR&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending"
 
-//updateDB(query)
+updateDB(query)
