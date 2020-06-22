@@ -37,6 +37,7 @@ app.use(bodyParser.json())
 
 app.get('/', (req, res) => res.render('front'))
 
+// New feed for category
 app.get('/new/:cat', (req, res) => {
 
     let myData = {
@@ -46,6 +47,16 @@ app.get('/new/:cat', (req, res) => {
     res.render('new', { myData })
 })
 
+
+// Page for single paper
+app.get('/paper/:arxivid', (req, res) => {
+    let query = { pdfUrl: `http://arxiv.org/pdf/${req.params.arxivid}` }
+    Paper.findOne(query, (err, paper) => {
+        res.render('single',{paper});
+    })
+});
+
+
 app.get('/api/new/:cat', (req, res) => {
     Paper.find({ category: req.params.cat }).sort('-published').limit(10).exec(function (err, newPapers) {
         let results = newPapers
@@ -54,6 +65,7 @@ app.get('/api/new/:cat', (req, res) => {
         } else res.json(newPapers)
     });
 })
+
 
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
@@ -95,7 +107,6 @@ function parseEntry(entry) {
 
 function saveEntry(entry) {
     const paper = new Paper(parseEntry(entry))
-    console.log(paper)
     Paper.countDocuments({ url: paper.url }, function (err, count) {
         if (count === 0) {
             paper.save((err, paper) => {
@@ -126,6 +137,6 @@ function updateDB(queryString) {
     })
 }
 
-let query = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.SR&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending"
+let query = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.CO&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending"
 
-updateDB(query)
+//updateDB(query)

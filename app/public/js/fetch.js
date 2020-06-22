@@ -40,10 +40,12 @@ document.addEventListener("DOMContentLoaded", () => {
         return authorString
     }
 
+
     function renderPaper(paperObject) {
         let titleElem = document.createElement("h3");
+        let arxivID = paperObject.pdfUrl.split('/').slice(-1).pop()
         titleElem.innerHTML = `
-            <a href=${paperObject.url}>            
+            <a href=/paper/${arxivID}>            
             <h3>${paperObject.title}</h3>
             </a>`
 

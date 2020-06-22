@@ -1,3 +1,6 @@
+Overarching goal:
+Incentivize people to upvote/downvote and leave comments. Create a community
+
 Next Steps:
 [] Put project on github
 [] Add custom PDF viewer (Should never have to leave my site)
