@@ -35,11 +35,6 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 
-app.get('/test/:id', (req, res) => {
-    // console.log('test: ' + req.url)
-})
-
-
 app.get('/', (req, res) => res.render('front'))
 
 app.get('/new/:cat', (req, res) => {
@@ -47,9 +42,7 @@ app.get('/new/:cat', (req, res) => {
     let myData = {
         title:sentencifyArxivCategory(req.params.cat),
         fetchURL:'/api'+req.url
-    }
-    
-    console.log(myData.title)
+    }    
     res.render('new',{myData})
 })
 
