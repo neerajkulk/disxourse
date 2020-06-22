@@ -50,7 +50,7 @@ app.get('/new/:cat', (req, res) => {
     }
     
     console.log(myData.title)
-    res.render('index',{myData})
+    res.render('new',{myData})
 })
 
 app.get('/api/new/:cat', (req, res) => {
