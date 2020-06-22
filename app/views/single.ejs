@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include('partials/head') %>
+</head>
+
+
+<body>
+    <%- include('partials/navbar') %>
+
+    <div class="container">
+        <h1 class="container text-center mt-5 mb-5 "><%= paper.title %> </h1>
+        <!-- TODO: Load PDF even if  entry doesn't exist in DB. -->
+        <iframe src="<%=paper.pdfUrl%>" width="100%" height="750px" frameBorder="0"> Browser Not compatible </iframe>
+        <hr>
+        <h4>Comments</h4>
+        <p>Great paper</p>
+        <p>Insightful work</p>
+        <p>Have you considered XXX</p>
+        <p style="margin-left: 50px;"> Yes I have</p>
+        <p style="margin-left: 100px;"> Amazing, we have a grad studnent working on YYY. Lets collaborate</p>
+        <p style="margin-left: 150px;"> Perfect, add me on github</p>
+
+    </div>
+
+    <%- include('partials/bottomScripts') %>
+
+</body>
+
+</html>
