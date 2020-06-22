@@ -54,6 +54,7 @@ app.get('/paper/:arxivid', (req, res) => {
     Paper.findOne(query, (err, paper) => {
         res.render('single',{paper});
     })
+    // TODO: if paper does not exists, add it to database.
 });
 
 
