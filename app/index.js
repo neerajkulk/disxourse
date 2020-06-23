@@ -50,11 +50,16 @@ app.get('/new/:cat', (req, res) => {
 
 // Page for single paper
 app.get('/paper/:arxivid', (req, res) => {
-    let query = { pdfUrl: `http://arxiv.org/pdf/${req.params.arxivid}` }
+    let query = { url: `http://arxiv.org/abs/${req.params.arxivid}` }
     Paper.findOne(query, (err, paper) => {
-        res.render('single',{paper});
+        if (paper) {
+            console.log('paper exists')
+            res.render('single', { paper })
+        } else {
+            addPaperById(req.params.arxivid)
+            res.redirect('back');
+        }
     })
-    // TODO: if paper does not exists, add it to database.
 });
 
 
@@ -70,6 +75,8 @@ app.get('/api/new/:cat', (req, res) => {
 
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+
+
 
 
 function sentencifyArxivCategory(cat) {
@@ -97,12 +104,12 @@ function parseEntry(entry) {
     return {
         title: entry.title[0].replace(/(\r\n|\n|\r)/gm, " "),
         url: entry.id[0].slice(0, -2), // ignore arxiv versions,
-        pdfUrl: entry.link[1]['$'].href.slice(0, -2), // ignore arxiv versions,
+        pdfUrl: entry.link.slice(-1).pop()['$'].href.slice(0, -2), // ignore arxiv versions,
         authors: entry.author.map(name => name.name[0]),
         abstract: entry.summary[0].replace(/(\r\n|\n|\r)/gm, " "),
         updated: entry.updated[0],
         published: entry.published[0],
-        category: entry.category.map(cat => cat['$'].term),
+        category: entry.category.map(cat => cat['$'].term)
     }
 }
 
@@ -112,7 +119,10 @@ function saveEntry(entry) {
         if (count === 0) {
             paper.save((err, paper) => {
                 if (err) return console.error(err);
+                console.log(`added ${paper.url} to DB`)
             })
+        } else {
+
         }
     });
 }
@@ -128,6 +138,7 @@ function updateDB(queryString) {
         })
         resp.on('end', () => {
             parseString(data, function (err, papersJSON) {
+                //console.log(papersJSON.feed.entry)
                 papersJSON.feed.entry.map(entry => {
                     saveEntry(entry)
                 })
@@ -138,6 +149,12 @@ function updateDB(queryString) {
     })
 }
 
+function addPaperById(arxivID) {
+    let queryString = `http://export.arxiv.org/api/query?id_list=${arxivID}`
+    updateDB(queryString)
+}
+
+//addPaperById('2004.03940')
 let query = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.CO&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending"
 
 //updateDB(query)
