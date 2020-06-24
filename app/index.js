@@ -4,7 +4,12 @@ const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
 dotenv.config({ path: './config/config.env' })
 
+const session = require('express-session')
 const ejs = require('ejs');
+
+// Passport
+const passport = require('passport')
+require('./config/passport')(passport)
 
 const connectDB = require('./config/db')
 connectDB()
@@ -16,8 +21,21 @@ const PORT = process.env.PORT || 3000
 app.set('view engine', 'ejs');
 
 
-// Middleware
+// Set Static folder
 app.use(express.static(path.join(__dirname, 'public')))
+
+// express-session middleware
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: true }
+  }))
+
+// Passport middleware
+app.use(passport.initialize())
+app.use(passport.initialize())
+
 
 // body-parser stuff
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -26,6 +44,8 @@ app.use(bodyParser.json())
 
 // Routes
 app.use('/', require('./routes/routes'))
+app.use('/', require('./routes/auth'))
+
 app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mode at http://localhost:${PORT}`))
 
 
