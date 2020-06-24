@@ -3,7 +3,7 @@ const parseString = require('xml2js').parseString;
 
 
 // MongoDB Schema
-let Paper = require('./models/papers.js');
+let Paper = require('./models/Paper.js');
 
 // Stuff to add papers to mongoDB
 function parseEntry(entry) {

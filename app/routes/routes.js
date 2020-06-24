@@ -1,11 +1,13 @@
 const express = require('express')
 const router = express.Router()
-let Paper = require('../models/papers');
+let Paper = require('../models/Paper');
 const fetchPapers = require('../fetchPapers');
 
 
 
 router.get('/', (req, res) => res.render('front'))
+
+router.get('/dashboard', (req, res) => res.send('Succesfull login'))
 
 // New feed for category
 router.get('/new/:cat', (req, res) => {
