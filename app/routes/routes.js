@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 let Paper = require('../models/papers');
+const fetchPapers = require('../fetchPapers');
 
 
 
@@ -24,7 +25,7 @@ router.get('/paper/:arxivid', (req, res) => {
         if (paper) {
             res.render('single', { paper })
         } else {
-            addPaperById(req.params.arxivid)
+            fetchPapers.addPaperById(req.params.arxivid)
             res.redirect('back'); // reload page
         }
     })
