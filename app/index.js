@@ -7,10 +7,6 @@ dotenv.config({ path: './config/config.env' })
 const ejs = require('ejs');
 
 const connectDB = require('./config/db')
-
-// MongoDB Schema
-let Paper = require('./models/papers.js');
-
 connectDB()
 
 const app = express()
