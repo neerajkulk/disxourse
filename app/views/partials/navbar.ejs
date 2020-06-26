@@ -26,8 +26,16 @@
                 </li>
             </ul>
         </div>
-        <a href="/auth/google"> 
-            <button class="btn btn-outline-success my-2 my-sm-0">Login</button>
-        </a>
+
+        <li class="nav-item active">
+            <% if (user) {%>
+            Welcome, <%= user.firstName %>
+            <a href="/auth/logout"><button type="button" class="btn btn-success">Logout</button></a>
+            <% } else {%>
+            <a href="/auth/google">
+                <button class="btn btn-outline-success my-2 my-sm-0"> Login with <i class="fa fa-google"></i> </button>
+            </a>
+            <%}%>
+        </li>
     </nav>
 </div>

@@ -2,12 +2,16 @@ const express = require('express')
 const router = express.Router()
 let Paper = require('../models/Paper');
 const fetchPapers = require('../fetchPapers');
+const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
 
+router.get('/', (req, res) => res.render('front',{
+    user:req.user
+}))
 
-router.get('/', (req, res) => res.render('front'))
-
-router.get('/dashboard', (req, res) => res.send('Succesfull login'))
+router.get('/dashboard', ensureAuth, (req, res) => res.render('dashboard', {
+    name: req.user.firstName
+}))
 
 // New feed for category
 router.get('/new/:cat', (req, res) => {
@@ -16,16 +20,21 @@ router.get('/new/:cat', (req, res) => {
         title: sentencifyArxivCategory(req.params.cat),
         fetchURL: '/api' + req.url
     }
-    res.render('new', { myData })
+    res.render('new', {
+        user: req.user,
+        myData: myData
+    })
 })
-
 
 // Page for single paper
 router.get('/paper/:arxivid', (req, res) => {
     let query = { url: `http://arxiv.org/abs/${req.params.arxivid}` }
     Paper.findOne(query, (err, paper) => {
         if (paper) {
-            res.render('single', { paper })
+            res.render('single', {
+                paper: paper,
+                user: req.user
+            })
         } else {
             fetchPapers.addPaperById(req.params.arxivid)
             res.redirect('back'); // reload page

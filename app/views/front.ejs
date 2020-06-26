@@ -4,10 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('partials/head') %>
     <title>Front</title>
+    
 </head>
 
 <body>
+    <%= user %> 
+    <%- include('partials/navbar') %>
 
     <h1>Categories</h1>
     <ul>
@@ -19,6 +23,7 @@
         <li> <a href="/new/astro-ph.SR">Solar and Stellar Astrophysics </a> </li>
     </ul>
 
+    <%- include('partials/bottomScripts') %>
 </body>
 
 </html>

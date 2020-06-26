@@ -3,9 +3,11 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv')
 dotenv.config({ path: './config/config.env' })
-
 const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
+
 const ejs = require('ejs');
+const mongoose = require('mongoose')
 
 // Passport
 const passport = require('passport')
@@ -29,13 +31,13 @@ app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: true }
-  }))
+    //cookie: { secure: true }, Wont work without https
+    store: new MongoStore({ mongooseConnection:mongoose.connection})
+}))
 
 // Passport middleware
 app.use(passport.initialize())
-app.use(passport.initialize())
-
+app.use(passport.session())
 
 // body-parser stuff
 app.use(bodyParser.urlencoded({ extended: false }))
