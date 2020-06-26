@@ -1,0 +1,29 @@
+.upvote {
+    color: rgba(0, 255, 0, 0.3);
+}
+
+.upvote:hover {
+    color: rgba(0, 255, 0, 1);
+    cursor: pointer;
+}
+
+#upvote.active {
+    color: rgba(0, 255, 0, 1);
+}
+
+.downvote {
+    color: rgba(255, 0, 0, 0.3);
+}
+
+.downvote:hover {
+    color: rgba(255, 0, 0, 1);
+    cursor: pointer;
+}
+
+#downvote.active {
+    color: rgba(255, 0, 0, 1);
+}
+
+#vote-score {
+    margin-bottom: 0px;
+}
