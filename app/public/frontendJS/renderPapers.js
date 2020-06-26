@@ -43,6 +43,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     function renderPaper(paperObject) {
+        let outerDiv = document.createElement('div')
+        outerDiv.classList.add('row')
+
+        let upvoteSidebar = document.createElement('div')
+        upvoteSidebar.classList.add('col-md-1')
+
+        let mainDiv = document.createElement('div')
+        mainDiv.classList.add('col-md-11')
 
         let titleElem = document.createElement("h3");
         let arxivID = paperObject.pdfUrl.split('/').slice(-1).pop()
@@ -63,10 +71,17 @@ document.addEventListener("DOMContentLoaded", () => {
         abstractElem.innerText = paperObject.abstract
         abstractElem.classList.add('text-muted')
 
-        paperSection.appendChild(titleElem)
-        paperSection.appendChild(authorElem)
-        paperSection.appendChild(abstractElem)
-        paperSection.appendChild(document.createElement("br"))
+        mainDiv.appendChild(titleElem)
+        mainDiv.appendChild(authorElem)
+        mainDiv.appendChild(abstractElem)
+        mainDiv.appendChild(document.createElement("br"))
+
+        upvoteSidebar.appendChild(addUpvoteFunctions())
+
+        outerDiv.appendChild(upvoteSidebar)
+        outerDiv.appendChild(mainDiv)
+
+        paperSection.appendChild(outerDiv)
     }
 
     function addUpvoteFunctions() {
@@ -88,8 +103,6 @@ document.addEventListener("DOMContentLoaded", () => {
         outerDiv.appendChild(upElem)
         outerDiv.appendChild(voteElem)
         outerDiv.appendChild(downElem)
-        paperSection.appendChild(outerDiv)
-
 
         function vote(type) {
             const buttons = { "1": upElem, "-1": downElem };
@@ -111,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
         upElem.addEventListener("click", () => vote(1));
         downElem.addEventListener("click", () => vote(-1));
 
-
+        return outerDiv
     }
 
 
