@@ -15,7 +15,8 @@ function parseEntry(entry) {
         abstract: entry.summary[0].replace(/(\r\n|\n|\r)/gm, " "),
         updated: entry.updated[0],
         published: entry.published[0],
-        category: entry.category.map(cat => cat['$'].term)
+        category: entry.category.map(cat => cat['$'].term),
+        upvotes:0
     }
 }
 

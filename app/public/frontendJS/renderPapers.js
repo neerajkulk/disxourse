@@ -3,26 +3,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const myData = JSON.parse(document.getElementById('my-data').innerText)
     const paperSection = document.getElementById('papers')
 
-
     fetch(myData.fetchURL)
         .then(response => response.json())
         .then(allPapers => {
-            addUpvoteFunctions()
             allPapers.forEach(paper => {
                 renderPaper(paper)
             });
             renderMathJax()
         })
-
-
-    function renderMathJax() {
-        let script = document.createElement('script');
-        script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js";
-        script.type = "text/javascript";
-        script.id = "MathJax-script";
-        script.async = true;
-        document.getElementsByTagName('head')[0].appendChild(script);
-    }
 
 
     function parseAuthors(authorList) {
@@ -41,42 +29,57 @@ document.addEventListener("DOMContentLoaded", () => {
         return authorString
     }
 
-
-    function renderPaper(paperObject) {
-        let outerDiv = document.createElement('div')
-        outerDiv.classList.add('row')
-
-        let upvoteSidebar = document.createElement('div')
-        upvoteSidebar.classList.add('col-md-1')
-
-        let mainDiv = document.createElement('div')
-        mainDiv.classList.add('col-md-11')
-
+    function renderTitle(paperObject) {
         let titleElem = document.createElement("h3");
         let arxivID = paperObject.pdfUrl.split('/').slice(-1).pop()
         titleElem.innerHTML = ` 
             <a href=/paper/${arxivID}>            
             <h3>${paperObject.title}</h3>
             </a>`
+        return titleElem
+    }
 
+    function renderAuthor(paperObject) {
         let authorElem = document.createElement("p");
         authorElem.innerHTML = `${parseAuthors(paperObject.authors)}
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>`
-
         authorElem.classList.add('lead')
+
+        return authorElem
+    }
+
+    function renderAbstract(paperObject) {
 
         let abstractElem = document.createElement("p")
         paperObject.abstract = paperObject.abstract
 
-        abstractElem.innerText = paperObject.abstract
+        abstractElem.textContent = paperObject.abstract
         abstractElem.classList.add('text-muted')
+
+        return abstractElem
+    }
+
+    function renderPaper(paperObject) {
+
+        let outerDiv = document.createElement('div')
+        outerDiv.classList.add('row')
+
+        let upvoteSidebar = document.createElement('div')
+        upvoteSidebar.classList.add('col-sm-1')
+
+        let mainDiv = document.createElement('div')
+        mainDiv.classList.add('col-sm-11')
+
+        titleElem = renderTitle(paperObject)
+        authorElem = renderAuthor(paperObject)
+        abstractElem = renderAbstract(paperObject)
 
         mainDiv.appendChild(titleElem)
         mainDiv.appendChild(authorElem)
         mainDiv.appendChild(abstractElem)
         mainDiv.appendChild(document.createElement("br"))
 
-        upvoteSidebar.appendChild(addUpvoteFunctions())
+        upvoteSidebar.appendChild(upvoteElement(paperObject))
 
         outerDiv.appendChild(upvoteSidebar)
         outerDiv.appendChild(mainDiv)
@@ -84,8 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
         paperSection.appendChild(outerDiv)
     }
 
-    function addUpvoteFunctions() {
-        dbVotes = 10 // Votes from databse
+    function upvoteElement(paperObject) {
+        let dbVotes = paperObject.upvotes
         let outerDiv = document.createElement('div')
         let voteElem = document.createElement('p')
         let upElem = document.createElement('i');
@@ -97,8 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
         downElem.setAttribute('class', "fa fa-arrow-down downvote")
         downElem.setAttribute('id', "downvote")
 
-        voteElem.setAttribute('id','vote-score')
-        voteElem.innerText = dbVotes
+        voteElem.setAttribute('id', 'vote-score')
+        voteElem.textContent = dbVotes
 
         outerDiv.appendChild(upElem)
         outerDiv.appendChild(voteElem)
@@ -128,6 +131,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+
+
+    function renderMathJax() {
+        let script = document.createElement('script');
+        script.src = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js";
+        script.type = "text/javascript";
+        script.id = "MathJax-script";
+        script.async = true;
+        document.getElementsByTagName('head')[0].appendChild(script);
+    }
 
 })
 

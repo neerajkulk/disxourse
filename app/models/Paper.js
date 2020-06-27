@@ -29,6 +29,10 @@ let paperSchema = mongoose.Schema({
     },
     category: {
         type:[String]
+    },
+    upvotes:{
+        type:Number,
+        required:true
     }
 })
 
