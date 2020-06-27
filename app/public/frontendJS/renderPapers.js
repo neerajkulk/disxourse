@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderPaper(paperObject) {
 
         let outerDiv = document.createElement('div')
+        outerDiv.setAttribute('id', paperObject._id)
         outerDiv.classList.add('row')
 
         let upvoteSidebar = document.createElement('div')
@@ -89,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function upvoteElement(paperObject) {
         let dbVotes = paperObject.upvotes
+        let newVotes = dbVotes
         let outerDiv = document.createElement('div')
         let voteElem = document.createElement('p')
         let upElem = document.createElement('i');
@@ -109,19 +111,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function vote(type) {
             const buttons = { "1": upElem, "-1": downElem };
-            const score = Number(voteElem.textContent);
 
             if (buttons[type].classList.contains("active")) {
-                voteElem.textContent = score - type;
+                // voteElem.textContent = score - type;
+                newVotes = newVotes - type;
                 buttons[type].classList.remove("active");
             } else if (buttons[-type].classList.contains("active")) {
-                voteElem.textContent = score + 2 * type;
+                newVotes = newVotes + 2 * type;
                 buttons[-type].classList.remove("active");
                 buttons[type].classList.add("active");
             } else {
-                voteElem.textContent = score + type;
+                newVotes = newVotes + type;
                 buttons[type].classList.add("active");
             }
+            voteElem.textContent = newVotes
+            fetch(`/api/${newVotes}/5ef77a8d3b8cae3593de4a97`, { method: "POST" })
+
         };
 
         upElem.addEventListener("click", () => vote(1));

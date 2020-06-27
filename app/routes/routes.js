@@ -5,8 +5,8 @@ const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
 
-router.get('/', (req, res) => res.render('front',{
-    user:req.user
+router.get('/', (req, res) => res.render('front', {
+    user: req.user
 }))
 
 router.get('/dashboard', ensureAuth, (req, res) => res.render('dashboard', {
@@ -52,6 +52,18 @@ router.get('/api/new/:cat', (req, res) => {
     });
 })
 
+router.post('/api/:vote/:paperid', async (req, res) => {
+    try {
+        let paper = await Paper.findById(req.params.paperid)
+        paper.upvotes = Number(req.params.vote)
+        await paper.save()
+        res.status(200)
+        console.log('vote request recieved')
+    } catch (err) {
+        console.error(err)
+    }
+
+})
 
 
 function sentencifyArxivCategory(cat) {
