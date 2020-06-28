@@ -2,10 +2,11 @@ Overarching goal:
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 Next Steps:
-[] Add upvote
+[] Restructure DB to use new votes Schema
+[] Notification if user not logged in
+[] ensureAuth API upvote, downvote routes. 
 [] Add Publication date to frontend
-[] Priorotiz getting backend features done (frontend can be added slowly later)
-[] Use card class
+[] Use card class to make things look nicer
 [] Turn callbacks into promises/async await
 [] Add search tab
 [] Set up email notification for comments for authors. (does arxiv provide email addresses?)
