@@ -52,13 +52,47 @@ router.get('/api/new/:cat', (req, res) => {
     });
 })
 
-router.post('/api/:vote/:paperid', async (req, res) => {
+// TODO: add ensure auth here
+router.post('/api/vote/:paperid', async (req, res) => {
+
     try {
-        let paper = await Paper.findById(req.params.paperid)
-        paper.upvotes = Number(req.params.vote)
-        await paper.save()
-        res.status(200)
-        console.log('vote request recieved')
+        if (req.user) {
+            const paper = await Paper.findById(req.params.paperid)
+
+            let userVoted = false
+            // Update existing vote
+            for (let index = 0; index < paper.votes.length; index++) {
+                voteObj = paper.votes[index]
+                if (String(voteObj.user) == String(req.user._id)) {
+                    userVoted = true
+                    voteObj = {
+                        user: req.user._id,
+                        vote: req.body.vote
+                    }
+                    if (voteObj.vote == 0) {
+                        paper.votes.splice(index, 1);
+                    } else {
+                        paper.votes[index] = voteObj
+                    }
+                    break
+                }
+            }
+
+            // First time vote
+            if (userVoted == false) {
+                paper.votes.push({
+                    user: req.user._id,
+                    vote: req.body.vote
+                })
+            }
+
+            paper.markModified("votes");
+            await paper.save()
+
+            res.status(200).send('vote stored in DB')
+        } else {
+            console.log('User not logged in')
+        }
     } catch (err) {
         console.error(err)
     }

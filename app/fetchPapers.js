@@ -16,7 +16,6 @@ function parseEntry(entry) {
         updated: entry.updated[0],
         published: entry.published[0],
         category: entry.category.map(cat => cat['$'].term),
-        upvotes:0
     }
 }
 

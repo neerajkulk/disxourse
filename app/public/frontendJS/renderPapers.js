@@ -60,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function renderPaper(paperObject) {
-
         let outerDiv = document.createElement('div')
         outerDiv.setAttribute('id', paperObject._id)
         outerDiv.classList.add('row')
@@ -89,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function upvoteElement(paperObject) {
-        let dbVotes = paperObject.upvotes
+        let dbVotes = 0 //calculate this explicitly from DB
         let newVotes = dbVotes
         let outerDiv = document.createElement('div')
         let voteElem = document.createElement('p')
@@ -125,7 +124,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 buttons[type].classList.add("active");
             }
             voteElem.textContent = newVotes
-            fetch(`/api/${newVotes}/5ef77a8d3b8cae3593de4a97`, { method: "POST" })
+
+            fetch(`/api/vote/${paperObject._id}`, {
+                method: 'POST', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    vote: (newVotes - dbVotes)
+                }),
+            }).then(()=>{console.log(newVotes - dbVotes)})
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
 
         };
 

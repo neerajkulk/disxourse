@@ -9,9 +9,9 @@ let paperSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    pdfUrl:{
-        type:String,
-        required:true
+    pdfUrl: {
+        type: String,
+        required: true
     },
     authors: {
         type: [String],
@@ -28,11 +28,10 @@ let paperSchema = mongoose.Schema({
         type: Date
     },
     category: {
-        type:[String]
+        type: [String]
     },
-    upvotes:{
-        type:Number,
-        required:true
+    votes:{
+        type:Array
     }
 })
 
