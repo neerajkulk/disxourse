@@ -92,6 +92,7 @@ router.post('/api/vote/:paperid', async (req, res) => {
             res.status(200).send('vote stored in DB')
         } else {
             console.log('User not logged in')
+            res.status(403).send('User Not Logged in')
         }
     } catch (err) {
         console.error(err)
