@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function upvoteElement(paperObject) {
-        let dbVotes = 0 //calculate this explicitly from DB
+        let dbVotes = paperObject.netVotes
         let newVotes = dbVotes
         let outerDiv = document.createElement('div')
         let voteElem = document.createElement('p')
@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    vote: (newVotes - dbVotes)
+                    vote: (newVotes - dbVotes),
                 }),
             }).then(()=>{console.log(newVotes - dbVotes)})
                 .catch((error) => {

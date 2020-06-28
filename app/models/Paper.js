@@ -30,8 +30,12 @@ let paperSchema = mongoose.Schema({
     category: {
         type: [String]
     },
-    votes:{
-        type:Array
+    voteData: {
+        type: Array
+    },
+    netVotes: {
+        type: Number,
+        default: 0
     }
 })
 

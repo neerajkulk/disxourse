@@ -52,43 +52,44 @@ router.get('/api/new/:cat', (req, res) => {
     });
 })
 
+function calcNetVotes(voteData) {
+    let sum = 0
+    voteData.forEach(voteObj => {
+        sum += voteObj.vote
+    });
+
+    return sum
+}
 // TODO: add ensure auth here
 router.post('/api/vote/:paperid', async (req, res) => {
 
     try {
         if (req.user) {
             const paper = await Paper.findById(req.params.paperid)
-
             let userVoted = false
+            let voteObj = {
+                user: req.user._id,
+                vote: req.body.vote
+            }
             // Update existing vote
-            for (let index = 0; index < paper.votes.length; index++) {
-                voteObj = paper.votes[index]
-                if (String(voteObj.user) == String(req.user._id)) {
-                    userVoted = true
-                    voteObj = {
-                        user: req.user._id,
-                        vote: req.body.vote
-                    }
+            for (let index = 0; index < paper.voteData.length; index++) {
+                if (String(paper.voteData[index].user) == String(req.user._id)) {
+                    userVoted = true // user has voted previously
                     if (voteObj.vote == 0) {
-                        paper.votes.splice(index, 1);
+                        paper.voteData.splice(index, 1);
                     } else {
-                        paper.votes[index] = voteObj
+                        paper.voteData[index] = voteObj
                     }
                     break
                 }
             }
-
             // First time vote
             if (userVoted == false) {
-                paper.votes.push({
-                    user: req.user._id,
-                    vote: req.body.vote
-                })
+                paper.voteData.push(voteObj)
             }
-
-            paper.markModified("votes");
+            paper.netVotes = calcNetVotes(paper.voteData)
+            paper.markModified("voteData");
             await paper.save()
-
             res.status(200).send('vote stored in DB')
         } else {
             console.log('User not logged in')
