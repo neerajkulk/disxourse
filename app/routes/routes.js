@@ -58,7 +58,7 @@ router.get('/api/new/:cat', (req, res) => {
 // JSON of all users voted on a paper
 router.get('/api/userVotes', async (req, res) => {
     if (req.user) {
-        let userVotes = await Upvote.find({ userID: req.user._id }, { userID: 1, paperID: 1 })
+        let userVotes = await Upvote.find({ userID: req.user._id }, { userID: 1, paperID: 1, vote: 1 })
         res.json(userVotes)
     } else {
         res.send('Must be logged in to view your votes')
@@ -77,34 +77,39 @@ router.get('/api/paperVotes/:paperid', async (req, res) => {
 })
 
 router.post('/api/vote/:paperid', async (req, res) => {
-    if (req.user) {
-        // Has the user voted on the paper before?
-        let previousVote = await Upvote.findOne({ paperID: req.body.paperID, userID: req.user._id })
+    try {
+        if (req.user) {
+            // Has the user voted on the paper before?
+            let previousVote = await Upvote.findOne({ paperID: req.body.paperID, userID: req.user._id })
 
-        if (previousVote) {
+            if (previousVote) {
 
-            if (req.body.vote == 0) {
-                await previousVote.deleteOne()
-                res.status(200).send('Previous vote deleted')
+                if (req.body.vote == 0) {
+                    await previousVote.deleteOne()
+                    res.status(200).send('Previous vote deleted')
+                } else {
+                    previousVote.vote = req.body.vote
+                    await previousVote.save()
+                    res.status(200).send('previous vote updated')
+                }
             } else {
-                previousVote.vote = req.body.vote
-                await previousVote.save()
-                res.status(200).send('previous vote updated')
+                let newVote = new Upvote({
+                    paperID: req.body.paperID,
+                    userID: req.user._id,
+                    vote: req.body.vote
+                })
+                await newVote.save()
+                res.status(200).end('new vote saved')
             }
-        } else {
-            let newVote = new Upvote({
-                paperID: req.body.paperID,
-                userID: req.user._id,
-                vote: req.body.vote
-            })
-            await newVote.save()
-            res.status(200).end('new vote saved')
-        }
 
-    } else {
-        res.status(403).send('must be logged in to vote')
-        console.log('must be logged in to vote')
+        } else {
+            res.status(403).send('must be logged in to vote')
+            console.log('must be logged in to vote')
+        }
+    } catch (err) {
+        console.error(err)
     }
+
 })
 
 // router.post('/api/vote/:paperid', async (req, res) => {

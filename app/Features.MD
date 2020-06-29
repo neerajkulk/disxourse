@@ -12,7 +12,7 @@ Next Steps:
 [] Add search tab
 [] Set up email notification for comments for authors. (does arxiv provide email addresses?)
 [] protect auntheticated routes
-
+[] make sure you wrap async await in try-catch block and user .catch on .then on promises. 
 
 
 

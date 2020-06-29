@@ -73,13 +73,15 @@ document.addEventListener("DOMContentLoaded", () => {
         titleElem = renderTitle(paperObject)
         authorElem = renderAuthor(paperObject)
         abstractElem = renderAbstract(paperObject)
+        let upvoteElem = upvoteElement(paperObject)
 
         mainDiv.appendChild(titleElem)
         mainDiv.appendChild(authorElem)
         mainDiv.appendChild(abstractElem)
         mainDiv.appendChild(document.createElement("br"))
 
-        upvoteSidebar.appendChild(upvoteElement(paperObject))
+        upvoteElem.then(element => { upvoteSidebar.appendChild(element) })
+        .catch(err => console.log(err))
 
         outerDiv.appendChild(upvoteSidebar)
         outerDiv.appendChild(mainDiv)
@@ -87,8 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
         paperSection.appendChild(outerDiv)
     }
 
-    function upvoteElement(paperObject) {
-        let dbVotes = 0
+    async function upvoteElement(paperObject) {
+        let dbVotes = await fetch(`/api/paperVotes/${paperObject._id}`);
+        dbVotes = await dbVotes.json()
+
+        let userVotes = await fetch(`/api/userVotes`)
+        userVotes = await userVotes.json()
+
         let newVotes = dbVotes
         let outerDiv = document.createElement('div')
         let voteElem = document.createElement('p')
@@ -108,6 +115,18 @@ document.addEventListener("DOMContentLoaded", () => {
         outerDiv.appendChild(voteElem)
         outerDiv.appendChild(downElem)
 
+        // Add class based on existing vote:
+        userVotes.forEach(voteObj => {
+            if (voteObj.paperID == paperObject._id) {
+                // user has voted on the paper
+                if (voteObj.vote == 1) {
+                    upElem.classList.add('active')
+                } else if (voteObj.vote == -1) {
+                    downElem.classList.add('active')
+                }
+            }
+        })
+
         function vote(type) {
             const buttons = { "1": upElem, "-1": downElem };
 
@@ -124,6 +143,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 buttons[type].classList.add("active");
             }
             voteElem.textContent = newVotes
+            let voteToPost
+            if (upElem.classList.contains('active')) {
+                voteToPost = 1
+            } else if (downElem.classList.contains('active')) {
+                voteToPost = -1
+            } else {
+                voteToPost = 0
+            }
 
             fetch(`/api/vote/${paperObject._id}`, {
                 method: 'POST',
@@ -132,9 +159,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify({
                     paperID: paperObject._id,
-                    vote: (newVotes - dbVotes)
+                    vote: voteToPost
                 }),
-            }).then(() => { console.log(newVotes - dbVotes) })
+            }).then(() => { console.log(`sent to body ${voteToPost}`) })
                 .catch((error) => {
                     console.error('Error:', error);
                 });
