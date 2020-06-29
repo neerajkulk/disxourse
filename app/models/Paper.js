@@ -13,6 +13,10 @@ let paperSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    arxivID: {
+        type: String,
+        required: true
+    },
     authors: {
         type: [String],
         required: true
@@ -29,13 +33,6 @@ let paperSchema = mongoose.Schema({
     },
     category: {
         type: [String]
-    },
-    voteData: {
-        type: Array
-    },
-    netVotes: {
-        type: Number,
-        default: 0
     }
 })
 

@@ -7,15 +7,17 @@ let Paper = require('./models/Paper.js');
 
 // Stuff to add papers to mongoDB
 function parseEntry(entry) {
+    const url = entry.id[0].slice(0, -2)
     return {
         title: entry.title[0].replace(/(\r\n|\n|\r)/gm, " "),
-        url: entry.id[0].slice(0, -2), // ignore arxiv versions,
+        url: url, // ignore arxiv versions,
         pdfUrl: entry.link.slice(-1).pop()['$'].href.slice(0, -2), // ignore arxiv versions,
+        arxivID: url.split('/').slice(-1).pop(),
         authors: entry.author.map(name => name.name[0]),
         abstract: entry.summary[0].replace(/(\r\n|\n|\r)/gm, " "),
         updated: entry.updated[0],
         published: entry.published[0],
-        category: entry.category.map(cat => cat['$'].term),
+        category: entry.category.map(cat => cat['$'].term)
     }
 }
 
