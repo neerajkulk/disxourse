@@ -44,6 +44,7 @@ router.get('/paper/:arxivid', (req, res) => {
 });
 
 
+// Returns JSON of new papers in the field
 router.get('/api/new/:cat', (req, res) => {
     Paper.find({ category: req.params.cat }).sort('-published').limit(10).exec(function (err, newPapers) {
         let results = newPapers
@@ -53,15 +54,27 @@ router.get('/api/new/:cat', (req, res) => {
     });
 })
 
-function calcNetVotes(voteData) {
-    let sum = 0
-    voteData.forEach(voteObj => {
-        sum += voteObj.vote
-    });
 
-    return sum
-}
-// TODO: add ensure auth here
+// JSON of all users voted on a paper
+router.get('/api/userVotes', async (req, res) => {
+    if (req.user) {
+        let userVotes = await Upvote.find({ userID: req.user._id }, { userID: 1, paperID: 1 })
+        res.json(userVotes)
+    } else {
+        res.send('Must be logged in to view your votes')
+    }
+
+})
+
+
+
+// Net vote count for a paper 
+router.get('/api/paperVotes/:paperid', async (req, res) => {
+    let sum = 0
+    let paperVotes = await Upvote.find({ paperID: req.params.paperid })
+    paperVotes.forEach(voteObj => { sum += voteObj.vote })
+    res.send(String(sum))
+})
 
 router.post('/api/vote/:paperid', async (req, res) => {
     if (req.user) {
