@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 let Paper = require('../models/Paper');
+let Upvote = require('../models/Upvote');
 const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 
@@ -61,45 +62,77 @@ function calcNetVotes(voteData) {
     return sum
 }
 // TODO: add ensure auth here
+
 router.post('/api/vote/:paperid', async (req, res) => {
+    if (req.user) {
+        // Has the user voted on the paper before?
+        let previousVote = await Upvote.findOne({ paperID: req.body.paperID, userID: req.user._id })
 
-    try {
-        if (req.user) {
-            const paper = await Paper.findById(req.params.paperid)
-            let userVoted = false
-            let voteObj = {
-                user: req.user._id,
-                vote: req.body.vote
+        if (previousVote) {
+
+            if (req.body.vote == 0) {
+                await previousVote.deleteOne()
+                res.status(200).send('Previous vote deleted')
+            } else {
+                previousVote.vote = req.body.vote
+                await previousVote.save()
+                res.status(200).send('previous vote updated')
             }
-            // Update existing vote
-            for (let index = 0; index < paper.voteData.length; index++) {
-                if (String(paper.voteData[index].user) == String(req.user._id)) {
-                    userVoted = true // user has voted previously
-                    if (voteObj.vote == 0) {
-                        paper.voteData.splice(index, 1);
-                    } else {
-                        paper.voteData[index] = voteObj
-                    }
-                    break
-                }
-            }
-            // First time vote
-            if (userVoted == false) {
-                paper.voteData.push(voteObj)
-            }
-            paper.netVotes = calcNetVotes(paper.voteData)
-            paper.markModified("voteData");
-            await paper.save()
-            res.status(200).send('vote stored in DB')
         } else {
-            console.log('User not logged in')
-            res.status(403).send('User Not Logged in')
+            let newVote = new Upvote({
+                paperID: req.body.paperID,
+                userID: req.user._id,
+                vote: req.body.vote
+            })
+            await newVote.save()
+            res.status(200).end('new vote saved')
         }
-    } catch (err) {
-        console.error(err)
-    }
 
+    } else {
+        res.status(403).send('must be logged in to vote')
+        console.log('must be logged in to vote')
+    }
 })
+
+// router.post('/api/vote/:paperid', async (req, res) => {
+
+//     try {
+//         if (req.user) {
+//             const paper = await Paper.findById(req.params.paperid)
+//             let userVoted = false
+//             let voteObj = {
+//                 user: req.user._id,
+//                 vote: req.body.vote
+//             }
+//             // Update existing vote
+//             for (let index = 0; index < paper.voteData.length; index++) {
+//                 if (String(paper.voteData[index].user) == String(req.user._id)) {
+//                     userVoted = true // user has voted previously
+//                     if (voteObj.vote == 0) {
+//                         paper.voteData.splice(index, 1);
+//                     } else {
+//                         paper.voteData[index] = voteObj
+//                     }
+//                     break
+//                 }
+//             }
+//             // First time vote
+//             if (userVoted == false) {
+//                 paper.voteData.push(voteObj)
+//             }
+//             paper.netVotes = calcNetVotes(paper.voteData)
+//             paper.markModified("voteData");
+//             await paper.save()
+//             res.status(200).send('vote stored in DB')
+//         } else {
+//             console.log('User not logged in')
+//             res.status(403).send('User Not Logged in')
+//         }
+//     } catch (err) {
+//         console.error(err)
+//     }
+
+// })
 
 
 function sentencifyArxivCategory(cat) {

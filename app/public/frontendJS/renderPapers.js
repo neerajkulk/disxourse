@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function upvoteElement(paperObject) {
-        let dbVotes = paperObject.netVotes
+        let dbVotes = 0
         let newVotes = dbVotes
         let outerDiv = document.createElement('div')
         let voteElem = document.createElement('p')
@@ -126,14 +126,15 @@ document.addEventListener("DOMContentLoaded", () => {
             voteElem.textContent = newVotes
 
             fetch(`/api/vote/${paperObject._id}`, {
-                method: 'POST', 
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    vote: (newVotes - dbVotes),
+                    paperID: paperObject._id,
+                    vote: (newVotes - dbVotes)
                 }),
-            }).then(()=>{console.log(newVotes - dbVotes)})
+            }).then(() => { console.log(newVotes - dbVotes) })
                 .catch((error) => {
                     console.error('Error:', error);
                 });
