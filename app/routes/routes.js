@@ -4,10 +4,10 @@ let Paper = require('../models/Paper');
 let Upvote = require('../models/Upvote');
 const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
-
+const helpers = require('../helpers/helpers');
 
 router.get('/', (req, res) => res.render('front', {
-    user: req.user
+    myData: { user: req.user }
 }))
 
 router.get('/dashboard', ensureAuth, (req, res) => res.render('dashboard', {
@@ -15,32 +15,58 @@ router.get('/dashboard', ensureAuth, (req, res) => res.render('dashboard', {
 }))
 
 // New feed for category
-router.get('/new/:cat', (req, res) => {
+router.get('/new/:cat', async (req, res) => {
+    try {
+        let papers = await Paper.find({ category: req.params.cat }).sort('-published').limit(3).lean()
 
-    let myData = {
-        title: sentencifyArxivCategory(req.params.cat),
-        fetchURL: '/api' + req.url
+        for (let index = 0; index < papers.length; index++) {
+            paper = papers[index]
+            paper.authors = helpers.parseAuthors(paper.authors)
+            paper.userVote = await helpers.getUserPreviousVote(paper._id, req.user._id)
+        }
+        let myData = {
+            title: sentencifyArxivCategory(req.params.cat),
+            papers: papers,
+            user: req.user
+        }
+        res.render('new', {
+            myData: myData
+        })
+    } catch (err) {
+        console.error(err)
     }
-    res.render('new', {
-        user: req.user,
-        myData: myData
-    })
 })
 
 // Page for single paper
-router.get('/paper/:arxivid', (req, res) => {
+router.get('/paper/:arxivid', async (req, res) => {
     let query = { url: `http://arxiv.org/abs/${req.params.arxivid}` }
-    Paper.findOne(query, (err, paper) => {
-        if (paper) {
-            res.render('single', {
-                paper: paper,
-                user: req.user
-            })
-        } else {
-            fetchPapers.addPaperById(req.params.arxivid)
-            res.redirect('back'); // reload page
+
+    let paper = await Paper.findOne(query)
+
+    if (paper) {
+        paper.userVote = await helpers.getUserPreviousVote(paper._id, req.user._id)
+        let myData = {
+            paper: paper,
+            user: req.user
         }
-    })
+        res.render('single', { myData })
+    } else {
+        fetchPapers.addPaperById(req.params.arxivid)
+        res.redirect(req.originalUrl); // refresh page
+    }
+
+    // Paper.findOne(query, (err, paper) => {
+    //     if (paper) {
+    //         let myData = {
+    //             paper: paper,
+    //             user: req.user
+    //         }
+    //         res.render('single', { myData })
+    //     } else {
+    //         fetchPapers.addPaperById(req.params.arxivid)
+    //         res.redirect('back'); // reload page
+    //     }
+    // })
 });
 
 
@@ -54,27 +80,45 @@ router.get('/api/new/:cat', (req, res) => {
     });
 })
 
+// I think these routes are useless...
 
 // JSON of all users voted on a paper
-router.get('/api/userVotes', async (req, res) => {
-    if (req.user) {
-        let userVotes = await Upvote.find({ userID: req.user._id }, { userID: 1, paperID: 1, vote: 1 })
-        res.json(userVotes)
-    } else {
-        res.send('Must be logged in to view your votes')
+// router.get('/api/userVotes', async (req, res) => {
+//     if (req.user) {
+//         let userVotes = await Upvote.find({ userID: req.user._id }, { userID: 1, paperID: 1, vote: 1 })
+//         res.json(userVotes)
+//     } else {
+//         res.send('Must be logged in to view your votes')
+//     }
+
+// })
+
+
+
+// // Net vote count for a paper 
+// router.get('/api/paperVotes/:paperid', async (req, res) => {
+//     let sum = 0
+//     let paperVotes = await Upvote.find({ paperID: req.params.paperid })
+//     paperVotes.forEach(voteObj => { sum += voteObj.vote })
+//     res.send(String(sum))
+// })
+
+
+async function updateVoteScore(paperID) {
+    try {
+        let paper = await Paper.findById(paperID)
+
+        let sum = 0
+        let paperVotes = await Upvote.find({ paperID: paperID })
+        paperVotes.forEach(voteObj => { sum += voteObj.vote })
+        paper.voteScore = sum
+        await paper.save()
+
+    } catch (err) {
+        console.error(err)
     }
+}
 
-})
-
-
-
-// Net vote count for a paper 
-router.get('/api/paperVotes/:paperid', async (req, res) => {
-    let sum = 0
-    let paperVotes = await Upvote.find({ paperID: req.params.paperid })
-    paperVotes.forEach(voteObj => { sum += voteObj.vote })
-    res.send(String(sum))
-})
 
 router.post('/api/vote/:paperid', async (req, res) => {
     try {
@@ -83,7 +127,6 @@ router.post('/api/vote/:paperid', async (req, res) => {
             let previousVote = await Upvote.findOne({ paperID: req.body.paperID, userID: req.user._id })
 
             if (previousVote) {
-
                 if (req.body.vote == 0) {
                     await previousVote.deleteOne()
                     res.status(200).send('Previous vote deleted')
@@ -101,6 +144,8 @@ router.post('/api/vote/:paperid', async (req, res) => {
                 await newVote.save()
                 res.status(200).end('new vote saved')
             }
+
+            await updateVoteScore(req.body.paperID) // change score in papers collections
 
         } else {
             res.status(403).send('must be logged in to vote')

@@ -28,8 +28,8 @@
         </div>
 
         <li class="navbar-nav mr-auto">
-            <% if (user) {%>
-            Welcome, <%= user.firstName %>
+            <% if (myData.user) {%>
+            Welcome, <%= myData.user.firstName %>
             <a href="/auth/logout"><button type="button" class="btn btn-success">Logout</button></a>
             <% } else {%>
             <a href="/auth/google">

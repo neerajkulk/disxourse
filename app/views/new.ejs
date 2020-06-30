@@ -13,13 +13,36 @@
     <!-- Empty DIV to store data. Front-end Javascript reads this -->
     <div id="my-data" style="display: none;"> <%- JSON.stringify(myData) %></div>
     <%- include('partials/navbar') %>
-    <!-- TODO: Sidebar linking to other arxiv posts -->
     <h1 class="container text-center display-3 mt-5 mb-5 "><%= myData.title %> </h1>
-    <section class="container" id="papers"></section>
+    <section class="container" id="papers">
+        <!-- Loop through  papers and display them-->
+        <% for(let i=0; i < myData.papers.length; i++) { %>
+        <% paperID = myData.papers[i]._id%>
+        <div class="row" id="<%= paperID %>">
+            <div class="col-sm-1">
+                <%- include('partials/upvote',{
+                    paperID:paperID,
+                    voteScore:myData.papers[i].voteScore,
+                    userVote:myData.papers[i].userVote
+                    }) %>
+            </div>
+            <div class="col-sm-11">
+                <h3>
+                    <a href=<%= `/paper/${myData.papers[i].arxivID}` %>> <%= myData.papers[i].title %> </a>
+                </h3>
+                <p class="lead"> <%= myData.papers[i].authors %> </p>
+                <p class="text-muted"> <%= myData.papers[i].abstract %> </p>
+            </div>
+        </div>
+        <% } %>
+    </section>
     <%- include('partials/bottomScripts') %>
 
 
+
     <script src="/frontendJS/renderPapers.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
 </body>
 
 </html>

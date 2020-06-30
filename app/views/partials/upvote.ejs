@@ -1,0 +1,78 @@
+<div>
+    <i class="fa fa-arrow-up upvote" id="<%= `upvote-${paperID}` %>"></i>
+    <p class="vote-score" id="<%= `vote-score-${paperID}` %>"><%= voteScore %> </p>
+    <i class="fa fa-arrow-down downvote" id="<%= `downvote-${paperID}` %>"></i>
+</div>
+
+
+<script>
+    // Retrieve variables from main template
+    paperID = '<%= paperID %>' 
+    userVote = '<%= userVote %>'
+    addVoteFunctionality(paperID)
+
+    function addVoteFunctionality(paperID) {
+        let upElem = document.getElementById('<%= `upvote-${paperID}` %>')
+        let downElem = document.getElementById('<%= `downvote-${paperID}` %>')
+        let scoreElem = document.getElementById('<%= `vote-score-${paperID}` %>')
+        let voteScore = Number(scoreElem.textContent)
+
+        loadPreviousVote(userVote, upElem, downElem)
+
+        // Event listener function
+        function vote(type) {
+            const buttons = { "1": upElem, "-1": downElem };
+
+            if (buttons[type].classList.contains("active")) {
+                voteScore = voteScore - type;
+                buttons[type].classList.remove("active");
+            } else if (buttons[-type].classList.contains("active")) {
+                voteScore = voteScore + 2 * type;
+                buttons[-type].classList.remove("active");
+                buttons[type].classList.add("active");
+            } else {
+                voteScore = voteScore + type;
+                buttons[type].classList.add("active");
+            }
+            scoreElem.textContent = voteScore
+
+            let voteToPost = 0
+            if (upElem.classList.contains('active')) {
+                voteToPost = 1
+            } else if (downElem.classList.contains('active')) {
+                voteToPost = -1
+            }
+
+            submitVote(paperID, voteToPost)
+        };
+
+        upElem.addEventListener("click", () => vote(1));
+        downElem.addEventListener("click", () => vote(-1));
+    }
+
+    function submitVote(paperID, vote) {
+        // Send vote to backend
+        fetch(`/api/vote/${paperID}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                paperID: paperID,
+                vote: vote
+            }),
+        }).then(() => { console.log(`sent to body ${vote}`) })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    }
+
+    function loadPreviousVote(userVote, upElem, downElem) {
+        if (userVote == 1) {
+            upElem.classList.add('active')
+        } else if (userVote == -1) {
+            downElem.classList.add('active')
+        }
+    }
+
+</script>

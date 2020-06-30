@@ -33,6 +33,10 @@ let paperSchema = mongoose.Schema({
     },
     category: {
         type: [String]
+    },
+    voteScore:{
+        type:Number,
+        default:0
     }
 })
 

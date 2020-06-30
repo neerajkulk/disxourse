@@ -2,7 +2,9 @@ Overarching goal:
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 Next Steps:
+[] Minimize front-end JS. Keep it simple, servers-side + EJS templates
 [] Did this user vote this item up or down
+[] Make sure stuff works if you're not logged in...
 [] How many people voted up or down on this item
 [] Notification if user not logged in
 [] ensureAuth API upvote, downvote routes. 
