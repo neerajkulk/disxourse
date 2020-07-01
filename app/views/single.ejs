@@ -2,45 +2,43 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <%- include('partials/head') %>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document </title>
+  <%- include('partials/head') %>
 </head>
 
 
 <body>
-    <%- include('partials/navbar') %>
+  <%- include('partials/navbar') %>
 
-    <div class="container text-center mt-5 mb-5">
-        <div class="row">
-            <div class="col-sm-1">
-                <%- include('partials/upvote',{
-                    paperID:myData.paper._id,
-                    voteScore:myData.paper.voteScore,
-                    userVote:myData.paper.userVote
-                    }) %>
-            </div>
-            <h1 class="col-sm-11"><%= myData.paper.title %> </h1>
-        </div>
+  <div class="container text-center mt-5 mb-5">
+    <div class="row">
+      <div class="col-sm-1">
+        <% if (myData.user){%>
+        <%- include('partials/upvote',{
+                      paperID:myData.paper._id,
+                      voteScore:myData.paper.voteScore,
+                      userVote:myData.paper.userVote
+                       }) %>
+        <%} else { %>
+        <%- include('partials/upvote-guest',{
+                       paperID:myData.paper._id,
+                      voteScore:myData.paper.voteScore,
+                      }) %>
+        <%} %>
+      </div>
+      <h1 class="col-sm-11"><%= myData.paper.title %> </h1>
     </div>
+  </div>
 
 
-    <iframe class="container-fluid" src="<%=myData.paper.pdfUrl%>" width="100%" height="750px" frameBorder="0"> Browser
-        Not compatible </iframe>
-    <hr>
+  <iframe class="container-fluid" src="<%=myData.paper.pdfUrl%>" width="100%" height="750px" frameBorder="0"> Browser
+    Not compatible </iframe>
+  <hr>
 
-    <div class="container">
-        <h4>Comments</h4>
-        <p>Great paper</p>
-        <p>Insightful work best work evaaaahh</p>
-        <p>Have you considered XXX</p>
-        <p style="margin-left: 50px;"> Yes I have</p>
-        <p style="margin-left: 100px;"> Amazing, we have a grad student working on YYY. Lets collaborate</p>
-        <p style="margin-left: 150px;"> Perfect, add me on github</p>
-    </div>
 
-    <%- include('partials/bottomScripts') %>
+  <%- include('partials/bottomScripts') %>
 
 </body>
 

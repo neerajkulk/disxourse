@@ -15,16 +15,25 @@
     <%- include('partials/navbar') %>
     <h1 class="container text-center display-3 mt-5 mb-5 "><%= myData.title %> </h1>
     <section class="container" id="papers">
+
         <!-- Loop through  papers and display them-->
         <% for(let i=0; i < myData.papers.length; i++) { %>
         <% paperID = myData.papers[i]._id%>
         <div class="row" id="<%= paperID %>">
             <div class="col-sm-1">
+                <% if (myData.user){%>
                 <%- include('partials/upvote',{
-                    paperID:paperID,
-                    voteScore:myData.papers[i].voteScore,
-                    userVote:myData.papers[i].userVote
-                    }) %>
+                        paperID:paperID,
+                        voteScore:myData.papers[i].voteScore,
+                        userVote:myData.papers[i].userVote
+                        }) %>
+                <%} else { %>
+                    <%- include('partials/upvote-guest',{
+                        paperID:paperID,
+                        voteScore:myData.papers[i].voteScore,
+                        }) %>
+                <%} %>
+
             </div>
             <div class="col-sm-11">
                 <h3>

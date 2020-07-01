@@ -54,9 +54,9 @@ function updateDB(queryString) {
     })
 }
 
-function addPaperById(arxivID) {
+async function addPaperById(arxivID) {
     let queryString = `http://export.arxiv.org/api/query?id_list=${arxivID}`
-    updateDB(queryString)
+    updateDB(queryString)  
 }
 
 module.exports = {
