@@ -1,0 +1,24 @@
+<div>
+
+    <i class="fa fa-arrow-up upvote guest" id="<%= `upvote-${paperID}` %>"></i>
+    <p class="vote-score" id="<%= `vote-score-${paperID}` %>"><%= voteScore %> </p>
+    <i class="fa fa-arrow-down downvote guest" id="<%= `downvote-${paperID}` %>"></i>
+</div>
+
+
+<script>
+    // Random jQuery i found here: https://stackoverflow.com/questions/15054484/why-my-bootstrap-popover-doesnt-show
+jQuery(document).ready(function() {
+     $('.upvote.guest').popover({
+        trigger:'hover',
+        content:'Please login to vote',
+        placement:'right'
+    });
+
+    $('.downvote.guest').popover({
+        trigger:'hover',
+        content:'Please login to vote',
+        placement:'right'
+    });
+ });
+</script>
