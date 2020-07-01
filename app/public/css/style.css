@@ -9,6 +9,8 @@
 
 .upvote.active {
     color: rgba(0, 255, 0, 1);
+    font-size: 30px;
+    transition: 0.1s;
 }
 
 .downvote {
@@ -22,8 +24,18 @@
 
 .downvote.active {
     color: rgba(255, 0, 0, 1);
+    font-size: 30px;
+    transition: 0.1s;
 }
 
 .vote-score {
     margin-bottom: 0px;
+}
+
+.upvote.guest{
+    color: gray;
+}
+
+.downvote.guest{
+    color: gray;
 }
