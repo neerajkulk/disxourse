@@ -39,3 +39,7 @@
 .downvote.guest{
     color: gray;
 }
+
+.card-header{
+    height:3em ;
+}

@@ -32,12 +32,29 @@
     </div>
   </div>
 
+  <div id="success-alert" class="container">
+    <!-- this div gets filled up when new comment is posted -->
+  </div>
+
 
   <iframe class="container-fluid" src="<%=myData.paper.pdfUrl%>" width="100%" height="750px" frameBorder="0"> Browser
     Not compatible </iframe>
   <hr>
 
+  <!-- Comments -->
 
+  <%- include('partials/comments',{
+    paperID:myData.paper._id,
+    comments:myData.comments}) %>
+
+  <% if (myData.user){%>
+  <%- include('partials/post-comment',{
+    paperID:myData.paper._id,
+    user:myData.user
+    }) %>
+  <% } else { %>
+    <%- include('partials/comment-disabled') %>
+  <%} %>
   <%- include('partials/bottomScripts') %>
 
 </body>

@@ -1,0 +1,14 @@
+<div class="container">
+    <% for (let i = 0; i < comments.length; i++) { %>
+    <div class="card mb-4">
+        <div class="card-header">
+            <p class="float-left"><%= comments[i].displayName %></p>
+            <p class="text-muted float-right"><%= comments[i].date.toLocaleString() %></p>
+        </div>
+        <div class="card-body">
+            <p class="card-text"><%= comments[i].commentBody %></p>
+        </div>
+    </div>
+    <%}%>
+</div>
+

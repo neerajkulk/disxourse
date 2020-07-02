@@ -40,7 +40,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // body-parser stuff
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 
