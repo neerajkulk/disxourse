@@ -19,7 +19,7 @@ Next Steps:
 [] Oauth routs should link back to current page. Not send you to main page. 
 [] back button from single page to news feed
 [] add footer
-
+[] remember to add .lean() to mongoose queries when you dont need to save back to DB
 
 
 Features to add

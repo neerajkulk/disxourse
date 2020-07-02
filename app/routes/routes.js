@@ -16,9 +16,11 @@ router.get('/dashboard', ensureAuth, (req, res) => res.render('dashboard', {
 }))
 
 // New feed for category
-router.get('/new/:cat', async (req, res) => {
+router.get('/new/:cat/:page', async (req, res) => {
     try {
-        let papers = await Paper.find({ category: req.params.cat }).sort('-published').limit(30).lean()
+        let page = Number(req.params.page)
+        let resultsPerPage = 5
+        let papers = await Paper.find({ category: req.params.cat }).sort('-published').skip(resultsPerPage * page).limit(resultsPerPage).lean()
 
         for (let index = 0; index < papers.length; index++) {
             paper = papers[index]
@@ -29,8 +31,10 @@ router.get('/new/:cat', async (req, res) => {
         }
         let myData = {
             title: sentencifyArxivCategory(req.params.cat),
+            category:req.params.cat,
             papers: papers,
-            user: req.user
+            user: req.user,
+            page:page,
         }
         res.render('new', {
             myData: myData
@@ -44,7 +48,7 @@ router.get('/new/:cat', async (req, res) => {
 router.get('/paper/:arxivid', async (req, res) => {
     let query = { url: `http://arxiv.org/abs/${req.params.arxivid}` }
     let paper = await Paper.findOne(query)
-    let comments = await Comment.find({paperID:paper._id})
+    let comments = await Comment.find({ paperID: paper._id })
 
     if (paper) {
         if (req.user) {
@@ -53,7 +57,7 @@ router.get('/paper/:arxivid', async (req, res) => {
         let myData = {
             paper: paper,
             user: req.user,
-            comments:comments
+            comments: comments
         }
         res.render('single', { myData })
     } else {
@@ -129,14 +133,14 @@ router.post('/api/vote/:paperid', async (req, res) => {
 router.post('/api/comment/:paperid', async (req, res) => {
     let comment = new Comment({
         paperID: req.params.paperid,
-        userID:req.user._id,
-        displayName:req.user.displayName,
-        commentBody:req.body.commentBody,
-        date:Date.now()
+        userID: req.user._id,
+        displayName: req.user.displayName,
+        commentBody: req.body.commentBody,
+        date: Date.now()
     })
     await comment.save()
     let paper = await Paper.findById(req.params.paperid)
-    paper.commentCount ++
+    paper.commentCount++
     await paper.save()
     res.status(200).redirect(req.get('Referrer') + '#comments')
 })

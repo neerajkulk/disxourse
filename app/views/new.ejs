@@ -16,7 +16,7 @@
     <h1 class="container text-center display-3 mt-5 mb-5 "><%= myData.title %> </h1>
     <section class="container" id="papers">
 
-        <!-- Loop through  papers and display them-->
+        <!-- Loop through papers and display them-->
         <% for(let i=0; i < myData.papers.length; i++) { %>
         <% paperID = myData.papers[i]._id%>
         <div class="row" id="<%= paperID %>">
@@ -58,6 +58,31 @@
         </div>
         <% } %>
     </section>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center">
+        <nav aria-label="...">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href=<%= `/new/${myData.category}/0` %>>Newest</a>
+                </li>
+                <% if (myData.page > 0) {%>
+                    <li class="page-item"><a class="page-link" href="<%= `/new/${myData.category}/${myData.page - 1}` %>"><%= myData.page - 1%> </a></li>
+
+                <% } %>
+
+                <li class="page-item active">
+                    <span class="page-link">
+                        <%= myData.page %>
+                        <span class="sr-only">(current)</span>
+                    </span>
+                </li>
+                <li class="page-item"><a class="page-link" href="<%= `/new/${myData.category}/${myData.page + 1}` %>"><%= myData.page + 1%> </a></li>
+            </ul>
+        </nav>
+    </div>
+
+
     <%- include('partials/bottomScripts') %>
 
 
