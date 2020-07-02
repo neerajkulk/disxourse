@@ -28,7 +28,7 @@
                         userVote:myData.papers[i].userVote
                         }) %>
                 <%} else { %>
-                    <%- include('partials/upvote-guest',{
+                <%- include('partials/upvote-guest',{
                         paperID:paperID,
                         voteScore:myData.papers[i].voteScore,
                         }) %>
@@ -41,6 +41,17 @@
                 </h3>
                 <p class="lead"> <%= myData.papers[i].authors %> </p>
                 <p class="text-muted"> <%= myData.papers[i].abstract %> </p>
+                <a href=<%= `/paper/${myData.papers[i].arxivID}#comments` %>>
+                    <% if ( myData.papers[i].commentCount  > 0) { %>
+                    <%= myData.papers[i].commentCount%>
+                    <%} %>
+                    <i class="fa fa-comments-o mb-5" aria-hidden="true"> </i>
+                </a>
+                <a class="twitter-share-button ml-5"
+                    href="https://twitter.com/intent/tweet?text=<%=`/paper/${myData.papers[i].arxivID}`%>"
+                    target="_blank">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
             </div>
         </div>
         <% } %>
@@ -49,7 +60,6 @@
 
 
 
-    <script src="/frontendJS/renderPapers.js"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
     </script>
 </body>

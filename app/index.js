@@ -52,6 +52,6 @@ app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mo
 
 
 const fetchPapers = require('./fetchPapers');
-let query = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.SR&start=0&max_results=30&sortBy=submittedDate&sortOrder=descending"
+let query = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.CO&start=0&max_results=30&sortBy=submittedDate&sortOrder=descending"
 //fetchPapers.updateDB(query)
 

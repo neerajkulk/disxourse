@@ -135,7 +135,10 @@ router.post('/api/comment/:paperid', async (req, res) => {
         date:Date.now()
     })
     await comment.save()
-    res.status(200).redirect(req.get('Referrer') + '/?newComment')
+    let paper = await Paper.findById(req.params.paperid)
+    paper.commentCount ++
+    await paper.save()
+    res.status(200).redirect(req.get('Referrer') + '#comments')
 })
 
 

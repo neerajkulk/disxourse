@@ -37,6 +37,10 @@ let paperSchema = mongoose.Schema({
     voteScore:{
         type:Number,
         default:0
+    },
+    commentCount:{
+        type:Number,
+        default:0
     }
 })
 

@@ -2,8 +2,6 @@ Overarching goal:
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 Next Steps:
-[] Minimize front-end JS. Keep it simple, servers-side + EJS templates
-[] Did this user vote this item up or down
 [] Make sure stuff works if you're not logged in...
 [] How many people voted up or down on this item
 [] Notification if user not logged in
@@ -16,6 +14,10 @@ Next Steps:
 [] protect auntheticated routes
 [] make sure you wrap async await in try-catch block and user .catch on .then on promises. 
 [] Is Mathjax rendering on all relevent pages?
+[] Fix twitter link once I have a domain name
+[] Turn login page into a modal
+[] Oauth routs should link back to current page. Not send you to main page. 
+[] back button from single page to news feed
 
 
 
