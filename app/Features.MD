@@ -18,6 +18,7 @@ Next Steps:
 [] Turn login page into a modal
 [] Oauth routs should link back to current page. Not send you to main page. 
 [] back button from single page to news feed
+[] add footer
 
 
 

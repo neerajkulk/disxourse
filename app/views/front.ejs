@@ -4,26 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     <%- include('partials/head') %>
-    <title>Front</title>
-    
 </head>
 
 <body>
-    
+
     <%- include('partials/navbar') %>
 
-    <h1>Categories</h1>
-    <ul>
-        <li> <a href="/new/astro-ph.CO">Cosmology and Nongalactic Astrophysics </a> </li>
-        <li> <a href="/new/astro-ph.EP">Earth and Planetary Astrophysics </a> </li>
-        <li> <a href="/new/astro-ph.GA">Astrophysics of Galaxies </a> </li>
-        <li> <a href="/new/astro-ph.HE">High Energy Astrophysical Phenomena </a> </li>
-        <li> <a href="/new/astro-ph.IM">Instrumentation and Methods for Astrophysics </a> </li>
-        <li> <a href="/new/astro-ph.SR">Solar and Stellar Astrophysics </a> </li>
-    </ul>
+    <main role="main">
+
+        <!-- Main jumbotron for a primary marketing message or call to action -->
+        <div class="jumbotron">
+            <div class="container">
+                <h1 class="display-3">DisXourse</h1>
+                <p>Stay updated with the latest papers in your field</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Example row of columns -->
+            <div class="row">
+                <div class="col-md-4">
+                    <h2>Astrophysics</h2>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"> <a href="/new/astro-ph.CO">Cosmology and Nongalactic Astrophysics </a> </li>
+                        <li class="list-group-item"> <a href="/new/astro-ph.EP">Earth and Planetary Astrophysics </a> </li>
+                        <li class="list-group-item"> <a href="/new/astro-ph.GA">Astrophysics of Galaxies </a> </li>
+                        <li class="list-group-item"> <a href="/new/astro-ph.HE">High Energy Astrophysical Phenomena </a> </li>
+                        <li class="list-group-item"> <a href="/new/astro-ph.IM">Instrumentation and Methods for Astrophysics </a> </li>
+                        <li class="list-group-item"> <a href="/new/astro-ph.SR">Solar and Stellar Astrophysics </a> </li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <hr>
+
+        </div> <!-- /container -->
+
+    </main>
+
 
     <%- include('partials/bottomScripts') %>
+
 </body>
 
 </html>
