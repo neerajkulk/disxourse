@@ -1,6 +1,8 @@
-<div class="card">
-    <div class="card-header">
-        Posting as <%= user.displayName %>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header">
+            Posting as <%= user.displayName %>
+        </div>
         <div class="card-body">
             <form action=<%= `/api/comment/${paperID}` %> method="post">
                 <div class="form-group">
@@ -11,7 +13,6 @@
                 </div>
             </form>
         </div>
-
     </div>
 </div>
 

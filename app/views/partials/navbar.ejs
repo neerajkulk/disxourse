@@ -29,11 +29,13 @@
 
         <li class="navbar-nav mr-auto">
             <% if (myData.user) {%>
-            Welcome, <%= myData.user.firstName %>
-            <a href="/auth/logout"><button type="button" class="btn btn-success">Logout</button></a>
+            <span class="navbar-text mr-4">
+                Welcome, <%= myData.user.firstName %>
+            </span>
+            <a href="/auth/logout"><button type="button" class="btn btn-outline-info">Logout</button></a>
             <% } else {%>
             <a href="/auth/google">
-                <button class="btn btn-outline-success my-2 my-sm-0"> Login with <i class="fa fa-google"></i> </button>
+                <button class="btn btn-success my-2 my-sm-0"> Login with <i class="fa fa-google"></i> </button>
             </a>
             <%}%>
         </li>
