@@ -39,7 +39,9 @@
                 <h3>
                     <a href=<%= `/paper/${myData.papers[i].arxivID}` %>> <%= myData.papers[i].title %> </a>
                 </h3>
+                <p class="text-muted float-right"> <%= myData.papers[i].published.toDateString() %> </p>
                 <p class="lead"> <%= myData.papers[i].authors %> </p>
+
                 <p class="text-muted"> <%= myData.papers[i].abstract %> </p>
                 <a href=<%= `/paper/${myData.papers[i].arxivID}#comments` %>>
                     <% if ( myData.papers[i].commentCount  > 0) { %>

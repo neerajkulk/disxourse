@@ -18,7 +18,7 @@ router.get('/dashboard', ensureAuth, (req, res) => res.render('dashboard', {
 // New feed for category
 router.get('/new/:cat', async (req, res) => {
     try {
-        let papers = await Paper.find({ category: req.params.cat }).sort('-published').limit(3).lean()
+        let papers = await Paper.find({ category: req.params.cat }).sort('-published').limit(30).lean()
 
         for (let index = 0; index < papers.length; index++) {
             paper = papers[index]

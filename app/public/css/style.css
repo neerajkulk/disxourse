@@ -32,14 +32,20 @@
     margin-bottom: 0px;
 }
 
-.upvote.guest{
+.upvote.guest {
     color: gray;
 }
 
-.downvote.guest{
+.downvote.guest {
     color: gray;
 }
 
-.card-header{
-    height:3em ;
+.card-header {
+    height: 3em;
+}
+
+.pdf-viewer {
+    box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.8);
+    width: 90%;
+    height: 750px;
 }
