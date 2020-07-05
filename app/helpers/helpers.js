@@ -3,8 +3,8 @@ let Upvote = require('../models/Upvote');
 
 
 module.exports = {
-    // Shorten author list 
     parseAuthors: function (authorList) {
+        // Shorten list of authors
         let authorString = ''
         switch (authorList.length) {
             case 1:
@@ -20,14 +20,13 @@ module.exports = {
         return authorString
     },
 
-    // Get user's previous vote for a paper
     getUserPreviousVote: async function (paperID, userID) {
+        // Returns user's previous vote on a paper 
         let userVote = await Upvote.findOne({ paperID: paperID, userID: userID }).lean()
         if (userVote) {
-            return userVote.vote 
-        } else{
+            return userVote.vote
+        } else {
             return 0
         }
-
     },
 };

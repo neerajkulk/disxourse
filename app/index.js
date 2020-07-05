@@ -32,7 +32,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     //cookie: { secure: true }, Wont work without https
-    store: new MongoStore({ mongooseConnection:mongoose.connection})
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
 }))
 
 // Passport middleware
