@@ -11,7 +11,7 @@
 
 <body>
     <!-- Empty DIV to store data. Front-end Javascript reads this -->
-    <div id="my-data" style="display: none;"> <%- JSON.stringify(myData) %></div>
+    <div id="my-data" style="display: none;"> <%= JSON.stringify(myData) %></div>
     <%- include('partials/navbar') %>
     <h1 class="container text-center display-3 mt-5 mb-5 "><%= myData.title %> </h1>
     <section class="container" id="papers">

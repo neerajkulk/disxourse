@@ -6,6 +6,7 @@ let Comment = require('../models/Comment');
 const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
+const global = require('../global.js');
 
 router.get('/', (req, res) => res.render('front', {
     myData: { user: req.user }
@@ -19,7 +20,7 @@ router.get('/dashboard', ensureAuth, (req, res) => res.render('dashboard', {
 router.get('/new/:cat/:page', async (req, res) => {
     try {
         let page = Number(req.params.page)
-        let resultsPerPage = 5
+        let resultsPerPage = global.resultsPerPage
         let papers = await Paper.find({ category: req.params.cat }).sort('-published').skip(resultsPerPage * page).limit(resultsPerPage).lean()
 
         for (let index = 0; index < papers.length; index++) {
