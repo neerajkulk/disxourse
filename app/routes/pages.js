@@ -28,7 +28,7 @@ router.get('/:cat/:filter/:page', async (req, res) => {
             user: req.user,
             pagination: helpers.paginateURLs(req.url)
         }
-        res.render('new', {
+        res.render('main', {
             myData: myData
         })
     } catch (err) {
