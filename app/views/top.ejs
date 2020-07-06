@@ -12,21 +12,23 @@
 <body>
     <%- include('partials/navbar') %>
 
+    <!-- Sort by Duration dropdown  -->
     <h1 class="container text-center display-3 mt-5 mb-5 "><%= myData.title %> </h1>
     <div class="container mt-5 mb-5">
         <div class="dropdown">
             <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <%= myData.filter %>
+                <%= myData.duration %>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href=<%= `/${myData.category}/newest/0` %>>Newest</a>
-                <a class="dropdown-item" href=<%= `/${myData.category}/top-week/0` %>>Top - Past Week</a>
-                <a class="dropdown-item" href=<%= `/${myData.category}/top-month/0` %>>Top - Past Month</a>
-                <a class="dropdown-item" href=<%= `/${myData.category}/top-all/0` %>>Top - All time</a>
+                <a class="dropdown-item" href=<%= `/new/${myData.category}/0` %>>Newest</a>
+                <a class="dropdown-item" href=<%= `/top/${myData.category}/week/0` %>>Top - Past Week</a>
+                <a class="dropdown-item" href=<%= `/top/${myData.category}/month/0` %>>Top - Past Month Top</a>
+                <a class="dropdown-item" href=<%= `/top/${myData.category}/all/0` %>>Top - All time</a>
             </div>
         </div>
     </div>
+
     <%- include('partials/papers',{papers:myData.papers,user:myData.user}) %>
 
     <%- include('partials/pagination',{pagination:myData.pagination}) %>

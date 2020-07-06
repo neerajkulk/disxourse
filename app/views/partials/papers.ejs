@@ -1,0 +1,47 @@
+<section class="container" id="papers">
+    
+    <% if(papers.length == 0) {%>
+    <h4> No papers found</h4>
+    <% } %>
+
+    <!-- Loop through papers and display them-->
+    <% for(let i=0; i < papers.length; i++) { %>
+    <% paperID = papers[i]._id%>
+    <div class="row" id="<%= paperID %>">
+        <div class="col-sm-1">
+            <% if (user){%>
+            <%- include('../partials/upvote',{
+                    paperID:paperID,
+                    voteScore:papers[i].voteScore,
+                    userVote:papers[i].userVote
+                    }) %>
+            <%} else { %>
+            <%- include('../partials/upvote-guest',{
+                    paperID:paperID,
+                    voteScore:papers[i].voteScore,
+                    }) %>
+            <%} %>
+
+        </div>
+        <div class="col-sm-11">
+            <h3>
+                <a href=<%= `/paper/${papers[i].arxivID}` %>> <%= papers[i].title %> </a>
+            </h3>
+            <p class="text-muted float-right"> <%= papers[i].published.toDateString() %> </p>
+            <p class="lead"> <%= papers[i].authors %> </p>
+
+            <p class="text-muted"> <%= papers[i].abstract %> </p>
+            <a href=<%= `/paper/${papers[i].arxivID}#comments` %>>
+                <% if ( papers[i].commentCount  > 0) { %>
+                <%= papers[i].commentCount%>
+                <%} %>
+                <i class="fa fa-comments-o mb-5" aria-hidden="true"> </i>
+            </a>
+            <a class="twitter-share-button ml-5"
+                href="https://twitter.com/intent/tweet?text=<%=`/paper/${papers[i].arxivID}`%>" target="_blank">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+    <% } %>
+</section>

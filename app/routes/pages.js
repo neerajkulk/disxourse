@@ -7,23 +7,23 @@ const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const global = require('../global.js');
-const { use } = require('./api');
 
 router.get('/', (req, res) => res.render('front', {
     myData: { user: req.user }
 }))
 
-// New feed for category
-router.get('/new/:cat/:page', async (req, res) => {
+
+
+router.get('/:cat/:filter/:page', async (req, res) => {
     try {
         let page = Number(req.params.page)
         let resultsPerPage = global.resultsPerPage
-        let papersQuery = await Paper.find({ category: req.params.cat }).sort('-published').skip(resultsPerPage * page).limit(resultsPerPage).lean()
+        let papersQuery = await helpers.queryPapers(req.params.cat, req.params.filter, resultsPerPage, page)
         let paperData = await helpers.getPaperTemplateData(papersQuery, req.user)
-
         let myData = {
             title: helpers.sentencifyArxivCategory(req.params.cat),
             category: req.params.cat,
+            filter: helpers.parseFilter(req.params.filter),
             papers: paperData,
             user: req.user,
             pagination: helpers.paginateURLs(req.url)
@@ -35,35 +35,6 @@ router.get('/new/:cat/:page', async (req, res) => {
         console.error(err)
     }
 })
-
-
-// Top posts for a category
-router.get('/top/:cat/:page', async (req, res) => {
-    try {
-        let page = Number(req.params.page)
-        let resultsPerPage = global.resultsPerPage
-        let d = new Date();
-        d.setDate(d.getDate() - 7);
-        let papersQuery = await Paper.find({ "published": { "$gte": d } }).sort('-voteScore').skip(resultsPerPage * page).limit(resultsPerPage).lean()
-        let paperData = await helpers.getPaperTemplateData(papersQuery, req.user)
-
-        let myData = {
-            title: helpers.sentencifyArxivCategory(req.params.cat),
-            category: req.params.cat,
-            papers: paperData,
-            user: req.user,
-            pagination: helpers.paginateURLs(req.url)
-        }
-
-        res.render('new', {
-            myData: myData
-        })
-
-    } catch (err) {
-        console.error(err)
-    }
-})
-
 
 // Page for single paper
 router.get('/paper/:arxivid', async (req, res) => {

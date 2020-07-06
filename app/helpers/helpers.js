@@ -78,7 +78,6 @@ module.exports = {
         let currentPage = Number(arr.slice(-1).pop())
         let nextPage = currentPage + 1
         let prevPage = currentPage == 0 ? null : currentPage - 1
-
         arr.pop()
         baseURL = arr.join('/')
         return {
@@ -87,5 +86,51 @@ module.exports = {
             current: currentURL,
             next: baseURL + '/' + nextPage
         }
+    },
+    queryPapers: async function (category, filter, resultsPerPage, page) {
+        let results
+        let d = new Date()
+        let query
+        switch (filter) {
+            case 'newest':
+                results = await Paper.find({ category: category }).sort('-published').skip(resultsPerPage * page).limit(resultsPerPage).lean()
+                break;
+            case 'top-week':
+                d.setDate(d.getDate() - 7);
+                query = { category: category, published: { "$gte": d } }
+                results = await Paper.find(query).sort('-voteScore').skip(resultsPerPage * page).limit(resultsPerPage).lean()
+                break
+            case 'top-month':
+                d.setDate(d.getDate() - 30);
+                query = { category: category, published: { "$gte": d } }
+                results = await Paper.find(query).sort('-voteScore').skip(resultsPerPage * page).limit(resultsPerPage).lean()
+                break
+            case 'top-all':
+                query = { category: category }
+                results = await Paper.find(query).sort('-voteScore').skip(resultsPerPage * page).limit(resultsPerPage).lean()
+                break
+            default:
+                results = []
+                break
+        }
+        return results
+    },
+    parseFilter: function (filter) {
+        let outString = ''
+        switch (filter) {
+            case 'newest':
+                outString = 'Newest'
+                break;
+            case 'top-week':
+                outString = 'Top - Past Week'
+                break
+            case 'top-month':
+                outString = 'Top - Past Month'
+                break
+            case 'top-all':
+                outString = 'Top - All time'
+                break
+        }
+        return outString
     }
 };
