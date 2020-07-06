@@ -12,8 +12,6 @@ router.get('/', (req, res) => res.render('front', {
     myData: { user: req.user }
 }))
 
-
-
 router.get('/:cat/:filter/:page', async (req, res) => {
     try {
         let page = Number(req.params.page)
