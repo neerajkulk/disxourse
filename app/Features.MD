@@ -11,7 +11,9 @@ Next Steps:
 [] Oauth routs should link back to current page. Not send you to main page. 
 [] add footer
 [] remember to add .lean() to mongoose queries when you dont need to save back to DB
-
+[] Add google analytics
+[] Add feature requst button
+[] Add favicon 
 
 Features to add:
 [] In Related papers, show cited papers
