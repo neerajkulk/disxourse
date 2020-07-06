@@ -8,11 +8,13 @@ const { ensureAuth, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const global = require('../global.js');
 
-router.get('/', (req, res) => res.render('front', {
-    myData: { user: req.user }
-}))
+router.get('/', (req, res) => {
+    res.render('front', {
+        myData: { user: req.user }
+    })
+})
 
-router.get('/:cat/:filter/:page', async (req, res) => {
+router.get('/feed/:cat/:filter/:page', async (req, res) => {
     try {
         let page = Number(req.params.page)
         let resultsPerPage = global.resultsPerPage

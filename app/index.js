@@ -45,9 +45,9 @@ app.use(bodyParser.json())
 
 
 // Routes
+app.use('/', require('./routes/auth'))
 app.use('/', require('./routes/api'))
 app.use('/', require('./routes/pages'))
-app.use('/', require('./routes/auth'))
 
 app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mode at http://localhost:${PORT}`))
 

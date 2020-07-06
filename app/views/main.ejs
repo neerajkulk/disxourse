@@ -20,10 +20,10 @@
                 <%= myData.filter %>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href=<%= `/${myData.category}/newest/0` %>>Newest</a>
-                <a class="dropdown-item" href=<%= `/${myData.category}/top-week/0` %>>Top - Past Week</a>
-                <a class="dropdown-item" href=<%= `/${myData.category}/top-month/0` %>>Top - Past Month</a>
-                <a class="dropdown-item" href=<%= `/${myData.category}/top-all/0` %>>Top - All time</a>
+                <a class="dropdown-item" href=<%= `/feed/${myData.category}/newest/0` %>>Newest</a>
+                <a class="dropdown-item" href=<%= `/feed/${myData.category}/top-week/0` %>>Top - Past Week</a>
+                <a class="dropdown-item" href=<%= `/feed/${myData.category}/top-month/0` %>>Top - Past Month</a>
+                <a class="dropdown-item" href=<%= `/feed/${myData.category}/top-all/0` %>>Top - All time</a>
             </div>
         </div>
     </div>
