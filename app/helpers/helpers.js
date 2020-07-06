@@ -29,4 +29,37 @@ module.exports = {
             return 0
         }
     },
+    sentencifyArxivCategory: function (cat) {
+        switch (cat) {
+            case 'astro-ph.CO':
+                return 'Cosmology and Nongalactic Astrophysics'
+            case 'astro-ph.EP':
+                return 'Earth and Planetary Astrophysics'
+            case 'astro-ph.GA':
+                return 'Astrophysics of Galaxies'
+            case 'astro-ph.HE':
+                return 'High Energy Astrophysical Phenomena'
+            case 'astro-ph.IM':
+                return 'Instrumentation and Methods for Astrophysics'
+            case 'astro-ph.SR':
+                return 'Solar and Stellar Astrophysics'
+            default:
+                return 'Not valid'
+        }
+    },
+    sumPaperVotes: async function (paperID) {
+        // Compute net upvotes of a paper by summing up all votes
+        try {
+            let paper = await Paper.findById(paperID)
+
+            let sum = 0
+            let paperVotes = await Upvote.find({ paperID: paperID })
+            paperVotes.forEach(voteObj => { sum += voteObj.vote })
+            paper.voteScore = sum
+            await paper.save()
+
+        } catch (err) {
+            console.error(err)
+        }
+    }
 };
