@@ -61,5 +61,31 @@ module.exports = {
         } catch (err) {
             console.error(err)
         }
+    },
+    getPaperTemplateData: async function (papers, user) {
+        // Add user-specific data to pass into EJS template (previous votes)
+        for (let index = 0; index < papers.length; index++) {
+            paper = papers[index]
+            paper.authors = module.exports.parseAuthors(paper.authors)
+            if (user) {
+                paper.userVote = await module.exports.getUserPreviousVote(paper._id, user._id)
+            }
+        }
+        return papers
+    },
+    paginateURLs: function (currentURL) {
+        let arr = currentURL.split('/')
+        let currentPage = Number(arr.slice(-1).pop())
+        let nextPage = currentPage + 1
+        let prevPage = currentPage == 0 ? null : currentPage - 1
+
+        arr.pop()
+        baseURL = arr.join('/')
+        return {
+            first: baseURL + '/' + 0,
+            prev: prevPage == null ? null : baseURL + '/' + prevPage,
+            current: currentURL,
+            next: baseURL + '/' + nextPage
+        }
     }
 };

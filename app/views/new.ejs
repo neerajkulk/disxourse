@@ -59,29 +59,7 @@
         <% } %>
     </section>
 
-    <!-- Pagination -->
-    <div class="d-flex justify-content-center">
-        <nav aria-label="...">
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href=<%= `/new/${myData.category}/0` %>>Newest</a>
-                </li>
-                <% if (myData.page > 0) {%>
-                    <li class="page-item"><a class="page-link" href="<%= `/new/${myData.category}/${myData.page - 1}` %>"><%= myData.page - 1%> </a></li>
-
-                <% } %>
-
-                <li class="page-item active">
-                    <span class="page-link">
-                        <%= myData.page %>
-                        <span class="sr-only">(current)</span>
-                    </span>
-                </li>
-                <li class="page-item"><a class="page-link" href="<%= `/new/${myData.category}/${myData.page + 1}` %>"><%= myData.page + 1%> </a></li>
-            </ul>
-        </nav>
-    </div>
-
+    <%- include('partials/pagination',{pagination:myData.pagination}) %>
 
     <%- include('partials/bottomScripts') %>
 
