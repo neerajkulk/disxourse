@@ -49,3 +49,8 @@
     width: 90%;
     height: 750px;
 }
+
+.jumbotron {
+    background: linear-gradient( #0099ff, #33AEFF);
+    color: white
+}
