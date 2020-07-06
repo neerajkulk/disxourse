@@ -12,10 +12,15 @@ Next Steps:
 [] add footer
 [] remember to add .lean() to mongoose queries when you dont need to save back to DB
 [] Add google analytics
-[] Add feature requst button
 [] Add favicon 
 
 Features to add:
 [] In Related papers, show cited papers
 [] mongoose query to count if documents might be slow. Speed up if performance is an issue
 [] Notifications for comments and upvotes (allow users to follow a paper)
+
+
+- Possible names
+
+DisXourse
+ArXiv chats

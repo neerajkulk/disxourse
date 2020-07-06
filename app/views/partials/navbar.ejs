@@ -8,35 +8,43 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    Categories
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/feed/astro-ph.CO/top-week/0">Cosmology and Nongalactic Astrophysics
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Categories
                     </a>
-                    <a class="dropdown-item" href="/feed/astro-ph.EP/top-week/0">Earth and Planetary Astrophysics</a>
-                    <a class="dropdown-item" href="/feed/astro-ph.GA/top-week/0">Astrophysics of Galaxies </a>
-                    <a class="dropdown-item" href="/feed/astro-ph.HE/top-week/0">High Energy Astrophysical Phenomena</a>
-                    <a class="dropdown-item" href="/feed/astro-ph.IM/top-week/0">Instrumentation and Methods for
-                        Astrophysics </a>
-                    <a class="dropdown-item" href="/feed/astro-ph.SR/top-week/0">Solar and Stellar Astrophysics </a>
-                </div>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/feed/astro-ph.EP/top-week/0">Earth and Planetary
+                            Astrophysics</a>
+                        <a class="dropdown-item" href="/feed/astro-ph.GA/top-week/0">Astrophysics of Galaxies </a>
+                        <a class="dropdown-item" href="/feed/astro-ph.HE/top-week/0">High Energy Astrophysical
+                            Phenomena</a>
+                        <a class="dropdown-item" href="/feed/astro-ph.IM/top-week/0">Instrumentation and Methods for
+                            Astrophysics </a>
+                        <a class="dropdown-item" href="/feed/astro-ph.SR/top-week/0">Solar and Stellar Astrophysics
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="navbar-item ml-auto">
+                    <% if (myData.user) {%>
+                    <span class="navbar-text mr-4">
+                        Welcome, <%= myData.user.firstName %>
+                    </span>
+                    <a href="/auth/logout"><button type="button" class="btn btn-outline-info">Logout</button></a>
+                    <% } else {%>
+                    <a href="/auth/google">
+                        <button class="btn btn-success my-2 my-sm-0"> Login with <i class="fa fa-google"></i>
+                        </button>
+                    </a>
+                    <%}%>
                 </li>
             </ul>
         </div>
-
-        <li class="navbar-nav mr-auto">
-            <% if (myData.user) {%>
-            <span class="navbar-text mr-4">
-                Welcome, <%= myData.user.firstName %>
-            </span>
-            <a href="/auth/logout"><button type="button" class="btn btn-outline-info">Logout</button></a>
-            <% } else {%>
-            <a href="/auth/google">
-                <button class="btn btn-success my-2 my-sm-0"> Login with <i class="fa fa-google"></i> </button>
-            </a>
-            <%}%>
-        </li>
     </nav>
 </div>

@@ -13,6 +13,11 @@ router.get('/', (req, res) => {
         myData: { user: req.user }
     })
 })
+router.get('/about', (req, res) => {
+    res.render('about', {
+        myData: { user: req.user }
+    })
+})
 
 router.get('/feed/:cat/:filter/:page', async (req, res) => {
     try {
