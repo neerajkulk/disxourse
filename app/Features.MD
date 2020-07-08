@@ -13,6 +13,8 @@ Next Steps:
 [] remember to add .lean() to mongoose queries when you dont need to save back to DB
 [] Add google analytics
 [] Add favicon 
+[] THink of a more elegent way of passing data to template instead of creating the myData object each time. 
+[] Create error files to render in catch statements
 
 Features to add:
 [] In Related papers, show cited papers
@@ -24,3 +26,4 @@ Features to add:
 
 DisXourse
 ArXiv chats
+DisXus
