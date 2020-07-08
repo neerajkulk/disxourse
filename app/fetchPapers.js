@@ -60,10 +60,10 @@ async function saveEntry(entry) {
         const alreadyExists = await Paper.findOne({ arxivID: paper.arxivID })
         if (!alreadyExists) {
             await paper.save()
-            console.log(`added ${paper.arxivID} to DB`)
+            console.log(`${paper.arxivID} has been added`)
             return true
         } else {
-            console.log(`${paper.arxivID} already exits DB`)
+            console.log(`${paper.arxivID} already exists`)
             return false
         }
     } catch (err) {
@@ -84,10 +84,10 @@ async function QueryToJSON(queryString) {
 async function updateDB() {
     try {
         let startIndex = 0
-        let maxIndex = 200  //10
-        let querySize = 51 // 100
+        let maxIndex = 20  //10
+        let querySize = 10 // 100
         let totalPapersAdded = 0
-        const baseURL = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.CO"
+        const baseURL = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.SR"
 
 
         for (startIndex = 0; startIndex < maxIndex; startIndex += querySize) {
@@ -99,18 +99,23 @@ async function updateDB() {
             for (let entry = 0; entry < parsed.length; entry++) {
                 let saved = await saveEntry(parsed[entry])
                 if (saved) { currentQueryNewPapers++ }
-                console.log({ currentQueryNewPapers })
             }
-
             totalPapersAdded += currentQueryNewPapers
-            console.log({ totalPapersAdded })
+            console.log(`\n *** Added ${currentQueryNewPapers} new papers from current query *** \n`)
 
             if (currentQueryNewPapers == 0) {
-                console.log('All up to date')
+                console.log('\n \n ----------- All up to date ---------- \n \n')
                 break
             }
-            await sleep(5000)
+
+            await sleep(5000) // Let's not break arXiv API
         }
+
+        if (startIndex == maxIndex) {
+            console.log('\n \n ----------- Max iteration Limit reached!?!?! ---------- \n \n')
+        }
+
+        console.log(`\n ***** ${totalPapersAdded} new papers added *****`)
 
     } catch (error) {
         console.error(error);
