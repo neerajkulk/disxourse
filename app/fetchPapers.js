@@ -30,7 +30,6 @@ function parseCategory(entry) {
     }
 }
 
-
 function parseAuthor(entry) {
     if (Array.isArray(entry.author)) {
         return entry.author.map(name => name.name._text)
@@ -82,7 +81,7 @@ async function QueryToJSON(queryString) {
     }
 }
 
-async function updateDB(queryString) {
+async function updateDB() {
     try {
         let startIndex = 0
         let maxIndex = 200  //10
@@ -119,8 +118,13 @@ async function updateDB(queryString) {
 }
 
 async function addPaperById(arxivID) {
-    let queryString = `http://export.arxiv.org/api/query?id_list=${arxivID}`
-    updateDB(queryString)
+    try {
+        let queryString = `http://export.arxiv.org/api/query?id_list=${arxivID}`
+        let parsed = await QueryToJSON(queryString)
+        await saveEntry(parsed)
+    } catch (err) {
+        console.err(err)
+    }
 }
 
 module.exports = {

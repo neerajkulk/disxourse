@@ -62,7 +62,7 @@ router.get('/paper/:arxivid', async (req, res) => {
             res.render('single', { myData })
         } else {
             await fetchPapers.addPaperById(req.params.arxivid)
-            res.redirect(req.originalUrl); // TODO: reload here is multiple times. Do some async await stuff here
+            res.redirect(req.originalUrl); 
         }
     } catch (err) {
         console.error(err)
