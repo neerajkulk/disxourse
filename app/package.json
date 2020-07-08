@@ -10,6 +10,7 @@
   "author": "Neeraj Kulkarni",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "connect-mongo": "^3.2.0",
     "dotenv": "^8.2.0",
@@ -22,6 +23,7 @@
     "morgan": "^1.10.0",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
+    "xml-js": "^1.6.11",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
