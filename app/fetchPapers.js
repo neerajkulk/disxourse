@@ -88,7 +88,7 @@ async function updateDB() {
         let maxIndex = 1000  //10
         let querySize = 100 // 100
         let totalPapersAdded = 0
-        const baseURL = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.CO+OR+astro-ph.EP+OR+astro-ph.GA+OR+astro-ph.HE+OR+astro-ph.IM+OR+astro-ph.SR"
+        const baseURL = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.CO+OR+cat:astro-ph.EP+OR+cat:astro-ph.GA+OR+cat:astro-ph.HE+OR+cat:astro-ph.IM+OR+cat:astro-ph.SR"
 
 
         for (startIndex = 0; startIndex < maxIndex; startIndex += querySize) {
