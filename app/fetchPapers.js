@@ -105,10 +105,10 @@ async function updateDB() {
             totalPapersAdded += currentQueryNewPapers
             console.log(`\n *** Added ${currentQueryNewPapers} new papers from current query *** \n`)
 
-            if (currentQueryNewPapers == 0) {
-                console.log('\n \n ----------- All up to date ---------- \n \n')
-                break
-            }
+            // if (currentQueryNewPapers == 0) {
+            //     console.log('\n \n ----------- All up to date ---------- \n \n')
+            //     break
+            // }
 
             await sleep(5000) // Let's not break arXiv API
         }
