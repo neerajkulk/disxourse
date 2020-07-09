@@ -74,7 +74,6 @@ async function saveEntry(entry) {
 async function QueryToJSON(queryString) {
     try {
         const response = await axios.get(queryString);
-        console.log(response.data)
         let parsed = JSON.parse(convert.xml2json(response.data, { compact: true, spaces: 4 }));
         return parsed.feed.entry
     } catch (err) {
@@ -82,7 +81,7 @@ async function QueryToJSON(queryString) {
     }
 }
 
-async function updateDB() {
+async function updateDB(earlyExit = false) {
     try {
         let startIndex = 0
         let maxIndex = 1000  //10
@@ -90,13 +89,18 @@ async function updateDB() {
         let totalPapersAdded = 0
         const baseURL = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.CO+OR+cat:astro-ph.EP+OR+cat:astro-ph.GA+OR+cat:astro-ph.HE+OR+cat:astro-ph.IM+OR+cat:astro-ph.SR"
 
-
         for (startIndex = 0; startIndex < maxIndex; startIndex += querySize) {
             let currentQueryNewPapers = 0
 
             let queryString = baseURL + `&start=${startIndex}&max_results=${querySize}&sortBy=submittedDate&sortOrder=descending`
-            console.log(queryString)
-            let parsed = await QueryToJSON(queryString)
+            console.log('fetching papers from: \n'+queryString)
+            let parsed
+
+            // I think sometimes the arxiv API doesn't work and I have to try again. IDK why?
+            do {
+                parsed = await QueryToJSON(queryString)
+                await sleep(5000)
+            } while (parsed == undefined);
 
             for (let entry = 0; entry < parsed.length; entry++) {
                 let saved = await saveEntry(parsed[entry])
@@ -105,16 +109,16 @@ async function updateDB() {
             totalPapersAdded += currentQueryNewPapers
             console.log(`\n *** Added ${currentQueryNewPapers} new papers from current query *** \n`)
 
-            // if (currentQueryNewPapers == 0) {
-            //     console.log('\n \n ----------- All up to date ---------- \n \n')
-            //     break
-            // }
+            if (earlyExit && currentQueryNewPapers == 0 ) {
+                console.log('\n \n ----------- All up to date ---------- \n \n')
+                break
+            }
 
             await sleep(5000) // Let's not break arXiv API
         }
 
         if (startIndex == maxIndex) {
-            console.log('\n \n ----------- Max iteration Limit reached!?!?! ---------- \n \n')
+            console.log('\n \n ----------- Max iteration Limit reached ---------- \n \n')
         }
 
         console.log(`\n ***** ${totalPapersAdded} new papers added *****`)
