@@ -16,6 +16,8 @@ Incentivize people to upvote/downvote and leave comments. Create a community
 * THink of a more elegent way of passing data to template instead of creating the myData object each time. 
 * Create error files to render in catch statements
 * Should I minify JS and CSS files?
+* have clear call to action to login on landing page
+* if for some reason people dont want their paper on my page, there should be an option
 
 ### Features to add:
 * In Related papers, show cited papers

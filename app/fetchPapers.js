@@ -74,6 +74,7 @@ async function saveEntry(entry) {
 async function QueryToJSON(queryString) {
     try {
         const response = await axios.get(queryString);
+        console.log(response.data)
         let parsed = JSON.parse(convert.xml2json(response.data, { compact: true, spaces: 4 }));
         return parsed.feed.entry
     } catch (err) {
@@ -84,16 +85,17 @@ async function QueryToJSON(queryString) {
 async function updateDB() {
     try {
         let startIndex = 0
-        let maxIndex = 20  //10
-        let querySize = 10 // 100
+        let maxIndex = 1000  //10
+        let querySize = 100 // 100
         let totalPapersAdded = 0
-        const baseURL = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.SR"
+        const baseURL = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.CO+OR+astro-ph.EP+OR+astro-ph.GA+OR+astro-ph.HE+OR+astro-ph.IM+OR+astro-ph.SR"
 
 
         for (startIndex = 0; startIndex < maxIndex; startIndex += querySize) {
             let currentQueryNewPapers = 0
 
             let queryString = baseURL + `&start=${startIndex}&max_results=${querySize}&sortBy=submittedDate&sortOrder=descending`
+            console.log(queryString)
             let parsed = await QueryToJSON(queryString)
 
             for (let entry = 0; entry < parsed.length; entry++) {
