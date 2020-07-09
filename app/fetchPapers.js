@@ -93,13 +93,13 @@ async function updateDB(earlyExit = false) {
             let currentQueryNewPapers = 0
 
             let queryString = baseURL + `&start=${startIndex}&max_results=${querySize}&sortBy=submittedDate&sortOrder=descending`
-            console.log('fetching papers from: \n'+queryString)
+            console.log('fetching papers from: \n' + queryString)
             let parsed
 
             // I think sometimes the arxiv API doesn't work and I have to try again. IDK why?
             do {
-                parsed = await QueryToJSON(queryString)
                 await sleep(5000)
+                parsed = await QueryToJSON(queryString)
             } while (parsed == undefined);
 
             for (let entry = 0; entry < parsed.length; entry++) {
@@ -109,7 +109,7 @@ async function updateDB(earlyExit = false) {
             totalPapersAdded += currentQueryNewPapers
             console.log(`\n *** Added ${currentQueryNewPapers} new papers from current query *** \n`)
 
-            if (earlyExit && currentQueryNewPapers == 0 ) {
+            if (earlyExit && currentQueryNewPapers == 0) {
                 console.log('\n \n ----------- All up to date ---------- \n \n')
                 break
             }
