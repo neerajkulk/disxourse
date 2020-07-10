@@ -51,7 +51,5 @@ app.use('/', require('./routes/pages'))
 
 app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mode at http://localhost:${PORT}`))
 
-
-const fetchPapers = require('./fetchPapers');
-fetchPapers.updateDB()
-
+// cron jobs
+const getNewPapers = require('./cron/getNewPapers')
