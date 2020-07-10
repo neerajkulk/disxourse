@@ -11,7 +11,7 @@ function removeVersion(arxivURL) {
 
 function removeLineBreak(string) {
     // https://stackoverflow.com/questions/10805125/how-to-remove-all-line-breaks-from-a-string
-    return string.replace(/(\r\n|\n|\r)/gm, "")
+    return string.replace(/(\r\n|\n|\r)/gm, " ")
 }
 
 async function sleep(ms) {
