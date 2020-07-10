@@ -9,49 +9,133 @@
 </head>
 
 <body>
-
     <%- include('partials/navbar') %>
-    <main role="main">
-        <div class="jumbotron">
-            <div class="container">
-                <h1 class="display-3">DisXourse</h1>
-                <p class="lead">Join the discussion about the latest arXiv papers in your field!</p>
+    <div class="container-fluid" style="height: 100vh;" id="big-landing">
+        <div class="row align-items-center h-75">
+            <div class="col-sm-7">
+                <h1 class="display-3 text-right">disXourse</h1>
+                <p class="lead text-right"> Join the discussion about the latest arXiv papers in your field.</p>
+                <a href="#info"> <button class="btn btn-outline-light mx-4 mt-4" style="float: right"> Learn
+                        more <i class="fa fa-angle-down" aria-hidden="true"></i>
+                    </button></a>
+
+                <% if(! myData.user) {%>
+                <a href="/auth/google"><button class="btn btn-white mx-4 mt-4 px-5" style="float: right;"> <i
+                            class="fa fa-sign-in" style="font-size: 1em;"></i> Sign in</button></a>
+                <% }%>
+            </div>
+            <div class="col-sm-5">
+                <i class="fa fa-leanpub ml-5 mt-5" style="font-size: 4em;"></i>
             </div>
         </div>
+    </div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h2>Astrophysics</h2>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"> <a href="/feed/astro-ph.CO/top-week/0">Cosmology and Nongalactic
-                                Astrophysics
-                            </a> </li>
-                        <li class="list-group-item"> <a href="/feed/astro-ph.EP/top-week/0">Earth and Planetary
-                                Astrophysics
-                            </a>
-                        </li>
-                        <li class="list-group-item"> <a href="/feed/astro-ph.GA/top-week/0">Astrophysics of Galaxies
-                            </a>
-                        </li>
-                        <li class="list-group-item"> <a href="/feed/astro-ph.HE/top-week/0">High Energy Astrophysical
-                                Phenomena
-                            </a>
-                        </li>
-                        <li class="list-group-item"> <a href="/feed/astro-ph.IM/top-week/0">Instrumentation and Methods
-                                for
-                                Astrophysics </a> </li>
-                        <li class="list-group-item"> <a href="/feed/astro-ph.SR/top-week/0">Solar and Stellar
-                                Astrophysics
-                            </a>
-                        </li>
-                    </ul>
+    <div id="info"> </div>
+    <br><br><br>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-5 mb-lg-0 border-0">
+                    <div class="card-body">
+                        <h2 class="text-center"> <i class="fa fa-book"></i> <br>
+                            Read</h2>
+                        <p class="text-center text-muted"> Read the latest scientific papers right here on disXourse
+                        </p>
+                    </div>
                 </div>
             </div>
-            <hr>
-        </div> <!-- /container -->
-    </main>
+            <div class="col-lg-4">
+                <div class="card mb-5 mb-lg-0 border-0">
+                    <div class="card-body">
+                        <h2 class="text-center"> <i class="fa fa-arrow-up"></i><br>
+                            Vote</h2>
+                        <p class="text-center text-muted"> Let others know what you think by voting on the best
+                            papers</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card mb-5 mb-lg-0 border-0">
+                    <div class="card-body">
+                        <!-- <h3 class="card-title text-muted text-uppercase text-center">Read</h3> -->
+                        <h2 class="text-center"> <i class="fa fa-comments"></i> <br>
+                            Comment</h2>
+                        <p class="text-center text-muted"> Share your thoughts, ask questions and join the
+                            discussion with other researchers in your field.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <hr>
+    <h1 class="text-center my-5">What's your field of research?</h1>
+
+
+    <section class="cat-card my-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mb-5 mb-lg-0">
+                        <div class="card-body">
+                            <h2 class="text-center"> Astrophysics</h2>
+                            <hr>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"> <a href="/feed/astro-ph.CO/top-week/0">Cosmology and
+                                        Nongalactic
+                                        Astrophysics
+                                    </a> </li>
+                                <li class="list-group-item"> <a href="/feed/astro-ph.EP/top-week/0">Earth and
+                                        Planetary
+                                        Astrophysics
+                                    </a>
+                                </li>
+                                <li class="list-group-item"> <a href="/feed/astro-ph.GA/top-week/0">Astrophysics of
+                                        Galaxies
+                                    </a>
+                                </li>
+                                <li class="list-group-item"> <a href="/feed/astro-ph.HE/top-week/0">High Energy
+                                        Astrophysical
+                                        Phenomena
+                                    </a>
+                                </li>
+                                <li class="list-group-item"> <a href="/feed/astro-ph.IM/top-week/0">Instrumentation
+                                        and Methods
+                                        for
+                                        Astrophysics </a> </li>
+                                <li class="list-group-item"> <a href="/feed/astro-ph.SR/top-week/0">Solar and
+                                        Stellar
+                                        Astrophysics
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-lg-4">
+                        <div class="card mb-5 mb-lg-0">
+                            <div class="card-body">
+                                <h2 class="text-center">
+                                    Physics</h2>
+                                <hr>
+                                <p class="text-center"> Coming Soon</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card mb-5 mb-lg-0">
+                            <div class="card-body">
+                                <h2 class="text-center">
+                                    Computer science</h2>
+                                <hr>
+                                <p class="text-center"> Coming Soon</p>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+    </section>
 
     <%- include('partials/bottomScripts') %>
 

@@ -50,7 +50,54 @@
     height: 750px;
 }
 
-.jumbotron {
+#big-landing {
     background: linear-gradient( #0099ff, #33AEFF);
     color: white
+}
+
+.btn-white {
+    color: #0099ff !important;
+    background-color: white !important;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Card info stuff in landing page */
+
+.cat-card .card {
+    border: none;
+    border-radius: 1rem;
+    transition: all 0.2s;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+}
+
+.cat-card hr {
+    margin: 1.5rem 0;
+}
+
+.cat-card .card-title {
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    letter-spacing: .1rem;
+    font-weight: bold;
+}
+
+.cat-card ul li {
+    margin-bottom: 1rem;
+}
+
+.cat-card .text-muted {
+    opacity: 0.7;
+}
+
+/* Hover Effects on Card */
+
+@media (min-width: 992px) {
+    .cat-card .card:hover {
+        margin-top: -.25rem;
+        margin-bottom: .25rem;
+        box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);
+    }
 }
