@@ -18,6 +18,7 @@ Incentivize people to upvote/downvote and leave comments. Create a community
 * Should I minify JS and CSS files?
 * have clear call to action to login on landing page
 * if for some reason people dont want their paper on my page, there should be an option
+* button to open pdf in new tab if PDF looks small in iframe
 
 ### Features to add:
 * In Related papers, show cited papers

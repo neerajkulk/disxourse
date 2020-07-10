@@ -53,3 +53,8 @@ app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mo
 
 // cron jobs
 const getNewPapers = require('./cron/getNewPapers')
+
+
+// Load papers at start
+const fetchPapers = require('./fetchPapers')
+fetchPapers.updateDB(startIndex = 0, maxIndex = 100, querySize = 100, earlyExit = false)

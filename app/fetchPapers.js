@@ -37,14 +37,23 @@ function parseAuthor(entry) {
         return entry.author.name._text
     }
 }
+
+function parseURL(url) {
+    return removeVersion(url).replace(/^http:\/\//i, 'https://')
+}
+
+function getArxivID(url) {
+    return lastElement(url.split('/'))
+}
+
 // Stuff to add papers to mongoDB
 function parseEntry(entry) {
-    const url = removeVersion(entry.id._text)
+    const url = parseURL(entry.id._text)
     return {
         title: removeLineBreak(entry.title._text),
         url: url,
-        pdfUrl: removeVersion(lastElement(entry.link)._attributes.href),
-        arxivID: lastElement(url.split('/')),
+        pdfUrl: parseURL(lastElement(entry.link)._attributes.href),
+        arxivID: getArxivID(url),
         authors: parseAuthor(entry),
         abstract: removeLineBreak(entry.summary._text),
         updated: entry.updated._text,
