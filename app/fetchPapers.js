@@ -81,11 +81,8 @@ async function QueryToJSON(queryString) {
     }
 }
 
-async function updateDB(earlyExit = false) {
+async function updateDB(startIndex = 0, maxIndex = 1000, querySize = 100, earlyExit = false) {
     try {
-        let startIndex = 0
-        let maxIndex = 1000  //10
-        let querySize = 100 // 100
         let totalPapersAdded = 0
         const baseURL = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.CO+OR+cat:astro-ph.EP+OR+cat:astro-ph.GA+OR+cat:astro-ph.HE+OR+cat:astro-ph.IM+OR+cat:astro-ph.SR"
 
