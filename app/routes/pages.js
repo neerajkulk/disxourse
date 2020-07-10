@@ -44,7 +44,7 @@ router.get('/feed/:cat/:filter/:page', async (req, res) => {
 // Page for single paper
 router.get('/paper/:arxivid', async (req, res) => {
     try {
-        let query = { url: `http://arxiv.org/abs/${req.params.arxivid}` }
+        let query = { arxivID: req.params.arxivid }
         let paper = await Paper.findOne(query)
         let comments = []
         if (paper) {
@@ -62,7 +62,7 @@ router.get('/paper/:arxivid', async (req, res) => {
             res.render('single', { myData })
         } else {
             await fetchPapers.addPaperById(req.params.arxivid)
-            res.redirect(req.originalUrl); 
+            res.redirect(req.originalUrl);
         }
     } catch (err) {
         console.error(err)
