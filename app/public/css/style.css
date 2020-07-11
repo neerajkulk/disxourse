@@ -48,11 +48,22 @@
     box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.8);
     width: 90%;
     height: 750px;
+    position: relative;
+}
+
+i.openpdf {
+    position:absolute; 
+    right: -21px; 
+    top: -21px; 
+    color: #1488CC; 
+    font-size: 30px;
 }
 
 #big-landing {
-    background: #1488CC;  /* fallback for old browsers */
-    background: linear-gradient(to right, #2B32B2, #1488CC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #1488CC;
+    /* fallback for old browsers */
+    background: linear-gradient(to right, #2B32B2, #1488CC);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     color: white
 }
 
