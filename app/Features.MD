@@ -2,6 +2,7 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
+* add render latex button
 * At some point read mongoose docs on indexing and using refs/populate to make queries faster
 * Add search tab (Users can search for features)
 * Set up email notification for comments for authors. (does arxiv provide email addresses?)

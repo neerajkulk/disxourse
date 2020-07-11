@@ -34,10 +34,7 @@
   <i class="fa fa-external-link-square-alt"></i>
 
   <div class="mx-auto pdf-viewer">
-    <a href=<%=myData.paper.pdfUrl%> target="_blank">
-      <i class="fa fa-external-link-square openpdf" aria-hidden="true"></i>
-    </a>
-    <iframe src="<%=myData.paper.pdfUrl%>" width="100%" height="100%" frameBorder="0"> Browser
+    <iframe src=<%=myData.paper.pdfUrl + '#view=fitH'%> width="100%" height="100%" frameBorder="0"> Browser
       Not compatible
     </iframe>
   </div>
