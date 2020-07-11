@@ -5,8 +5,8 @@
                 <a class="page-link" href=<%=  pagination.first %>>Newest</a>
             </li>
             <% if (pagination.prev != null) {%>
-            <li class="page-item"><a class="page-link"
-                    href=<%= pagination.prev %>><i class="fa fa-arrow-left" aria-hidden="true"></i>
+            <li class="page-item"><a class="page-link" href=<%= pagination.prev %>><i class="fa fa-arrow-left"
+                        aria-hidden="true"></i>
                 </a></li>
             <% } %>
 
@@ -16,9 +16,11 @@
                     <span class="sr-only">(current)</span>
                 </span>
             </li>
-            <li class="page-item"><a class="page-link"
-                    href=<%=  pagination.next %>><i class="fa fa-arrow-right" aria-hidden="true"></i>
+            <% if (paperCount != 0) {%>
+            <li class="page-item"><a class="page-link" href=<%=  pagination.next %>><i class="fa fa-arrow-right"
+                        aria-hidden="true"></i>
                 </a></li>
+            <% } %>
         </ul>
     </nav>
 </div>

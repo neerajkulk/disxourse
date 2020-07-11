@@ -28,7 +28,10 @@
     </div>
     <%- include('partials/papers',{papers:myData.papers,user:myData.user}) %>
 
-    <%- include('partials/pagination',{pagination:myData.pagination}) %>
+    <%- include('partials/pagination',{
+        pagination:myData.pagination,
+        paperCount:myData.papers.length
+        }) %>
 
     <%- include('partials/bottomScripts') %>
 
