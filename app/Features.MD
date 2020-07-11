@@ -3,9 +3,6 @@ Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
 * At some point read mongoose docs on indexing and using refs/populate to make queries faster
-* If no papers are found, don't load next arrow in pagination
-* Read arXiv api and figure out best way to download all astro papers (without specifying category)
-* Use card class to make things look nicer
 * Add search tab (Users can search for features)
 * Set up email notification for comments for authors. (does arxiv provide email addresses?)
 * protect auntheticated routes
