@@ -15,6 +15,7 @@ Incentivize people to upvote/downvote and leave comments. Create a community
 * add footer
 * remember to add .lean() to mongoose queries when you dont need to save back to DB
 * Add favicon 
+* Before big launch have a DB backup incase I push some crappy code. 
 * THink of a more elegent way of passing data to template instead of creating the myData object each time. 
 * Create error files to render in catch statements
 * Should I minify JS and CSS files?
