@@ -3,11 +3,11 @@ const mongoose = require('mongoose')
 let commentSchema = mongoose.Schema({
     paperID: {
         type: mongoose.Types.ObjectId,
-        required: true
+        ref: 'Paper'
     },
     userID: {
         type: mongoose.Types.ObjectId,
-        required: true
+        ref: 'User'
     },
     displayName: {
         type: String,

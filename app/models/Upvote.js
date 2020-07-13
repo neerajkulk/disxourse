@@ -3,11 +3,11 @@ const mongoose = require('mongoose')
 let upvoteSchema = mongoose.Schema({
     paperID: {
         type: mongoose.Types.ObjectId,
-        required: true
+        ref: 'Paper'
     },
     userID: {
         type: mongoose.Types.ObjectId,
-        required: true
+        ref: 'User'
     },
     vote: {
         type: Number,
