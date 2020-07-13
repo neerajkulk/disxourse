@@ -8,17 +8,6 @@ const { ensureAuth, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const global = require('../global.js');
 
-
-// Is this route even used?!?!
-// router.get('/api/new/:cat', (req, res) => {
-//     Paper.find({ category: req.params.cat }).sort('-published').limit(10).exec(function (err, newPapers) {
-//         let results = newPapers
-//         if (results.length == 0) {
-//             res.send('No results found')
-//         } else res.json(newPapers)
-//     });
-// })
-
 router.post('/api/comment/:paperid', async (req, res) => {
     try {
         let comment = new Comment({
