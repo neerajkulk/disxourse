@@ -11,7 +11,8 @@ let upvoteSchema = mongoose.Schema({
     },
     vote: {
         type: Number,
-        required: true
+        required: true,
+        enum: [-1, 1]
     }
 })
 

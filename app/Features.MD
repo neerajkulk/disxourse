@@ -2,6 +2,9 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
+* Do I need a back button?
+* Use local time zone in comments
+* COsmology category is missing
 * add render latex button
 * At some point read mongoose docs on indexing and using refs/populate to make queries faster
 * Add search tab (Users can search for features)

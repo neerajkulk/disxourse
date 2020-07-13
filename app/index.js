@@ -57,4 +57,4 @@ const getNewPapers = require('./cron/getNewPapers')
 
 // Load papers at start
 const fetchPapers = require('./fetchPapers')
-fetchPapers.updateDB(startIndex = 0, maxIndex = 100, querySize = 100, earlyExit = false)
+//fetchPapers.updateDB(startIndex = 0, maxIndex = 100, querySize = 100, earlyExit = false)
