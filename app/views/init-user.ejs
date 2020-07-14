@@ -33,17 +33,15 @@
                 <div class="row justify-content-center align-self-center">
                     <form action="/api/init-user" method="POST">
                         <div class="form-group">
-                            <label for="username">Username</label>
+                            <label for="username">Username:</label>
                             <input type="username" name='username' class="form-control" id="username"
                                 aria-describedby="username" placeholder="Choose a username" required>
                             <small id="usernameHelp" class="form-text text-muted">
                                 Others will see this name when you comment on papers</small>
                             <br>
-                            <label for="email">Email</label>
+                            <label for="email">Email:</label>
                             <input type="email" name="email" class="form-control" id="email"
                                 aria-describedby="emailHelp" placeholder="example@example.com">
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
-                                else.</small>
                             <input type="submit" class="btn btn-primary mt-3" value="Register">
                         </div>
                     </form>
