@@ -36,7 +36,7 @@
                 <li class="navbar-item ml-auto">
                     <% if (myData.user) {%>
                     <span class="navbar-text mr-4">
-                        Welcome, <%= myData.user.firstName %>
+                        Welcome, <%= myData.user.username %>
                     </span>
                     <a href="/auth/logout"><button type="button" class="btn btn-outline-info">Logout</button></a>
                     <% } else {%>

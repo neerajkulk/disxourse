@@ -52,7 +52,8 @@
     overflow: hidden
 }
 
-#big-landing {
+.blue-gradient-theme {
+    height: 100vh;
     background: #1488CC;
     /* fallback for old browsers */
     background: linear-gradient(to right, #2B32B2, #1488CC);

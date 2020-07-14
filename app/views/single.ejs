@@ -15,7 +15,7 @@
   <div class="container text-center mt-5 mb-5">
     <div class="row">
       <div class="col-sm-1">
-        <% if (myData.user){%>
+        <% if (myData.user.username){%>
         <%- include('partials/upvote',{
                       paperID:myData.paper._id,
                       voteScore:myData.paper.voteScore,
@@ -44,7 +44,7 @@
     paperID:myData.paper._id,
     comments:myData.comments}) %>
 
-  <% if (myData.user){%>
+  <% if (myData.user.username){%>
   <%- include('partials/post-comment',{
     paperID:myData.paper._id,
     user:myData.user

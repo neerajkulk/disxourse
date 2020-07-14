@@ -132,5 +132,14 @@ module.exports = {
                 break
         }
         return outString
+    },
+    fullAuth: function (user) {
+        // Both OAuth and username must be created
+        if (user) {
+            if (user.username) {
+                return user
+            }
+        }
+        return undefined
     }
 };

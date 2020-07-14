@@ -1,7 +1,7 @@
 <div class="container mt-5">
     <div class="card">
         <div class="card-header">
-            Posting as <%= user.displayName %>
+            Posting as <%= user.username %>
         </div>
         <div class="card-body">
             <form action=<%= `/api/comment/${paperID}` %> method="post">

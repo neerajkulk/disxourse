@@ -9,14 +9,17 @@ const helpers = require('../helpers/helpers');
 const global = require('../global.js');
 
 router.get('/', (req, res) => {
-    res.render('front', {
-        myData: { user: req.user }
-    })
+    let myData = { user: helpers.fullAuth(req.user) }
+    res.render('front', { myData })
 })
+
 router.get('/about', (req, res) => {
-    res.render('about', {
-        myData: { user: req.user }
-    })
+    let myData = { user: helpers.fullAuth(req.user) }
+    res.render('about', { myData })
+})
+
+router.get('/init-user', (req, res) => {
+    res.render('init-user', { user: req.user })
 })
 
 router.get('/feed/:cat/:filter/:page', async (req, res) => {

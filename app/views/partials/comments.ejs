@@ -5,7 +5,7 @@
     <% for (let i = 0; i < comments.length; i++) { %>
     <div class="card mb-4">
         <div class="card-header">
-            <p class="float-left" style="display: table-cell; vertical-align: middle;"><%= comments[i].displayName %></p>
+            <p class="float-left" style="display: table-cell; vertical-align: middle;"><%= comments[i].username %></p>
             <p class="text-muted float-right"><%= comments[i].date.toLocaleString() %></p>
         </div>
         <div class="card-body">

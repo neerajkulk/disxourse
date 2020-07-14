@@ -9,7 +9,7 @@ let commentSchema = mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'User'
     },
-    displayName: {
+    username: {
         type: String,
         required: true
     },

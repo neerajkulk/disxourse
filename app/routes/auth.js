@@ -1,7 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const router = express.Router()
-let User = require('../models/User');
+const helpers = require('../helpers/helpers')
 
 // Routes for authentication
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile'] }))
@@ -11,7 +11,11 @@ router.get('/login-failure', (req, res) => {
 })
 
 router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login-failure' }), (req, res) => {
-    res.redirect('/')
+    if (helpers.fullAuth(req.user)) {
+        res.redirect('/')
+    } else {
+        res.redirect('/init-user')
+    }
 })
 
 router.get('/auth/logout', (req, res) => {
