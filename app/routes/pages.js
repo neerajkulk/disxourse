@@ -9,12 +9,12 @@ const helpers = require('../helpers/helpers');
 const global = require('../global.js');
 
 router.get('/', (req, res) => {
-    let myData = { user: helpers.fullAuth(req.user) }
+    let myData = { user: helpers.hasUsername(req.user) }
     res.render('front', { myData })
 })
 
 router.get('/about', (req, res) => {
-    let myData = { user: helpers.fullAuth(req.user) }
+    let myData = { user: helpers.hasUsername(req.user) }
     res.render('about', { myData })
 })
 

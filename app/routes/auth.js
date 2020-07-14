@@ -11,7 +11,7 @@ router.get('/login-failure', (req, res) => {
 })
 
 router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login-failure' }), (req, res) => {
-    if (helpers.fullAuth(req.user)) {
+    if (helpers.hasUsername(req.user)) {
         res.redirect('/')
     } else {
         res.redirect('/init-user')

@@ -133,7 +133,7 @@ module.exports = {
         }
         return outString
     },
-    fullAuth: function (user) {
+    hasUsername: function (user) {
         // Both OAuth and username must be created
         if (user) {
             if (user.username) {

@@ -59,7 +59,7 @@ router.post('/api/comment/:paperid', async (req, res) => {
 
 router.post('/api/vote/:paperid', async (req, res) => {
     try {
-        if (helpers.fullAuth(req.user)) {
+        if (helpers.hasUsername(req.user)) {
             // Has the user voted on the paper before?
             let previousVote = await Upvote.findOne({ paperID: req.body.paperID, userID: req.user._id })
 
