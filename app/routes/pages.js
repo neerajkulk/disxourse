@@ -18,7 +18,7 @@ router.get('/about', (req, res) => {
     res.render('about', { myData })
 })
 
-router.get('/init-user', ensureUser, (req, res) => {
+router.get('/init-user', ensureAuth, (req, res) => {
     res.render('init-user', { user: req.user })
 })
 
