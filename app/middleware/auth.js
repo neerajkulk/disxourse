@@ -1,3 +1,4 @@
+const helpers = require('../helpers/helpers');
 module.exports = {
     ensureAuth: function (req, res, next) {
         if (req.isAuthenticated()) {
@@ -8,9 +9,16 @@ module.exports = {
     },
     ensureGuest: function (req, res, next) {
         if (req.isAuthenticated()) {
-            res.redirect('/dashboard')
-        } else{
+            res.redirect('/')
+        } else {
             return next()
+        }
+    },
+    ensureUser: function (req, res, next) {
+        if (helpers.hasUsername(req.user)) {
+            return next()
+        } else {
+            res.redirect('/')
         }
     }
 }

@@ -3,6 +3,7 @@ Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
 * ensure auth on init-user endpoint
+* restructure about page
 * make navbar partial take user as default arguement
 * Do I need a back button?
 * Use local time zone in comments

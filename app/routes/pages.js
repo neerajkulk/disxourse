@@ -4,7 +4,7 @@ let Paper = require('../models/Paper');
 let Upvote = require('../models/Upvote');
 let Comment = require('../models/Comment');
 const fetchPapers = require('../fetchPapers');
-const { ensureAuth, ensureGuest } = require('../middleware/auth')
+const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const global = require('../global.js');
 
@@ -18,7 +18,7 @@ router.get('/about', (req, res) => {
     res.render('about', { myData })
 })
 
-router.get('/init-user', (req, res) => {
+router.get('/init-user', ensureUser, (req, res) => {
     res.render('init-user', { user: req.user })
 })
 

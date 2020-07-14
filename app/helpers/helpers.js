@@ -1,5 +1,7 @@
 let Paper = require('../models/Paper');
 let Upvote = require('../models/Upvote');
+let User = require('../models/Upvote');
+
 
 
 module.exports = {
@@ -134,12 +136,21 @@ module.exports = {
         return outString
     },
     hasUsername: function (user) {
-        // Both OAuth and username must be created
+        // Used to see if req.user has a username
         if (user) {
             if (user.username) {
                 return user
             }
         }
         return undefined
+    },
+    usernameExists: async function (username) {
+        // Checks if username exists in DB
+        let user = await User.findOne({ username: username })
+        if (user) {
+            return true
+        } else {
+            return false
+        }
     }
 };

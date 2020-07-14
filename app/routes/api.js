@@ -5,22 +5,14 @@ let User = require('../models/User');
 let Upvote = require('../models/Upvote');
 let Comment = require('../models/Comment');
 const fetchPapers = require('../fetchPapers');
-const { ensureAuth, ensureGuest } = require('../middleware/auth')
+const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const global = require('../global.js');
 
-async function usernameExists(username) {
-    let user = await User.findOne({ username: username })
-    if (user) {
-        return true
-    } else {
-        return false
-    }
-}
 
-router.post('/api/init-user', async (req, res) => {
+router.post('/api/init-user', ensureAuth, async (req, res) => {
     let newUser = await User.findByIdAndUpdate({ _id: req.user._id })
-    let userExists = await usernameExists(req.body.username)
+    let userExists = await helpers.usernameExists(req.body.username)
 
     if (userExists) {
         res.render('init-user', {
@@ -36,7 +28,7 @@ router.post('/api/init-user', async (req, res) => {
     }
 })
 
-router.post('/api/comment/:paperid', async (req, res) => {
+router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
     try {
         let comment = new Comment({
             paperID: req.params.paperid,
@@ -57,7 +49,7 @@ router.post('/api/comment/:paperid', async (req, res) => {
 
 
 
-router.post('/api/vote/:paperid', async (req, res) => {
+router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
     try {
         if (helpers.hasUsername(req.user)) {
             // Has the user voted on the paper before?
