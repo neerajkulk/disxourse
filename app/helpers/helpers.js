@@ -3,7 +3,6 @@ let Upvote = require('../models/Upvote');
 let User = require('../models/Upvote');
 
 
-
 module.exports = {
     parseAuthors: function (authorList) {
         // Shorten list of authors
