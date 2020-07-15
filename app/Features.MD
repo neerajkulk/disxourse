@@ -3,7 +3,6 @@ Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
 * restructure about page
-* make navbar partial take user as default arguement
 * Do I need a back button?
 * add render latex button
 * Add search tab (Users can search for features)
