@@ -50,16 +50,17 @@ router.get('/paper/:arxivid', async (req, res) => {
         let query = { arxivID: req.params.arxivid }
         let paper = await Paper.findOne(query)
         let comments = []
+        let user = helpers.hasUsername(req.user)
         if (paper) {
-            if (req.user) {
-                paper.userVote = await helpers.getUserPreviousVote(paper._id, req.user._id)
+            if (user) {
+                paper.userVote = await helpers.getUserPreviousVote(paper._id, user._id)
             }
             if (paper.commentCount > 0) {
                 comments = await Comment.find({ paperID: paper._id })
             }
             let myData = {
                 paper: paper,
-                user: req.user,
+                user: user,
                 comments: comments
             }
             res.render('single', { myData })
