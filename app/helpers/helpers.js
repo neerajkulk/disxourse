@@ -94,21 +94,21 @@ module.exports = {
         let query
         switch (filter) {
             case 'newest':
-                results = await Paper.find({ category: category }).sort('-published').skip(resultsPerPage * page).limit(resultsPerPage).lean()
+                results = await Paper.find({ category: category }).sort({ published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
                 break;
             case 'top-week':
                 d.setDate(d.getDate() - 7);
                 query = { category: category, published: { "$gte": d } }
-                results = await Paper.find(query).sort('-voteScore').skip(resultsPerPage * page).limit(resultsPerPage).lean()
+                results = await Paper.find(query).sort({ voteScore: -1, published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
                 break
             case 'top-month':
                 d.setDate(d.getDate() - 30);
                 query = { category: category, published: { "$gte": d } }
-                results = await Paper.find(query).sort('-voteScore').skip(resultsPerPage * page).limit(resultsPerPage).lean()
+                results = await Paper.find(query).sort({ voteScore: -1, published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
                 break
             case 'top-all':
                 query = { category: category }
-                results = await Paper.find(query).sort('-voteScore').skip(resultsPerPage * page).limit(resultsPerPage).lean()
+                results = await Paper.find(query).sort({ voteScore: -1, published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
                 break
             default:
                 results = []
