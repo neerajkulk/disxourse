@@ -2,8 +2,6 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
-* In feed, sort by upvotes and then date
-* When comment is posted, redirect to bottom of screen 
 * restructure about page
 * make navbar partial take user as default arguement
 * Do I need a back button?
