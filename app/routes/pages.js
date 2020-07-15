@@ -33,7 +33,7 @@ router.get('/feed/:cat/:filter/:page', async (req, res) => {
             category: req.params.cat,
             filter: helpers.parseFilter(req.params.filter),
             papers: paperData,
-            user: req.user,
+            user: helpers.hasUsername(req.user),
             pagination: helpers.paginateURLs(req.url)
         }
         res.render('main', {
