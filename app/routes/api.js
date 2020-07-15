@@ -39,7 +39,7 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
         let paper = await Paper.findById(req.params.paperid)
         paper.commentCount++
         await paper.save()
-        res.status(200).redirect(req.get('Referrer') + '#comments')
+        res.status(200).redirect(req.get('Referrer') + '#comment-form')
     } catch (err) {
         console.log(err)
     }
