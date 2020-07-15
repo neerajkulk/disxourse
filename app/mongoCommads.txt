@@ -1,2 +1,6 @@
-Delete comment count from papers. Used when dropping the comments collection
+* Delete comment count from papers. Used when dropping the comments collection
 db.papers.updateMany({},{$set:{"commentCount":0}})
+
+* Remove username from specific user
+db.users.update({ "_id": ObjectId("5f07d27bee1a8e2fbf50d58d") }, { $unset : { username : 1} })
+
