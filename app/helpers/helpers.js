@@ -143,7 +143,7 @@ module.exports = {
         }
         return undefined
     },
-    usernameExists: async function (username) {
+    usernameTaken: async function (username) {
         // Checks if username exists in DB
         let user = await User.findOne({ username: username })
         if (user) {

@@ -9,11 +9,9 @@ const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const global = require('../global.js');
 
-
 router.post('/api/init-user', ensureAuth, async (req, res) => {
     let newUser = await User.findByIdAndUpdate({ _id: req.user._id })
-    let userExists = await helpers.usernameExists(req.body.username)
-
+    let userExists = await helpers.usernameTaken(req.body.username)
     if (userExists) {
         res.render('init-user', {
             user: req.user,
@@ -51,39 +49,31 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
 
 router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
     try {
-        if (helpers.hasUsername(req.user)) {
-            // Has the user voted on the paper before?
-            let previousVote = await Upvote.findOne({ paperID: req.body.paperID, userID: req.user._id })
+        // Has the user voted on the paper before?
+        let previousVote = await Upvote.findOne({ paperID: req.body.paperID, userID: req.user._id })
 
-            if (previousVote) {
-                if (req.body.vote == 0) {
-                    await previousVote.deleteOne()
-                    res.status(200).send('Previous vote deleted')
-                } else {
-                    previousVote.vote = req.body.vote
-                    await previousVote.save()
-                    res.status(200).send('previous vote updated')
-                }
+        if (previousVote) {
+            if (req.body.vote == 0) {
+                await previousVote.deleteOne()
+                res.status(200).send('Previous vote deleted')
             } else {
-                let newVote = new Upvote({
-                    paperID: req.body.paperID,
-                    userID: req.user._id,
-                    vote: req.body.vote
-                })
-                await newVote.save()
-                res.status(200).end('new vote saved')
+                previousVote.vote = req.body.vote
+                await previousVote.save()
+                res.status(200).send('previous vote updated')
             }
-
-            await helpers.sumPaperVotes(req.body.paperID)
-
         } else {
-            res.status(403).send('must be logged in to vote')
-            console.log('must be logged in to vote')
+            let newVote = new Upvote({
+                paperID: req.body.paperID,
+                userID: req.user._id,
+                vote: req.body.vote
+            })
+            await newVote.save()
+            res.status(200).end('new vote saved')
         }
+        await helpers.sumPaperVotes(req.body.paperID)
     } catch (err) {
         console.error(err)
     }
-
 })
 
 
