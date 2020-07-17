@@ -1,6 +1,7 @@
 const axios = require('axios').default;
 const convert = require('xml-js');
 const Paper = require('./models/Paper.js');
+const global = require('./global')
 
 module.exports = {
     removeVersion: function (arxivURL) {
@@ -87,7 +88,7 @@ module.exports = {
     updateDB: async function (startIndex = 0, maxIndex = 1000, querySize = 100, earlyExit = false) {
         try {
             let totalPapersAdded = 0
-            const baseURL = "http://export.arxiv.org/api/query?search_query=cat:astro-ph.CO+OR+cat:astro-ph.EP+OR+cat:astro-ph.GA+OR+cat:astro-ph.HE+OR+cat:astro-ph.IM+OR+cat:astro-ph.SR"
+            const baseURL = `http://export.arxiv.org/api/query?search_query=${global.astroCategories}`
 
             for (startIndex = 0; startIndex < maxIndex; startIndex += querySize) {
                 let currentQueryNewPapers = 0

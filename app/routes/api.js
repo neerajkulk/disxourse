@@ -7,6 +7,7 @@ let Comment = require('../models/Comment');
 const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
+const global = require('../global');
 
 router.post('/api/init-user', ensureAuth, async (req, res) => {
     let newUser = await User.findByIdAndUpdate({ _id: req.user._id })
@@ -77,7 +78,7 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
 
 function arxivQueryString(searchPhrase) {
     // Sort order here?
-    return `http://export.arxiv.org/api/query?search_query=all:${searchPhrase}+AND+cat:astro-ph&start=0&max_results=30&sortBy=relevance&sortOrder=descending`
+    return `http://export.arxiv.org/api/query?search_query=all:${searchPhrase}+AND+${global.astroCategories}&start=0&max_results=30&sortBy=submittedDate&sortOrder=descending`
 }
 
 router.get('/search/:query', async (req, res) => {

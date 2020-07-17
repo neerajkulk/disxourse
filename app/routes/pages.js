@@ -6,7 +6,7 @@ let Comment = require('../models/Comment');
 const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
-const global = require('../global.js');
+const global = require('../global');
 
 router.get('/', (req, res) => {
     let myData = { user: helpers.hasUsername(req.user) }
