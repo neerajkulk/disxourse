@@ -86,12 +86,12 @@ router.get('/search/:query', async (req, res) => {
     let parsed = await fetchPapers.QueryToJSON(queryString)
     if (parsed == undefined) {parsed = []}
     for (let i = 0; i < parsed.length; i++) {
-        let paper = parsed[i]
+        let paper = fetchPapers.parseEntry(parsed[i])
         let paperExists = await Paper.findOne({ arxivID: paper.arxivID }).lean()
         if (paperExists) {
             results.push(paperExists)
         } else {
-            let newPaper = new Paper(fetchPapers.parseEntry(paper))
+            let newPaper = new Paper(paper)
             results.push(newPaper)
             await newPaper.save()
         }
