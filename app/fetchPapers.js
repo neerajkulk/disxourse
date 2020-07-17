@@ -34,7 +34,15 @@ module.exports = {
         return module.exports.removeVersion(url).replace(/^http:\/\//i, 'https://')
     },
     getArxivID: function (url) {
-        return module.exports.lastElement(url.split('/'))
+        let arr = url.split('/')
+        if (arr.length == 5) {
+            // post 2007
+            return module.exports.lastElement(url.split('/'))
+        }
+        else if (arr.length == 6) {
+            // pre 2007
+            return arr.slice(4, 6).join(':')
+        }
     },
     // Stuff to add papers to mongoDB
     parseEntry: function (entry) {

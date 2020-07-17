@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+    <%- include('partials/head') %>
+</head>
+
+
+<body>
+    <%- include('partials/navbar',{user:myData.user}) %>
+    <h1 class="container-fluid text-center display-4 py-5">Search</h1>
+
+    <%- include('partials/papers',{papers:myData.papers,user:myData.user}) %>
+
+    <%- include('partials/bottomScripts') %>
+
+
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+</body>
+
+</html>

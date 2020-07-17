@@ -58,3 +58,15 @@ const getNewPapers = require('./cron/getNewPapers')
 // Load papers at start
 const fetchPapers = require('./fetchPapers')
 //fetchPapers.updateDB(startIndex = 0, maxIndex = 100, querySize = 100, earlyExit = false)
+const Paper = require('./models/Paper.js');
+
+async function deleteOldIds() {
+    let allpapers = await Paper.find()
+    for (let i = 0; i < allpapers.length; i++) {
+        if (allpapers[i].arxivID.split('/').length == 2) {
+            console.log(allpapers[i].arxivID)
+            await allpapers[i].remove()
+        }
+    }
+}
+//deleteOldIds()
