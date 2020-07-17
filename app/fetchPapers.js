@@ -129,6 +129,7 @@ module.exports = {
     },
     addPaperById: async function (arxivID) {
         try {
+            arxivID = arxivID.replace(":", "/") // pre-2007 arxivID's
             let queryString = `http://export.arxiv.org/api/query?id_list=${arxivID}`
             let parsed = await module.exports.QueryToJSON(queryString)
             await module.exports.saveEntry(parsed)

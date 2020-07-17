@@ -7,9 +7,6 @@ let Comment = require('../models/Comment');
 const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
-const global = require('../global.js');
-const axios = require('axios').default;
-const convert = require('xml-js');
 
 router.post('/api/init-user', ensureAuth, async (req, res) => {
     let newUser = await User.findByIdAndUpdate({ _id: req.user._id })
@@ -87,12 +84,14 @@ router.get('/search/:query', async (req, res) => {
     let results = []
     let queryString = arxivQueryString(req.params.query)
     let parsed = await fetchPapers.QueryToJSON(queryString)
+    if (parsed == undefined) {parsed = []}
     for (let i = 0; i < parsed.length; i++) {
-        let paperExists = await Paper.findOne({ arxivID: parsed[i].arxivID }).lean()
+        let paper = parsed[i]
+        let paperExists = await Paper.findOne({ arxivID: paper.arxivID }).lean()
         if (paperExists) {
             results.push(paperExists)
         } else {
-            let newPaper = new Paper(fetchPapers.parseEntry(parsed[i]))
+            let newPaper = new Paper(fetchPapers.parseEntry(paper))
             results.push(newPaper)
             await newPaper.save()
         }

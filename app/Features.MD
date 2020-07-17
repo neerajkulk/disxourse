@@ -2,6 +2,9 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
+* Search for papers
+* nested comments
+* template comments
 * restructure about page
 * Do I need a back button?
 * add render latex button
