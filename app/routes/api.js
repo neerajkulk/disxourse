@@ -41,7 +41,7 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
         await paper.save()
         res.status(200).redirect(req.get('Referrer') + '#comment-form')
     } catch (err) {
-        console.log(err)
+        console.error(err)
     }
 })
 
@@ -99,6 +99,7 @@ router.get('/search/:query', async (req, res) => {
     }
     let paperData = await helpers.getPaperTemplateData(results, req.user)
     let myData = {
+        query:req.params.query,
         papers: paperData,
         user: helpers.hasUsername(req.user)
     }
@@ -108,6 +109,7 @@ router.get('/search/:query', async (req, res) => {
 })
 
 router.post('/search', (req, res) => {
+    console.log(`/search/${req.body.searchPhrase}`)
     res.redirect(`/search/${req.body.searchPhrase}`)
 })
 

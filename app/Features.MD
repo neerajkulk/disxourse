@@ -25,4 +25,5 @@ Incentivize people to upvote/downvote and leave comments. Create a community
 * mongoose query to count if documents might be slow. Speed up if performance is an issue
 * Notifications for comments and upvotes (allow users to follow a paper)
 * Create news letter of top arxiv papers for the week
+* record group meetings and link to provide links to youtube videos
 
