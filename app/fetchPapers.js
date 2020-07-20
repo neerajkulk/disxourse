@@ -1,7 +1,7 @@
 const axios = require('axios').default;
 const convert = require('xml-js');
 const Paper = require('./models/Paper.js');
-const global = require('./global')
+const global = require('./global');
 
 module.exports = {
     removeVersion: function (arxivURL) {
@@ -80,7 +80,14 @@ module.exports = {
         try {
             const response = await axios.get(queryString);
             let parsed = JSON.parse(convert.xml2json(response.data, { compact: true, spaces: 4 }));
-            return parsed.feed.entry
+            let data =  parsed.feed.entry
+            if (data == undefined) {
+                return [] // no papers
+            } else if (data.length == undefined){
+                return [data] // 1 paper
+            } else{
+                return data // >1 papers
+            }
         } catch (err) {
             console.error(err)
         }

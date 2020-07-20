@@ -76,16 +76,31 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
     }
 })
 
-function arxivQueryString(searchPhrase) {
+function arxivQueryString(query) {
     // Sort order here?
-    return `http://export.arxiv.org/api/query?search_query=all:${searchPhrase}+AND+${global.astroCategories}&start=0&max_results=30&sortBy=submittedDate&sortOrder=descending`
+    return `http://export.arxiv.org/api/query?${query}&sortBy=submittedDate&sortOrder=descending`
+}
+
+function queryToObject(queryString) {
+    let queryObject = {}
+    queryString.split('&').forEach(param => {
+        if (param.includes('id_list')) {
+            queryObject.id_list = param.split('=')[1]
+        } else if (param.includes('search_query')) {
+            let searchFields = param.split('=')[1].split('+AND+')
+            searchFields.forEach(element => {
+                queryObject[element.split(':')[0]] = element.split(':')[1]
+            })
+        }
+    })
+    return queryObject
 }
 
 router.get('/search/:query', async (req, res) => {
+
     let results = []
     let queryString = arxivQueryString(req.params.query)
     let parsed = await fetchPapers.QueryToJSON(queryString)
-    if (parsed == undefined) {parsed = []}
     for (let i = 0; i < parsed.length; i++) {
         let paper = fetchPapers.parseEntry(parsed[i])
         let paperExists = await Paper.findOne({ arxivID: paper.arxivID }).lean()
@@ -99,18 +114,46 @@ router.get('/search/:query', async (req, res) => {
     }
     let paperData = await helpers.getPaperTemplateData(results, req.user)
     let myData = {
-        query:req.params.query,
+        query: req.params.query,
         papers: paperData,
-        user: helpers.hasUsername(req.user)
+        user: helpers.hasUsername(req.user),
+        queryObj: queryToObject(req.params.query)
     }
     res.render('search', {
         myData: myData
     })
 })
 
-router.post('/search', (req, res) => {
-    console.log(`/search/${req.body.searchPhrase}`)
-    res.redirect(`/search/${req.body.searchPhrase}`)
+function objectToQuery(reqBody) {
+    let queryString = ''
+
+
+    if (reqBody.id_list != '' && reqBody.id_list != undefined) {
+        queryString += `id_list=${reqBody.id_list}&`
+        reqBody.id_list = ''
+    }
+    let queryParams = []
+    for (const key in reqBody) {
+        if (reqBody[key] != '') {
+            queryParams.push(`${key}:${reqBody[key]}`)
+        }
+    }
+    queryString += `search_query=${queryParams.join('+AND+')}+AND+(${global.astroCategories})`
+
+    queryString += `&start=0&max_results=${global.resultsPerPage}`
+    return queryString
+}
+
+
+
+router.post('/advanced-search', (req, res) => {
+    const queryString = objectToQuery(req.body)
+    res.redirect(`/search/${queryString}`)
+})
+
+router.post('/simple-search', (req, res) => {
+    let queryString = `search_query=all:${req.body.searchTerm}+AND+(${global.astroCategories})&start=0&max_results=${global.resultsPerPage}`
+    res.redirect(`/search/${queryString}`)
 })
 
 module.exports = router
