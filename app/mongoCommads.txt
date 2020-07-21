@@ -4,3 +4,12 @@ db.papers.updateMany({},{$set:{"commentCount":0}})
 * Remove username from specific user
 db.users.update({ "_id": ObjectId("5f07d27bee1a8e2fbf50d58d") }, { $unset : { username : 1} })
 
+async function deleteOldIds() {
+    let allpapers = await Paper.find()
+    for (let i = 0; i < allpapers.length; i++) {
+        if (allpapers[i].arxivID.split('/').length == 2) {
+            console.log(allpapers[i].arxivID)
+            await allpapers[i].remove()
+        }
+    }
+}
