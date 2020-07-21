@@ -80,7 +80,6 @@ module.exports = {
         try {
             const response = await axios.get(queryString);
             let parsed = JSON.parse(convert.xml2json(response.data, { compact: true, spaces: 4 }));
-            if (parsed == undefined) { return [] }
             let data = parsed.feed.entry
             if (data == undefined) {
                 return [] // no papers
@@ -91,6 +90,7 @@ module.exports = {
             }
         } catch (err) {
             console.error(err)
+            return []
         }
     },
     updateDB: async function (startIndex = 0, maxIndex = 1000, querySize = 100, earlyExit = false) {
