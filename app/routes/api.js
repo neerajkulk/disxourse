@@ -76,29 +76,9 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
     }
 })
 
-function arxivQueryString(query) {
-    // Sort order here?
-    return `http://export.arxiv.org/api/query?${query}&sortBy=submittedDate&sortOrder=descending&start=0&max_results=${global.resultsPerPage}`
-}
-
-function queryToObject(queryString) {
-    let queryObject = {}
-    queryString.split('&').forEach(param => {
-        if (param.includes('id_list')) {
-            queryObject.id_list = param.split('=')[1]
-        } else if (param.includes('search_query')) {
-            let searchFields = param.split('=')[1].split('+AND+')
-            searchFields.forEach(element => {
-                queryObject[element.split(':')[0]] = element.split(':')[1]
-            })
-        }
-    })
-    return queryObject
-}
-
 router.get('/search/:query', async (req, res) => {
     let results = []
-    let queryString = arxivQueryString(req.params.query)
+    let queryString = helpers.arxivQueryString(req.params.query)
     let parsed = await fetchPapers.QueryToJSON(queryString)
     for (let i = 0; i < parsed.length; i++) {
         let paper = fetchPapers.parseEntry(parsed[i])
@@ -116,35 +96,15 @@ router.get('/search/:query', async (req, res) => {
         query: req.params.query,
         papers: paperData,
         user: helpers.hasUsername(req.user),
-        queryObj: queryToObject(req.params.query)
+        queryObj: helpers.queryToObject(req.params.query)
     }
     res.render('search', {
         myData: myData
     })
 })
 
-function objectToQuery(reqBody) {
-    let queryString = ''
-
-
-    if (reqBody.id_list != '' && reqBody.id_list != undefined) {
-        queryString += `id_list=${reqBody.id_list}&`
-        reqBody.id_list = ''
-    }
-    let queryParams = []
-    for (const key in reqBody) {
-        if (reqBody[key] != '') {
-            queryParams.push(`${key}:${reqBody[key]}`)
-        }
-    }
-    queryString += `search_query=${queryParams.join('+AND+')}+AND+(${global.astroCategories})`
-    return queryString
-}
-
-
-
 router.post('/advanced-search', (req, res) => {
-    const queryString = objectToQuery(req.body)
+    const queryString = helpers.objectToQuery(req.body)
     res.redirect(`/search/${queryString}`)
 })
 
