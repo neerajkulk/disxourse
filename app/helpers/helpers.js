@@ -184,7 +184,8 @@ module.exports = {
                 queryParams.push(`${key}:${reqBody[key]}`)
             }
         }
-        queryString += `search_query=${queryParams.join('+AND+')}+AND+(${global.astroCategories})`
+        queryParams.push(`(${global.astroCategories})`)
+        queryString += `search_query=${queryParams.join('+AND+')}`
         return queryString
     }
 };
