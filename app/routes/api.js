@@ -78,7 +78,7 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
 
 function arxivQueryString(query) {
     // Sort order here?
-    return `http://export.arxiv.org/api/query?${query}&sortBy=submittedDate&sortOrder=descending`
+    return `http://export.arxiv.org/api/query?${query}&sortBy=submittedDate&sortOrder=descending&start=0&max_results=${global.resultsPerPage}`
 }
 
 function queryToObject(queryString) {
@@ -97,7 +97,6 @@ function queryToObject(queryString) {
 }
 
 router.get('/search/:query', async (req, res) => {
-
     let results = []
     let queryString = arxivQueryString(req.params.query)
     let parsed = await fetchPapers.QueryToJSON(queryString)
@@ -139,8 +138,6 @@ function objectToQuery(reqBody) {
         }
     }
     queryString += `search_query=${queryParams.join('+AND+')}+AND+(${global.astroCategories})`
-
-    queryString += `&start=0&max_results=${global.resultsPerPage}`
     return queryString
 }
 
@@ -152,7 +149,7 @@ router.post('/advanced-search', (req, res) => {
 })
 
 router.post('/simple-search', (req, res) => {
-    let queryString = `search_query=all:${req.body.searchTerm}+AND+(${global.astroCategories})&start=0&max_results=${global.resultsPerPage}`
+    let queryString = `search_query=all:${req.body.searchTerm}+AND+(${global.astroCategories})`
     res.redirect(`/search/${queryString}`)
 })
 

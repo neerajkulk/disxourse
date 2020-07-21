@@ -80,12 +80,13 @@ module.exports = {
         try {
             const response = await axios.get(queryString);
             let parsed = JSON.parse(convert.xml2json(response.data, { compact: true, spaces: 4 }));
-            let data =  parsed.feed.entry
+            if (parsed == undefined) { return [] }
+            let data = parsed.feed.entry
             if (data == undefined) {
                 return [] // no papers
-            } else if (data.length == undefined){
+            } else if (data.length == undefined) {
                 return [data] // 1 paper
-            } else{
+            } else {
                 return data // >1 papers
             }
         } catch (err) {
