@@ -15,7 +15,7 @@ module.exports = {
                 authorString = `${authorList[0]} and ${authorList[1]}`
                 break
             default:
-                authorString = authorString = `${authorList[0]} Et al.`
+                authorString = authorString = `${authorList[0]} and collaborators`
                 break;
         }
         return authorString
