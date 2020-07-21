@@ -73,5 +73,32 @@ router.get('/paper/:arxivid', async (req, res) => {
     }
 });
 
+router.get('/search/:query', async (req, res) => {
+    let results = []
+    let queryString = helpers.arxivQueryString(req.params.query)
+    let parsed = await fetchPapers.QueryToJSON(queryString)
+    for (let i = 0; i < parsed.length; i++) {
+        let paper = fetchPapers.parseEntry(parsed[i])
+        let paperExists = await Paper.findOne({ arxivID: paper.arxivID }).lean()
+        if (paperExists) {
+            results.push(paperExists)
+        } else {
+            let newPaper = new Paper(paper)
+            results.push(newPaper)
+            await newPaper.save()
+        }
+    }
+    let paperData = await helpers.getPaperTemplateData(results, req.user)
+    let myData = {
+        query: req.params.query,
+        papers: paperData,
+        user: helpers.hasUsername(req.user),
+        queryObj: helpers.queryToObject(req.params.query)
+    }
+    res.render('search', {
+        myData: myData
+    })
+})
+
 
 module.exports = router
