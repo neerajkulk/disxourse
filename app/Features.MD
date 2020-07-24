@@ -3,6 +3,7 @@ Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
 * delete papers if they have recieved no engangement after 30 days
+* Pre-2007 arxiv ID query is broken.
 * Search for papers
 * nested comments
 * template comments
