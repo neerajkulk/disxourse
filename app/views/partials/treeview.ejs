@@ -1,0 +1,13 @@
+<% if (comments.length) { %>
+<ul>
+    <% } %>
+
+    <% comments.forEach(function(comment){ %>
+    <li>
+        <%= comment.commentBody %>
+        <%- include('./treeView', {comments: comment.comments}) %>
+    </li>
+    <% }) %>
+    <% if (comments.length) { %>
+</ul>
+<% } %>

@@ -89,4 +89,3 @@ function insertComment(comments, comment) {
 
 }
 
-console.log(test())

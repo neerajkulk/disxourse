@@ -7,6 +7,8 @@ const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const global = require('../global');
+const mongoose = require('mongoose')
+
 
 router.get('/', (req, res) => {
     let myData = { user: helpers.hasUsername(req.user) }
@@ -100,5 +102,63 @@ router.get('/search/:query', async (req, res) => {
     })
 })
 
+
+function insertComment(comments, comment) {
+    // Comments is an array, comment is an object
+    comments.forEach(child => {
+        if (child._id.toString() == comment.parentID.toString()) {
+            child.comments.push(comment)
+        } else {
+            insertComment(child.comments, comment)
+        }
+    })
+
+}
+
+router.get('/comments-test/', async (req, res) => {
+    let commentsDB = await Comment.find({ paperID: mongoose.Types.ObjectId("5f172b73bbbdb30d977b7831") }).sort({ date: 1 }).lean()
+    let comments = [] // store threads here
+    for (let i = 0; i < commentsDB.length; i++) {
+        comment = commentsDB[i]
+        comment.comments = []
+        if (comment.parentID == null) {
+            comments.push(comment)
+        } else {
+            insertComment(comments, comment)
+        }
+    }
+
+    const tree = [
+        {
+            name: "item 1",
+            link: "#link-1",
+            children: [
+                {
+                    name: "item 1.1",
+                    link: "#link-11",
+                    children: [
+                        {
+                            name: "item 1.1.1",
+                            link: "#link-111",
+                            children: []
+                        }
+                    ]
+                },
+                {
+                    name: "item 1.2",
+                    link: "#link-12",
+                    children: []
+                }
+            ]
+        },
+        {
+            name: "item 2",
+            children: []
+        }
+    ];
+
+    res.render('threaded-comments', { comments })
+
+})
 
 module.exports = router
