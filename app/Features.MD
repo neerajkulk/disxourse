@@ -2,9 +2,12 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
+* is depth, thread ID required for schema. 
+* create a skim-mode where a small iframe opens up right under the paper in the main feed. 
 * delete papers if they have recieved no engangement after 30 days
 * Pre-2007 arxiv ID query is broken.
 * Search for papers
+* add a banner in the comment section (I wrote this comment)
 * nested comments
 * template comments
 * restructure about page

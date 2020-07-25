@@ -58,7 +58,9 @@ router.get('/paper/:arxivid', async (req, res) => {
                 paper.userVote = await helpers.getUserPreviousVote(paper._id, user._id)
             }
             // handle case if there are zero comments here
-            comments = await Comment.find({ paperID: paper._id })
+            if (paper.commentCount != 0) {
+                comments = await Comment.find({ paperID: paper._id })
+            }
             let myData = {
                 paper: paper,
                 user: user,

@@ -35,7 +35,7 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
             username: req.user.username,
             commentBody: req.body.commentBody,
             date: Date.now(),
-            parentID: req.body.parentID
+            parentID: req.body.parentID == '' ? null : req.body.parentID
         })
         await comment.save()
         let paper = await Paper.findById(req.params.paperid)
