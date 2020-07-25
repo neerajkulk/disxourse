@@ -49,7 +49,10 @@
   <%- include('partials/post-comment',{
     paperID:myData.paper._id,
     user:myData.user,
-    parentID:null
+    comment:{
+      parentID:null,
+      depth:-1
+    }
     }) %>
   <% } else { %>
   <%- include('partials/comment-disabled') %>

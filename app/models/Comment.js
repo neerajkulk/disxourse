@@ -24,6 +24,10 @@ let commentSchema = mongoose.Schema({
     parentID: {
         type: mongoose.Types.ObjectId,
         default: null
+    },
+    depth: {
+        type: Number,
+        required: true
     }
 })
 

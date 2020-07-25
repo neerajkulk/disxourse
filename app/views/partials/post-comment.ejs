@@ -1,6 +1,7 @@
 <% if ( user == undefined) {%>
 <%- include('./comment-disabled') %>
 <% } else { %>
+
 <div class="container mt-5">
     <div class="card" id="comment-form">
         <div class="card-header">
@@ -10,7 +11,9 @@
             <form action=<%= `/api/comment/${paperID}` %> method="post">
                 <div class="hidden">
                     <label for="parentID"></label>
-                    <input name='parentID' value='<%= parentID %>'>
+                    <input name='parentID' value='<%= comment._id %>'>
+                    <label for="depth"></label>
+                    <input name='depth' value='<%= comment.depth +=1 %>'>
                 </div>
                 <div class="form-group">
                     <label for=<%=`comment-${paperID}`%>></label>
