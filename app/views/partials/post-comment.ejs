@@ -5,6 +5,10 @@
         </div>
         <div class="card-body">
             <form action=<%= `/api/comment/${paperID}` %> method="post">
+                <div class="hidden">
+                    <label for="parentID"></label>
+                    <input name='parentID' value='<%= parentID %>'>
+                </div>
                 <div class="form-group">
                     <label for=<%=`comment-${paperID}`%>></label>
                     <textarea name="commentBody" class="form-control" id=<%=`comment-${paperID}`%> rows="4"
@@ -15,15 +19,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    if (window.location.href.split('/').slice(-1).pop() == '?newComment') {
-        let successAlert = document.getElementById('success-alert')
-        successAlert.innerHTML = `
-        <div class="alert alert-success alert-dismissible">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>Success!</strong> Your comment has been posted
-        </div>
-        `
-    }
-</script>

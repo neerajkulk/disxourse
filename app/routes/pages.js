@@ -57,13 +57,12 @@ router.get('/paper/:arxivid', async (req, res) => {
             if (user) {
                 paper.userVote = await helpers.getUserPreviousVote(paper._id, user._id)
             }
-            if (paper.commentCount > 0) {
-                comments = await Comment.find({ paperID: paper._id })
-            }
+            // handle case if there are zero comments here
+            comments = await Comment.find({ paperID: paper._id })
             let myData = {
                 paper: paper,
                 user: user,
-                comments: comments
+                comments: makeCommentsThread(comments)
             }
             res.render('single', { myData })
         } else {
@@ -112,11 +111,9 @@ function insertComment(comments, comment) {
             insertComment(child.comments, comment)
         }
     })
-
 }
 
-router.get('/comments-test/', async (req, res) => {
-    let commentsDB = await Comment.find({ paperID: mongoose.Types.ObjectId("5f172b73bbbdb30d977b7831") }).sort({ date: 1 }).lean()
+function makeCommentsThread(commentsDB) {
     let comments = [] // store threads here
     for (let i = 0; i < commentsDB.length; i++) {
         comment = commentsDB[i]
@@ -127,37 +124,14 @@ router.get('/comments-test/', async (req, res) => {
             insertComment(comments, comment)
         }
     }
+    return comments
+}
 
-    const tree = [
-        {
-            name: "item 1",
-            link: "#link-1",
-            children: [
-                {
-                    name: "item 1.1",
-                    link: "#link-11",
-                    children: [
-                        {
-                            name: "item 1.1.1",
-                            link: "#link-111",
-                            children: []
-                        }
-                    ]
-                },
-                {
-                    name: "item 1.2",
-                    link: "#link-12",
-                    children: []
-                }
-            ]
-        },
-        {
-            name: "item 2",
-            children: []
-        }
-    ];
 
-    res.render('threaded-comments', { comments })
+router.get('/comments-test/', async (req, res) => {
+    let commentsDB = await Comment.find({ paperID: mongoose.Types.ObjectId("5f172b73bbbdb30d977b7831") }).sort({ date: 1 }).lean()
+    let comments = makeCommentsThread(commentsDB)
+    res.render('partials/threaded-comments', { comments })
 
 })
 

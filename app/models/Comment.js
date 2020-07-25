@@ -23,17 +23,7 @@ let commentSchema = mongoose.Schema({
     },
     parentID: {
         type: mongoose.Types.ObjectId,
-        required: true,
         default: null
-    },
-    depth: {
-        type: Number,
-        default: 0,
-        required:true
-    },
-    thread: {
-        type: mongoose.Types.ObjectId,
-        required: true
     }
 })
 

@@ -1,0 +1,139 @@
+<style>
+    /* Comment system */
+    ul.timeline-comments {
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+    }
+
+    ul.timeline-comments li.timeline-comment {
+        position: relative;
+        margin-bottom: 15px;
+        padding: 0px;
+        z-index: 9;
+    }
+
+    ul.timeline-comments li.timeline-comment:before {
+        content: '';
+        width: 1px;
+        height: 100%;
+        background: #ebedf2;
+        position: absolute;
+        left: 15px;
+        top: 15px;
+    }
+
+    ul.timeline-comments li.timeline-comment:last-child:before {
+        display: none;
+    }
+
+    ul.timeline-comments li.timeline-comment .timeline-comment-wrapper {
+        position: relative;
+        z-index: 99;
+    }
+
+    ul.timeline-comments li.timeline-comment .card .card-header {
+        position: relative;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    ul.timeline-comments li.timeline-comment .card .card-header img {
+        width: 32px;
+        background: #fff;
+    }
+
+    ul.timeline-comments li.timeline-comment .card .card-header h5 {
+        font-size: 16px;
+        line-height: 1;
+        margin: 0 10px;
+    }
+
+    ul.timeline-comments li.timeline-comment .card .card-header .comment-date {
+        font-size: 14px;
+        color: #bbb;
+    }
+
+    ul.timeline-comments li.timeline-comment .card .card-header .ribbon {
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+        position: absolute;
+        top: -5px;
+        left: -5px;
+    }
+
+    ul.timeline-comments li.timeline-comment .card .card-header .ribbon span {
+        position: absolute;
+        display: block;
+        width: 58px;
+        padding: 0px 0;
+        background-color: #4680ff;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        color: #fff;
+        font-size: 8px;
+        font-weight: 400;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        text-transform: uppercase;
+        text-align: center;
+        right: -5px;
+        top: 10px;
+        transform: rotate(-45deg);
+        z-index: 9;
+    }
+
+    ul.timeline-comments li.timeline-comment .card .card-header .ribbon:before,
+    ul.timeline-comments li.timeline-comment .card .card-header .ribbon:after {
+        position: absolute;
+        z-index: -1;
+        content: '';
+        display: block;
+        border: 5px solid #2980b9;
+        border-top-color: transparent;
+        border-left-color: transparent;
+    }
+
+    ul.timeline-comments li.timeline-comment .card .card-header .ribbon:before {
+        top: 0;
+        right: 0;
+    }
+
+    ul.timeline-comments li.timeline-comment .card .card-header .ribbon:after {
+        bottom: 0;
+        left: 0;
+    }
+
+    ul.timeline-comments li.timeline-comment ul {
+        padding-left: 30px;
+        margin-top: 15px;
+    }
+
+    ul.timeline-comments li>ul>li:first-child>.timeline-comment-wrapper>.card>.card-header:after {
+        content: '';
+        width: 15px;
+        height: 1px;
+        background: #ebedf2;
+        position: absolute;
+        left: -15px;
+        top: 50%;
+        z-index: 3;
+    }
+
+    ul.timeline-comments li>ul>li:first-child>.timeline-comment-wrapper>.card>.card-header:before {
+        content: '';
+        width: 1px;
+        height: 100%;
+        background: #ebedf2;
+        position: absolute;
+        left: -16px;
+        bottom: 50%;
+        z-index: 1;
+    }
+</style>
+
+<div class="container comments-box">
+    <%- include('./treeView', {
+        comments:comments,
+        user:myData.user
+        }) %>
+</div>

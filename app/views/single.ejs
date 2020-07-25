@@ -47,7 +47,8 @@
   <% if (myData.user){%>
   <%- include('partials/post-comment',{
     paperID:myData.paper._id,
-    user:myData.user
+    user:myData.user,
+    parentID:null
     }) %>
   <% } else { %>
   <%- include('partials/comment-disabled') %>

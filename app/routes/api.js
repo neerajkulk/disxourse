@@ -28,12 +28,14 @@ router.post('/api/init-user', ensureAuth, async (req, res) => {
 
 router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
     try {
+        console.log(req.body)
         let comment = new Comment({
             paperID: req.params.paperid,
             userID: req.user._id,
             username: req.user.username,
             commentBody: req.body.commentBody,
-            date: Date.now()
+            date: Date.now(),
+            parentID: req.body.parentID
         })
         await comment.save()
         let paper = await Paper.findById(req.params.paperid)
