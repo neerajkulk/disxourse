@@ -28,7 +28,6 @@ router.post('/api/init-user', ensureAuth, async (req, res) => {
 
 router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
     try {
-        console.log(req.body)
         let comment = new Comment({
             paperID: req.params.paperid,
             userID: req.user._id,
