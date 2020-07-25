@@ -1,3 +1,6 @@
+<% if ( user == undefined) {%>
+<%- include('./comment-disabled') %>
+<% } else { %>
 <div class="container mt-5">
     <div class="card" id="comment-form">
         <div class="card-header">
@@ -19,3 +22,4 @@
         </div>
     </div>
 </div>
+<% } %>

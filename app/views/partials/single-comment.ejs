@@ -10,7 +10,8 @@
             <p class="card-text"><%= comment.commentBody %></p>
         </div>
         <div class="card-footer bg-white p-2">
-            <div id=<%= `reply-form-${comment._id}` %> class="hidden"><%- include('./post-comment',{parentID:comment._id}) %></div>
+            <div id=<%= `reply-form-${comment._id}` %> class="hidden">
+                <%- include('./post-comment',{parentID:comment._id,user:user}) %></div>
             <button id=<%= `reply-btn-${comment._id}` %> type="button" class="btn btn-secondary btn-sm">Reply</button>
         </div>
     </div>
@@ -18,7 +19,8 @@
 
 <script>
 
-    comment = JSON.parse('<%- JSON.stringify(comment) %>')
+    var comment = JSON.parse('<%- JSON.stringify(comment) %>');
+  
     linkButtonToForm(comment._id)
 
     function linkButtonToForm(commentID) {

@@ -42,7 +42,8 @@
 
   <%- include('partials/threaded-comments',{
     paperID:myData.paper._id,
-    comments:myData.comments}) %>
+    comments:myData.comments,
+    user:myData.user}) %>
 
   <% if (myData.user){%>
   <%- include('partials/post-comment',{
