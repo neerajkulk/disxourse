@@ -2,7 +2,7 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
-* is depth, thread ID required for schema. 
+* newline in reply creates some sort of a bug. why??!
 * create a skim-mode where a small iframe opens up right under the paper in the main feed. 
 * delete papers if they have recieved no engangement after 30 days
 * Pre-2007 arxiv ID query is broken.

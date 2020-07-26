@@ -38,25 +38,34 @@
       Not compatible
     </iframe>
   </div>
-  <!-- Comments -->
 
+  <div class="container my-5">
+    <h2>Comments</h2>
+  </div>
+
+  <!-- Display comments-thread -->
   <%- include('partials/threaded-comments',{
     paperID:myData.paper._id,
     comments:myData.comments,
     user:myData.user}) %>
 
+
   <% if (myData.user){%>
-  <%- include('partials/post-comment',{
+  <!-- Form to post a new root comment -->
+  <div class='my-5' id="comment-form">
+    <%- include('partials/post-comment',{
     paperID:myData.paper._id,
     user:myData.user,
     comment:{
-      parentID:null,
-      depth:-1
+      parentID:null, // parent of root comment is null 
+      depth:-1  // parent of root comment has depth = -1
     }
     }) %>
-  <% } else { %>
-  <%- include('partials/comment-disabled') %>
-  <%} %>
+
+    <% } else { %>
+    <%- include('partials/comment-disabled') %>
+    <%} %>
+  </div>
 
 
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
