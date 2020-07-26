@@ -2,18 +2,18 @@
 
 <div class="timeline-comment-wrapper">
     <div class="card">
-        <div class="card-header d-flex align-items-center">
-            <h5 style="color: blue;"><%= comment.username%></h5>
-            <div class="comment-date"><%= comment.date %></div>
+        <div class="card-header my-auto">
+            <p class="comment-date float-right"><%= comment.date %></p>
+            <h5 class="lead mr-1"><%= comment.username%></h5>
         </div>
         <div class="card-body">
             <p class="card-text"><%= comment.commentBody %></p>
-            <p class="card-text"><%= comment.depth %></p>
         </div>
         <div class="card-footer bg-white p-2">
             <div id=<%= `reply-form-${comment._id}` %> class="hidden">
                 <%- include('./post-comment',{comment:comment,user:user}) %></div>
-            <button id=<%= `reply-btn-${comment._id}` %> type="button" class="btn btn-secondary btn-sm">Reply</button>
+            <button style="border: none;" id=<%= `reply-btn-${comment._id}` %> type="button"
+                class="btn btn-outline-primary btn-sm"><i class="fa fa-reply"></i> Reply</button>
         </div>
     </div>
 </div>

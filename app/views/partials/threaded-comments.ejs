@@ -32,12 +32,6 @@
         z-index: 99;
     }
 
-    ul.timeline-comments li.timeline-comment .card .card-header {
-        position: relative;
-        padding-top: 8px;
-        padding-bottom: 8px;
-    }
-
     ul.timeline-comments li.timeline-comment .card .card-header img {
         width: 32px;
         background: #fff;
@@ -45,62 +39,11 @@
 
     ul.timeline-comments li.timeline-comment .card .card-header h5 {
         font-size: 16px;
-        line-height: 1;
-        margin: 0 10px;
     }
 
     ul.timeline-comments li.timeline-comment .card .card-header .comment-date {
         font-size: 14px;
         color: #bbb;
-    }
-
-    ul.timeline-comments li.timeline-comment .card .card-header .ribbon {
-        width: 40px;
-        height: 40px;
-        overflow: hidden;
-        position: absolute;
-        top: -5px;
-        left: -5px;
-    }
-
-    ul.timeline-comments li.timeline-comment .card .card-header .ribbon span {
-        position: absolute;
-        display: block;
-        width: 58px;
-        padding: 0px 0;
-        background-color: #4680ff;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-        color: #fff;
-        font-size: 8px;
-        font-weight: 400;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-        text-transform: uppercase;
-        text-align: center;
-        right: -5px;
-        top: 10px;
-        transform: rotate(-45deg);
-        z-index: 9;
-    }
-
-    ul.timeline-comments li.timeline-comment .card .card-header .ribbon:before,
-    ul.timeline-comments li.timeline-comment .card .card-header .ribbon:after {
-        position: absolute;
-        z-index: -1;
-        content: '';
-        display: block;
-        border: 5px solid #2980b9;
-        border-top-color: transparent;
-        border-left-color: transparent;
-    }
-
-    ul.timeline-comments li.timeline-comment .card .card-header .ribbon:before {
-        top: 0;
-        right: 0;
-    }
-
-    ul.timeline-comments li.timeline-comment .card .card-header .ribbon:after {
-        bottom: 0;
-        left: 0;
     }
 
     ul.timeline-comments li.timeline-comment ul {
@@ -137,3 +80,17 @@
         user:user
         }) %>
 </div>
+
+
+<script>
+    //Format date on client side
+    function formatDateStr(dateStr) {
+        let date = new Date(dateStr)
+        return date.toLocaleString()
+    }
+    let dateElems = document.getElementsByClassName('comment-date')
+    for (let i = 0; i < dateElems.length; i++) {
+        let element = dateElems[i];
+        element.innerText = formatDateStr(element.innerText)
+    }
+</script>

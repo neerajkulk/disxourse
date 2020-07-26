@@ -2,12 +2,12 @@
 <%- include('./comment-disabled') %>
 <% } else { %>
 
-<div class="container mt-5">
+<div class="container mt-1 mb-2">
     <div class="card" id="comment-form">
-        <div class="card-header">
-            Posting as <%= user.username %>
+        <div class="card-header d-flex align-items-center">
+            <h5 class="lead"><%= user.username%></h5>
         </div>
-        <div class="card-body">
+        <div class="card-text px-3" >
             <form action=<%= `/api/comment/${paperID}` %> method="post">
                 <div class="hidden">
                     <label for="parentID"></label>
