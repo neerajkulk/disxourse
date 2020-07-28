@@ -64,7 +64,7 @@ router.get('/paper/:arxivid', async (req, res) => {
             let myData = {
                 paper: paper,
                 user: user,
-                comments: makeCommentsThread(comments)
+                comments: helpers.makeCommentsThread(comments)
             }
             res.render('single', { myData })
         } else {
@@ -104,37 +104,5 @@ router.get('/search/:query', async (req, res) => {
 })
 
 
-function insertComment(comments, comment) {
-    // Comments is an array, comment is an object
-    comments.forEach(child => {
-        if (child._id.toString() == comment.parentID.toString()) {
-            child.comments.push(comment)
-        } else {
-            insertComment(child.comments, comment)
-        }
-    })
-}
-
-function makeCommentsThread(commentsDB) {
-    let comments = [] // store threads here
-    for (let i = 0; i < commentsDB.length; i++) {
-        comment = commentsDB[i]
-        comment.comments = []
-        if (comment.parentID == null) {
-            comments.push(comment)
-        } else {
-            insertComment(comments, comment)
-        }
-    }
-    return comments
-}
-
-
-router.get('/comments-test/', async (req, res) => {
-    let commentsDB = await Comment.find({ paperID: mongoose.Types.ObjectId("5f172b73bbbdb30d977b7831") }).sort({ date: 1 }).lean()
-    let comments = makeCommentsThread(commentsDB)
-    res.render('partials/threaded-comments', { comments })
-
-})
 
 module.exports = router

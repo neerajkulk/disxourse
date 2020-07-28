@@ -1,3 +1,5 @@
+<!-- Form view to post a comment -->
+
 <% if ( user == undefined) {%>
 <%- include('./comment-disabled') %>
 <% } else { %>
@@ -7,7 +9,7 @@
         <div class="card-header d-flex align-items-center">
             <h5 class="lead"><%= user.username%></h5>
         </div>
-        <div class="card-text px-3" >
+        <div class="card-text px-3">
             <form action=<%= `/api/comment/${paperID}` %> method="post">
                 <div class="hidden">
                     <label for="parentID"></label>

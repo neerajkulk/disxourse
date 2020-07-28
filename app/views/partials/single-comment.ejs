@@ -1,5 +1,5 @@
 <!-- copied from https://github.com/ZsharE/threaded-comments-bootstrap -->
-
+<!-- view for a single comment in thread -->
 <div class="timeline-comment-wrapper">
     <div class="card">
         <div class="card-header my-auto">
@@ -19,7 +19,7 @@
 </div>
 
 <script>
-
+    // Script to show reply form 
     var comment = JSON.parse('<%- JSON.stringify(comment) %>');
     linkButtonToForm(comment._id)
 
