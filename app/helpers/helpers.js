@@ -5,6 +5,10 @@ const global = require('../global');
 
 
 module.exports = {
+    removeLineBreak: function (string) {
+        // https://stackoverflow.com/questions/10805125/how-to-remove-all-line-breaks-from-a-string
+        return string.replace(/(\r\n|\n|\r)/gm, " ")
+    },
     parseAuthors: function (authorList) {
         // Shorten list of authors
         let authorString = ''
@@ -187,5 +191,30 @@ module.exports = {
         queryParams.push(`(${global.astroCategories})`)
         queryString += `search_query=${queryParams.join('+AND+')}`
         return queryString
+    },
+    makeCommentsThread: function (commentsDB) {
+        let comments = [] // store threads here
+        for (let i = 0; i < commentsDB.length; i++) {
+            comment = commentsDB[i]
+            comment.comments = []
+            if (comment.parentID == null) {
+                comments.push(comment)
+            } else {
+                insertComment(comments, comment)
+            }
+        }
+        return comments
+
+        function insertComment(comments, comment) {
+            // Comments is an array, comment is an object
+            comments.forEach(child => {
+                if (child._id.toString() == comment.parentID.toString()) {
+                    child.comments.push(comment)
+                } else {
+                    insertComment(child.comments, comment)
+                }
+            })
+        }
     }
+
 };

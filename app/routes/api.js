@@ -32,7 +32,7 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
             paperID: req.params.paperid,
             userID: req.user._id,
             username: req.user.username,
-            commentBody: req.body.commentBody,
+            commentBody: helpers.removeLineBreak(req.body.commentBody),
             date: Date.now(),
             parentID: req.body.parentID == '' ? null : req.body.parentID,
             depth: parseInt(req.body.depth)
