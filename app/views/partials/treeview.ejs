@@ -7,7 +7,7 @@
     <li class="timeline-comment">
         <!-- comment card -->
         <%- include('./single-comment', {comment:comment,user:user}) %>
-        <%- include('./treeView', {comments: comment.comments,user:user}) %>
+        <%- include('./treeview', {comments: comment.comments,user:user}) %>
     </li>
     <% }) %>
     <% if (comments.length) { %>
