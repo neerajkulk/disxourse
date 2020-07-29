@@ -125,43 +125,11 @@ router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
 router.get('/user/:userID/recent-comments', ensureUser, async (req, res) => {
     // Sort query by date
     let userComments = await Comment.find({ userID: req.params.userID }).limit(30).populate('paperID').lean()
-    commentData = groupCommentsByPaper(userComments)
+    commentData = helpers.groupCommentsByPaper(userComments)
     let myData = { user: req.user, commentData: commentData }
     console.log(commentData)
     res.render('user-comments', { myData })
 })
-
-function groupCommentsByPaper(comments) {
-    let commentData = [] // poplate comments in this array 
-    comments.forEach(comment => {
-        let newComment = true
-        commentData.forEach(prevComment => {
-            // check if comment belongs to a paper
-            if (prevComment.paper.paperID.toString() == comment.paperID._id.toString()) {
-                prevComment.comments.push({
-                    commentBody: comment.commentBody,
-                    date: comment.date,
-                })
-                newComment = false
-            }
-        })
-        if (newComment) {
-            // no previous comments
-            commentData.push({
-                paper: {
-                    paperID: comment.paperID._id,
-                    url: `/paper/${comment.paperID.arxivID}`,
-                    title: comment.paperID.title
-                },
-                comments: [{
-                    commentBody: comment.commentBody,
-                    date: comment.date
-                }]
-            })
-        }
-    })
-    return commentData
-}
 
 
 module.exports = router

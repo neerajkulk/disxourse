@@ -215,6 +215,37 @@ module.exports = {
                 }
             })
         }
+    },
+    groupCommentsByPaper: function (comments) {
+        let commentData = [] // poplate comments in this array 
+        comments.forEach(comment => {
+            let newComment = true
+            commentData.forEach(prevComment => {
+                // check if comment belongs to a paper
+                if (prevComment.paper.paperID.toString() == comment.paperID._id.toString()) {
+                    prevComment.comments.push({
+                        commentBody: comment.commentBody,
+                        date: comment.date,
+                    })
+                    newComment = false
+                }
+            })
+            if (newComment) {
+                // no previous comments
+                commentData.push({
+                    paper: {
+                        paperID: comment.paperID._id,
+                        url: `/paper/${comment.paperID.arxivID}`,
+                        title: comment.paperID.title
+                    },
+                    comments: [{
+                        commentBody: comment.commentBody,
+                        date: comment.date
+                    }]
+                })
+            }
+        })
+        return commentData
     }
 
 };
