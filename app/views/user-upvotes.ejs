@@ -39,10 +39,12 @@
                 </div>
                 <!-- /.container-fluid -->
 
-                <%- include('partials/papers',{
-                    papers:myData.papers,
-                    user:myData.user
-                    }) %>
+                <div class="container">
+                    <%- include('partials/papers',{
+                        papers:myData.papers,
+                        user:myData.user
+                        }) %>
+                </div>
             </div>
             <!-- End of Main Content -->
 

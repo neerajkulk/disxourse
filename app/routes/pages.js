@@ -105,8 +105,7 @@ router.get('/search/:query', async (req, res) => {
 
 
 router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
-    // Sort query by date
-    let likedPapers = await Upvote.find({ userID: req.params.userID, vote: 1 }).populate('paperID').limit(30).lean()
+    let likedPapers = await Upvote.find({ userID: req.params.userID, vote: 1 }).populate('paperID').sort({ published: -1 }).limit(30).lean()
     let paperData = []
     likedPapers.forEach(paper => {
         if (paper.paperID != null) {
@@ -114,7 +113,6 @@ router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
         }
     });
     paperData = await helpers.getPaperTemplateData(paperData, req.user)
-    console.log(paperData)
     let myData = {
         papers: paperData,
         user: req.user
@@ -123,11 +121,9 @@ router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
 })
 
 router.get('/user/:userID/recent-comments', ensureUser, async (req, res) => {
-    // Sort query by date
-    let userComments = await Comment.find({ userID: req.params.userID }).limit(30).populate('paperID').lean()
+    let userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
     commentData = helpers.groupCommentsByPaper(userComments)
     let myData = { user: req.user, commentData: commentData }
-    console.log(commentData)
     res.render('user-comments', { myData })
 })
 
