@@ -2,16 +2,15 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
-* newline in reply creates some sort of a bug. why??!
+* make sure latex renders on all relevant pages
+* create user page
+* weekly mail digest
+* notifications on new-comment
 * create a skim-mode where a small iframe opens up right under the paper in the main feed. 
 * delete papers if they have recieved no engangement after 30 days
 * Pre-2007 arxiv ID query is broken.
-* Search for papers
-* add a banner in the comment section (I wrote this comment)
-* nested comments
-* template comments
+* edit comments?
 * restructure about page
-* Do I need a back button?
 * add render latex button
 * Add search tab (Users can search for features)
 * Fix twitter link once I have a domain name
