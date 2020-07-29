@@ -1,0 +1,12 @@
+<script>
+    //Format date on client side
+    function formatDateStr(dateStr) {
+        let date = new Date(dateStr)
+        return date.toLocaleString()
+    }
+    let dateElems = document.getElementsByClassName('comment-date')
+    for (let i = 0; i < dateElems.length; i++) {
+        let element = dateElems[i];
+        element.innerText = formatDateStr(element.innerText)
+    }
+</script>
