@@ -119,7 +119,7 @@ router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
         papers: paperData,
         user: req.user
     }
-    res.render('user', { myData })
+    res.render('user-upvotes', { myData })
 })
 
 router.get('/user/:userID/recent-comments', ensureUser, async (req, res) => {
@@ -128,7 +128,7 @@ router.get('/user/:userID/recent-comments', ensureUser, async (req, res) => {
     commentData = groupCommentsByPaper(userComments)
     let myData = { user: req.user, commentData: commentData }
     console.log(commentData)
-    res.render('recent-comments', { myData })
+    res.render('user-comments', { myData })
 })
 
 function groupCommentsByPaper(comments) {
