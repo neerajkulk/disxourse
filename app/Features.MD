@@ -2,6 +2,7 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
+* fixed sidebar does not scroll
 * make sure latex renders on all relevant pages
 * create user page
 * weekly mail digest
