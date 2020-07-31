@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Dashboard - SB Admin</title>
+    <title><%= `${myData.user.username} - comments` %> </title>
     <link href="/css/dashboard.css" rel="stylesheet" />
     <%- include('partials/head') %>
 </head>
@@ -44,7 +44,7 @@
 
                 <div class="container">
                     <% if (myData.commentData.length == 0) {%>
-                        <h4>No comments found</h4>
+                    <h4>No comments found</h4>
                     <% } %>
 
                     <% for(let i=0; i < myData.commentData.length; i++) { %>

@@ -2,6 +2,7 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
+* sort comments by date (Either add date object to upvotes or do an aggregation)
 * fixed sidebar does not scroll
 * make sure latex renders on all relevant pages
 * create user page
