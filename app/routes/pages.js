@@ -105,6 +105,7 @@ router.get('/search/:query', async (req, res) => {
 
 
 router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
+    if (req.params.userID.toString() != req.user._id.toString()) { res.redirect('/') }
     let likedPapers = await Upvote.find({ userID: req.params.userID, vote: 1 }).populate('paperID').sort({ published: -1 }).limit(30).lean()
     let paperData = []
     likedPapers.forEach(paper => {
@@ -121,6 +122,7 @@ router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
 })
 
 router.get('/user/:userID/recent-comments', ensureUser, async (req, res) => {
+    if (req.params.userID.toString() != req.user._id.toString()) { res.redirect('/') }
     let userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
     commentData = helpers.groupCommentsByPaper(userComments)
     let myData = { user: req.user, commentData: commentData }
