@@ -36,13 +36,17 @@
                 </div>
                 <div class="my-5"></div>
                 <div class="container my-5 text-center">
-                    <h1 class="display-4">Your recent comments </h1>
+                    <h1 class="display-4">Recent comments </h1>
                 </div>
                 <!-- /.container-fluid -->
 
                 <!-- End of Main Content -->
 
                 <div class="container">
+                    <% if (myData.commentData.length == 0) {%>
+                        <h4>No comments found</h4>
+                    <% } %>
+
                     <% for(let i=0; i < myData.commentData.length; i++) { %>
                     <!-- display all papers with comments -->
                     <div class="my-5">

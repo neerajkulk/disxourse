@@ -13,51 +13,51 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="#">
             <i class="fa fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+            <span><%= `Welcome, ${user.username}`  %></span></a>
     </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider">
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link " href="#">
             <i class="fa fa-fw fa-cog"></i>
             <span>Notifications</span>
         </a>
-    </li>
+    </li> -->
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link " href="#">
             <i class="fa fa-fw fa-cog"></i>
             <span>Your Profile</span>
         </a>
-    </li>
+    </li> -->
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link " href=<%= `/user/${user._id}/recent-upvotes` %> >
+        <a class="nav-link " href=<%= `/user/${user._id}/recent-upvotes` %>>
             <i class="fa fa-arrow-up"></i>
             <span>Upvoted papers</span>
         </a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link " href=<%= `/user/${user._id}/recent-comments` %> >
+        <a class="nav-link " href=<%= `/user/${user._id}/recent-comments` %>>
             <i class="fa fa-comments"></i>
-            <span>Your comments</span>
+            <span>Comments</span>
         </a>
     </li>
 
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link " href="#">
             <i class="fa fa-fw fa-cog"></i>
             <span>Settings</span>
         </a>
-    </li>
+    </li> -->
 
 
 </ul>
