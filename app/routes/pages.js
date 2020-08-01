@@ -7,7 +7,8 @@ const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const global = require('../global');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Notification = require('../models/Notification');
 
 
 router.get('/', (req, res) => {
@@ -103,6 +104,26 @@ router.get('/search/:query', async (req, res) => {
     })
 })
 
+router.get('/user/:userID/notifications', ensureUser, async (req, res) => {
+    // protect user route
+    let notifications = await Notification.find({ receiverID: req.user._id })
+    const myData = {
+        user: req.user,
+        unread: notifications.length,
+        notify: notifications
+    }
+    res.render('user-notifications', { myData })
+})
+
+
+
+router.delete('/test-delete', ensureUser, async (req, res) => {
+    // protect user route
+    console.log(req.body.userID)
+    await Notification.deleteMany({ receiverID: req.body.userID })
+    res.redirect(`/user/${req.user._id}/notifications`)
+})
+
 
 router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
     if (req.params.userID.toString() != req.user._id.toString()) { res.redirect('/') }
@@ -114,9 +135,11 @@ router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
         }
     });
     paperData = await helpers.getPaperTemplateData(paperData, req.user)
+    let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
     let myData = {
         papers: paperData,
-        user: req.user
+        user: req.user,
+        unread: unread
     }
     res.render('user-upvotes', { myData })
 })
@@ -125,7 +148,12 @@ router.get('/user/:userID/recent-comments', ensureUser, async (req, res) => {
     if (req.params.userID.toString() != req.user._id.toString()) { res.redirect('/') }
     let userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
     commentData = helpers.groupCommentsByPaper(userComments)
-    let myData = { user: req.user, commentData: commentData }
+    let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
+    let myData = {
+        user: req.user,
+        commentData: commentData,
+        unread: unread
+    }
     res.render('user-comments', { myData })
 })
 

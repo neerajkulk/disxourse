@@ -43,8 +43,7 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
         await paper.save()
 
         // Notify past users of comment.
-        const message = `${req.user.username} also commented on '${paper.title}'`
-        await notifyNewComment(req.user._id.toString(), req.params.paperid, message)
+        await notifyNewComment(req.user, paper)
 
         res.status(200).redirect(req.get('Referrer') + '#comment-form')
     } catch (err) {
@@ -52,23 +51,27 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
     }
 })
 
-async function notifyNewComment(commenterID, paperID, message) {
-    let usersID = await getUsersCommented(paperID)
+async function notifyNewComment(sender, paper) {
+    let usersID = await getUsersCommented(paper._id)
     for (let i = 0; i < usersID.length; i++) {
         const userID = usersID[i];
-        if (commenterID != userID) {
+        if (sender._id.toString() != userID) {
             const notification = new Notification({
-                userID: userID,
-                message: message,
-                read: false,
-                date: Date.now()
+                receiverID: userID,
+                sender: {
+                    id: sender._id.toString(),
+                    username: sender.username
+                },
+                date: Date.now(),
+                paper: {
+                    title: paper.title,
+                    arxivID: paper.arxivID
+                }
             });
             await notification.save()
         }
     }
 }
-
-
 
 async function getUsersCommented(paperID) {
     let comments = await Comment.find({ paperID: paperID })
@@ -81,22 +84,6 @@ async function getUsersCommented(paperID) {
     })
     return users
 }
-
-async function test(params) {
-    let users = await getUsersCommented("5f172b73bbbdb30d977b7831")
-    users.forEach(user => {
-        if (req.user != user) {
-            const notification = new Notification({
-                userID: user,
-                message: 'New comment',
-                read: false,
-                date: Date.now()
-            });
-            notification.save()
-        }
-    })
-}
-
 
 router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
     try {
