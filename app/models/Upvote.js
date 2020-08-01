@@ -13,6 +13,10 @@ let upvoteSchema = mongoose.Schema({
         type: Number,
         required: true,
         enum: [-1, 1]
+    },
+    date: {
+        type: Date,
+        default:Date.now()
     }
 })
 

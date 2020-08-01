@@ -59,33 +59,11 @@ const getNewPapers = require('./cron/getNewPapers')
 const fetchPapers = require('./fetchPapers')
 //fetchPapers.updateDB(startIndex = 0, maxIndex = 100, querySize = 100, earlyExit = false)
 
-let Comment = require('./models/Comment');
+const Upvote = require('./models/Upvote');
 
 
 async function test() {
-    let commentsDB = await Comment.find({ paperID: mongoose.Types.ObjectId("5f172b73bbbdb30d977b7831") }).sort({ date: 1 }).lean()
-    let comments = [] // store threads here
-    for (let i = 0; i < commentsDB.length; i++) {
-        comment = commentsDB[i]
-        comment.comments = []
-        if (comment.parentID == null) {
-            comments.push(comment)
-        } else {
-            insertComment(comments,comment)
-        }
-    }
-    return comments
-}
-
-function insertComment(comments, comment) {
-    // Comments is an array, comment is an object
-    comments.forEach(child => {
-        if (child._id.toString() == comment.parentID.toString()) {
-            child.comments.push(comment)
-        } else {
-            insertComment(child.comments, comment)
-        }
-    })
+    await Upvote.updateMany({}, { $set: { date: Date.now() } });
 
 }
-
+test()
