@@ -67,7 +67,8 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
             let newVote = new Upvote({
                 paperID: req.body.paperID,
                 userID: req.user._id,
-                vote: req.body.vote
+                vote: req.body.vote,
+                date: Date.now()
             })
             await newVote.save()
             res.status(200).end('new vote saved')
