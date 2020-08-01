@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
-let Paper = require('../models/Paper');
-let User = require('../models/User');
-let Upvote = require('../models/Upvote');
-let Comment = require('../models/Comment');
-const fetchPapers = require('../fetchPapers');
+const Paper = require('../models/Paper');
+const User = require('../models/User');
+const Upvote = require('../models/Upvote');
+const Comment = require('../models/Comment');
+const Notification = require('../models/Notification');
 const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const global = require('../global');
@@ -41,12 +41,61 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
         let paper = await Paper.findById(req.params.paperid)
         paper.commentCount++
         await paper.save()
+
+        // Notify past users of comment.
+        const message = `${req.user.username} also commented on '${paper.title}'`
+        await notifyNewComment(req.user._id.toString(), req.params.paperid, message)
+
         res.status(200).redirect(req.get('Referrer') + '#comment-form')
     } catch (err) {
         console.error(err)
     }
 })
 
+async function notifyNewComment(commenterID, paperID, message) {
+    let usersID = await getUsersCommented(paperID)
+    for (let i = 0; i < usersID.length; i++) {
+        const userID = usersID[i];
+        if (commenterID != userID) {
+            const notification = new Notification({
+                userID: userID,
+                message: message,
+                read: false,
+                date: Date.now()
+            });
+            await notification.save()
+        }
+    }
+}
+
+
+
+async function getUsersCommented(paperID) {
+    let comments = await Comment.find({ paperID: paperID })
+    users = []
+    comments.forEach(comment => {
+        let id = comment.userID.toString()
+        if (!users.includes(id)) {
+            users.push(id)
+        }
+    })
+    return users
+}
+
+async function test(params) {
+    let users = await getUsersCommented("5f172b73bbbdb30d977b7831")
+    users.forEach(user => {
+        if (req.user != user) {
+            const notification = new Notification({
+                userID: user,
+                message: 'New comment',
+                read: false,
+                date: Date.now()
+            });
+            notification.save()
+        }
+    })
+}
 
 
 router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
