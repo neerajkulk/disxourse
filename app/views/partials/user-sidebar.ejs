@@ -23,20 +23,13 @@
         <hr class="sidebar-divider">
 
         <!-- Nav Item - Pages Collapse Menu -->
-        <!-- <li class="nav-item">
-        <a class="nav-link " href="#">
-            <i class="fa fa-fw fa-cog"></i>
-            <span>Notifications</span>
-        </a>
-    </li> -->
-
-        <!-- Nav Item - Pages Collapse Menu -->
-        <!-- <li class="nav-item">
-        <a class="nav-link " href="#">
-            <i class="fa fa-fw fa-cog"></i>
-            <span>Your Profile</span>
-        </a>
-    </li> -->
+        <li class="nav-item">
+            <a class="nav-link " href=<%= `/user/${user._id}/notifications` %>>
+                <i class="fa fa-bell"></i>
+                <span>Notifications <span class="badge badge-danger"><%= myData.unread %> </span>
+                </span>
+            </a>
+        </li>
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
@@ -52,14 +45,6 @@
                 <span>Comments</span>
             </a>
         </li>
-
-        <!-- <li class="nav-item">
-        <a class="nav-link " href="#">
-            <i class="fa fa-fw fa-cog"></i>
-            <span>Settings</span>
-        </a>
-    </li> -->
-
 
     </ul>
 </div>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title><%= `${myData.user.username} - Notifications` %> </title>
+    <link href="/css/dashboard.css" rel="stylesheet" />
+    <%- include('partials/head') %>
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <%- include('partials/user-sidebar',{user:myData.user}) %>
+        <!-- End of Sidebar -->
+
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <div class="shadow">
+                        <%- include('partials/navbar',{user:myData.user}) %>
+                    </div>
+                </div>
+                <div class="my-5"></div>
+                <div class="container my-5 text-center">
+                    <h1 class="display-4">Notifications</h1>
+                </div>
+
+                <div class="container text-center">
+                    <% for(let i=0; i < myData.unread; i++) { %>
+                    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
+                        <div class="toast-header">
+                            <strong class="mr-auto"> <i class="fa fa-bell" style="color: #0275d8;"></i> New comment
+                            </strong>
+                            <small class="text-muted comment-date"><%= myData.notify[i].date %> </small>
+                        </div>
+                        <div class="toast-body text-left">
+                            <%= `${myData.notify[i].sender.username} commented on `%> <a
+                                href=<%= `/paper/${myData.notify[i].paper.arxivID}` %>>
+                                <%= myData.notify[i].paper.title %> </a>
+                        </div>
+                    </div>
+                    <% } %>
+                    <button onclick="deleteNotifications()" type="button" class="btn btn-primary">Clear
+                        notifications</button>
+                </div>
+
+
+
+                <script>
+                    $(document).ready(function () {
+                        $('.toast').toast('show');
+                    });
+
+                    function deleteNotifications() {
+                        fetch('/test-delete', {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ userID: '<%= myData.user._id%>' })
+                        }).then(response =>
+                            response.json().then(json => {
+                                json;
+                            })
+                        );
+                    }
+                </script>
+
+
+
+                <%- include('partials/formatClientDate.ejs') %>
+            </div>
+            <!-- End of Content Wrapper -->
+
+        </div>
+        <!-- End of Page Wrapper -->
+
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fa fa-angle-up"></i>
+        </a>
+
+        <%- include('partials/bottomScripts') %>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+</body>
+
+</html>
