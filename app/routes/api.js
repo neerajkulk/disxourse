@@ -52,7 +52,7 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
 })
 
 async function notifyNewComment(sender, paper) {
-    let usersID = await getUsersCommented(paper._id)
+    let usersID = await getEngagedUsers(paper._id)
     for (let i = 0; i < usersID.length; i++) {
         const userID = usersID[i];
         if (sender._id.toString() != userID) {
@@ -73,11 +73,19 @@ async function notifyNewComment(sender, paper) {
     }
 }
 
-async function getUsersCommented(paperID) {
+async function getEngagedUsers(paperID) {
+    // TODO: refactor this better
     let comments = await Comment.find({ paperID: paperID })
+    let upvotes = await Upvote.find({ paperID: paperID })
     users = []
     comments.forEach(comment => {
         let id = comment.userID.toString()
+        if (!users.includes(id)) {
+            users.push(id)
+        }
+    })
+    upvotes.forEach(upvote => {
+        let id = upvote.userID.toString()
         if (!users.includes(id)) {
             users.push(id)
         }
@@ -123,6 +131,17 @@ router.post('/advanced-search', (req, res) => {
 router.post('/simple-search', (req, res) => {
     let queryString = `search_query=all:${req.body.searchTerm}+AND+(${global.astroCategories})`
     res.redirect(`/search/${queryString}`)
+})
+
+
+router.delete('/api/delete-notifs', ensureUser, async (req, res) => {
+    try {
+        await Notification.deleteMany({ receiverID: req.user._id })
+        res.sendStatus(200)
+    } catch (err) {
+        console.error(err)
+    }
+
 })
 
 module.exports = router
