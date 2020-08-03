@@ -116,15 +116,6 @@ router.get('/user/:userID/notifications', ensureUser, async (req, res) => {
 })
 
 
-
-router.delete('/test-delete', ensureUser, async (req, res) => {
-    // protect user route
-    console.log(req.body.userID)
-    await Notification.deleteMany({ receiverID: req.body.userID })
-    res.redirect(`/user/${req.user._id}/notifications`)
-})
-
-
 router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
     if (req.params.userID.toString() != req.user._id.toString()) { res.redirect('/') }
     let likedPapers = await Upvote.find({ userID: req.params.userID, vote: 1 }).sort({ date: -1 }).limit(30).populate('paperID').lean()

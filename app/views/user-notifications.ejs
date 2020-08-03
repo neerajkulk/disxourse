@@ -39,9 +39,22 @@
                     <h1 class="display-4">Notifications</h1>
                 </div>
 
-                <div class="container text-center">
+                <style>
+                    .toast {
+                        max-width: 100% !important;
+                    }
+                </style>
+
+                <% if (myData.unread == 0) {%>
+                <div class="container">
+                    <h4>No new notifications</h4>
+                </div>
+                <%} else {%>
+
+                <div class="container mb-4">
                     <% for(let i=0; i < myData.unread; i++) { %>
-                    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-autohide="false">
+                    <div class="toast mx-auto" role="alert" aria-live="assertive" aria-atomic="true"
+                        data-autohide="false">
                         <div class="toast-header">
                             <strong class="mr-auto"> <i class="fa fa-bell" style="color: #0275d8;"></i> New comment
                             </strong>
@@ -54,10 +67,10 @@
                         </div>
                     </div>
                     <% } %>
-                    <button onclick="deleteNotifications()" type="button" class="btn btn-primary">Clear
-                        notifications</button>
+                    <button onclick="deleteNotifications()" type="button" class="btn btn-danger my-3"> Clear all <i
+                            class="fa fa-trash"></i></button>
                 </div>
-
+                <% } %>
 
 
                 <script>
@@ -66,17 +79,10 @@
                     });
 
                     function deleteNotifications() {
-                        fetch('/test-delete', {
-                            method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ userID: '<%= myData.user._id%>' })
-                        }).then(response =>
-                            response.json().then(json => {
-                                json;
-                            })
-                        );
+                        fetch('/api/delete-notifs', {
+                            method: 'delete',
+                        }).then((response) => { location.reload() }
+                        ).catch((err) => { console.log(err) });
                     }
                 </script>
 
