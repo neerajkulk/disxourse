@@ -104,12 +104,12 @@ module.exports = {
                 results = await Paper.find({ category: category }).sort({ published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
                 break;
             case 'top-week':
-                d.setDate(d.getDate() - 7);
+                d.setDate(d.getDate() - 8);
                 query = { category: category, published: { "$gte": d } }
                 results = await Paper.find(query).sort({ voteScore: -1, published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
                 break
             case 'top-month':
-                d.setDate(d.getDate() - 30);
+                d.setDate(d.getDate() - 31);
                 query = { category: category, published: { "$gte": d } }
                 results = await Paper.find(query).sort({ voteScore: -1, published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
                 break
@@ -149,6 +149,16 @@ module.exports = {
             }
         }
         return undefined
+    },
+    getUserData: async function (reqUser) {
+        let userData     // User data required to be rendered in templates
+        if (module.exports.hasUsername(reqUser)) {
+            userData = module.exports.hasUsername(reqUser)
+            userData.unread = await Notification.countDocuments({ receiverID: reqUser._id }) // number of unread notifications
+        } else {
+            userData = undefined
+        }
+        return userData
     },
     usernameTaken: async function (username) {
         // Checks if username exists in DB
