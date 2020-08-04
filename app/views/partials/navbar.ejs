@@ -46,6 +46,9 @@
                         <a class="nav-link" href=<%= `/user/${user._id}/recent-upvotes`%>>
                             <i class="fa fa-user" aria-hidden="true" style="color: #7b7b7c;"></i>
                             <%= ` ${user.username} ` %>
+                            <% if (unread){ %>
+                            <span class="badge badge-danger"><%= unread %> </span>
+                            <% } %>
                         </a>
                     </span>
                     <a href="/auth/logout"><button type="button" class="btn btn-outline-primary">Logout</button></a>

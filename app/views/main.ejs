@@ -10,7 +10,7 @@
 
 
 <body>
-    <%- include('partials/navbar',{user:myData.user}) %>
+    <%- include('partials/navbar',{user:myData.user,unread:myData.unread}) %>
     <h1 class="container-fluid text-center display-4 pt-5"><%= myData.title %> </h1>
     <div class="container mt-5 mb-5">
         <div class="dropdown">

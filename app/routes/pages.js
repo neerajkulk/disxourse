@@ -15,8 +15,13 @@ router.get('/', (req, res) => {
     res.render('front', { myData })
 })
 
-router.get('/about', (req, res) => {
-    let myData = { user: helpers.hasUsername(req.user) }
+router.get('/about', async (req, res) => {
+    let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
+
+    let myData = {
+        user: helpers.hasUsername(req.user),
+        unread: unread
+    }
     res.render('about', { myData })
 })
 
@@ -30,13 +35,15 @@ router.get('/feed/:cat/:filter/:page', async (req, res) => {
         let resultsPerPage = global.resultsPerPage
         let papersQuery = await helpers.queryPapers(req.params.cat, req.params.filter, resultsPerPage, page)
         let paperData = await helpers.getPaperTemplateData(papersQuery, req.user)
+        let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
         let myData = {
             title: helpers.sentencifyArxivCategory(req.params.cat),
             category: req.params.cat,
             filter: helpers.parseFilter(req.params.filter),
             papers: paperData,
             user: helpers.hasUsername(req.user),
-            pagination: helpers.paginateURLs(req.url)
+            pagination: helpers.paginateURLs(req.url),
+            unread: unread
         }
         res.render('main', {
             myData: myData
@@ -61,10 +68,12 @@ router.get('/paper/:arxivid', async (req, res) => {
             if (paper.commentCount != 0) {
                 comments = await Comment.find({ paperID: paper._id })
             }
+            let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
             let myData = {
                 paper: paper,
                 user: user,
-                comments: helpers.makeCommentsThread(comments)
+                comments: helpers.makeCommentsThread(comments),
+                unread: unread
             }
             res.render('single', { myData })
         } else {
@@ -80,6 +89,7 @@ router.get('/search/:query', async (req, res) => {
     let results = []
     let queryString = helpers.arxivQueryString(req.params.query)
     let parsed = await fetchPapers.QueryToJSON(queryString)
+    let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
     for (let i = 0; i < parsed.length; i++) {
         let paper = fetchPapers.parseEntry(parsed[i])
         let paperExists = await Paper.findOne({ arxivID: paper.arxivID }).lean()
@@ -96,7 +106,8 @@ router.get('/search/:query', async (req, res) => {
         query: req.params.query,
         papers: paperData,
         user: helpers.hasUsername(req.user),
-        queryObj: helpers.queryToObject(req.params.query)
+        queryObj: helpers.queryToObject(req.params.query),
+        unread: unread
     }
     res.render('search', {
         myData: myData
@@ -106,10 +117,11 @@ router.get('/search/:query', async (req, res) => {
 router.get('/user/:userID/notifications', ensureUser, async (req, res) => {
     // protect user route
     let notifications = await Notification.find({ receiverID: req.user._id })
+    let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
     const myData = {
         user: req.user,
         unread: notifications.length,
-        notify: notifications
+        notify: notifications,
     }
     res.render('user-notifications', { myData })
 })
