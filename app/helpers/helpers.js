@@ -1,6 +1,8 @@
 const Paper = require('../models/Paper');
 const Upvote = require('../models/Upvote');
+const Comment = require('../models/Comment');
 const User = require('../models/Upvote');
+const Notification = require('../models/Notification');
 const global = require('../global');
 
 
