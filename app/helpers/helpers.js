@@ -1,9 +1,11 @@
 const Paper = require('../models/Paper');
 const Upvote = require('../models/Upvote');
 const Comment = require('../models/Comment');
-const User = require('../models/Upvote');
+const User = require('../models/User');
 const Notification = require('../models/Notification');
 const global = require('../global');
+const voteHelpers = require('./voteHelpers');
+const userHelper = require('./userHelpers');
 
 
 module.exports = {
@@ -27,16 +29,6 @@ module.exports = {
         }
         return authorString
     },
-
-    getUserPreviousVote: async function (paperID, userID) {
-        // Returns user's previous vote on a paper 
-        let userVote = await Upvote.findOne({ paperID: paperID, userID: userID }).lean()
-        if (userVote) {
-            return userVote.vote
-        } else {
-            return 0
-        }
-    },
     sentencifyArxivCategory: function (cat) {
         switch (cat) {
             case 'astro-ph.CO':
@@ -55,28 +47,13 @@ module.exports = {
                 return 'Not valid'
         }
     },
-    sumPaperVotes: async function (paperID) {
-        // Compute net upvotes of a paper by summing up all votes
-        try {
-            let paper = await Paper.findById(paperID)
-
-            let sum = 0
-            let paperVotes = await Upvote.find({ paperID: paperID })
-            paperVotes.forEach(voteObj => { sum += voteObj.vote })
-            paper.voteScore = sum
-            await paper.save()
-
-        } catch (err) {
-            console.error(err)
-        }
-    },
     getPaperTemplateData: async function (papers, user) {
         // Add user-specific data to pass into EJS template (previous votes)
         for (let index = 0; index < papers.length; index++) {
             paper = papers[index]
             paper.authors = module.exports.parseAuthors(paper.authors)
             if (user) {
-                paper.userVote = await module.exports.getUserPreviousVote(paper._id, user._id)
+                paper.userVote = await voteHelpers.getUserPreviousVote(paper._id, user._id)
             }
         }
         return papers
@@ -95,34 +72,6 @@ module.exports = {
             next: baseURL + '/' + nextPage
         }
     },
-    queryPapers: async function (category, filter, resultsPerPage, page) {
-        let results
-        let d = new Date()
-        let query
-        switch (filter) {
-            case 'newest':
-                results = await Paper.find({ category: category }).sort({ published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
-                break;
-            case 'top-week':
-                d.setDate(d.getDate() - 8);
-                query = { category: category, published: { "$gte": d } }
-                results = await Paper.find(query).sort({ voteScore: -1, published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
-                break
-            case 'top-month':
-                d.setDate(d.getDate() - 31);
-                query = { category: category, published: { "$gte": d } }
-                results = await Paper.find(query).sort({ voteScore: -1, published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
-                break
-            case 'top-all':
-                query = { category: category }
-                results = await Paper.find(query).sort({ voteScore: -1, published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
-                break
-            default:
-                results = []
-                break
-        }
-        return results
-    },
     parseFilter: function (filter) {
         let outString = ''
         switch (filter) {
@@ -140,165 +89,5 @@ module.exports = {
                 break
         }
         return outString
-    },
-    hasUsername: function (user) {
-        // Used to see if req.user has a username
-        if (user) {
-            if (user.username) {
-                return user
-            }
-        }
-        return undefined
-    },
-    getUserData: async function (reqUser) {
-        let userData     // User data required to be rendered in templates
-        if (module.exports.hasUsername(reqUser)) {
-            userData = module.exports.hasUsername(reqUser)
-            userData.unread = await Notification.countDocuments({ receiverID: reqUser._id }) // number of unread notifications
-        } else {
-            userData = undefined
-        }
-        return userData
-    },
-    usernameTaken: async function (username) {
-        // Checks if username exists in DB
-        let user = await User.findOne({ username: username })
-        if (user) {
-            return true
-        } else {
-            return false
-        }
-    },
-    arxivQueryString: function (query) {
-        // Sort order here?
-        return `http://export.arxiv.org/api/query?${query}&sortBy=submittedDate&sortOrder=descending&start=0&max_results=${global.resultsPerPage}`
-    },
-    queryToObject: function (queryString) {
-        let queryObject = {}
-        queryString.split('&').forEach(param => {
-            if (param.includes('id_list')) {
-                queryObject.id_list = param.split('=')[1]
-            } else if (param.includes('search_query')) {
-                let searchFields = param.split('=')[1].split('+AND+')
-                searchFields.forEach(element => {
-                    queryObject[element.split(':')[0]] = element.split(':')[1]
-                })
-            }
-        })
-        return queryObject
-    },
-    objectToQuery: function (reqBody) {
-        let queryString = ''
-
-        if (reqBody.id_list != '' && reqBody.id_list != undefined) {
-            queryString += `id_list=${reqBody.id_list}&`
-            reqBody.id_list = ''
-        }
-        let queryParams = []
-        for (const key in reqBody) {
-            if (reqBody[key] != '') {
-                queryParams.push(`${key}:${reqBody[key]}`)
-            }
-        }
-        queryParams.push(`(${global.astroCategories})`)
-        queryString += `search_query=${queryParams.join('+AND+')}`
-        return queryString
-    },
-    makeCommentsThread: function (commentsDB) {
-        let comments = [] // store threads here
-        for (let i = 0; i < commentsDB.length; i++) {
-            comment = commentsDB[i]
-            comment.comments = []
-            if (comment.parentID == null) {
-                comments.push(comment)
-            } else {
-                insertComment(comments, comment)
-            }
-        }
-        return comments
-
-        function insertComment(comments, comment) {
-            // Comments is an array, comment is an object
-            comments.forEach(child => {
-                if (child._id.toString() == comment.parentID.toString()) {
-                    child.comments.push(comment)
-                } else {
-                    insertComment(child.comments, comment)
-                }
-            })
-        }
-    },
-    groupCommentsByPaper: function (comments) {
-        let commentData = [] // poplate comments in this array 
-        comments.forEach(comment => {
-            let newComment = true
-            commentData.forEach(prevComment => {
-                // check if comment belongs to a paper
-                if (prevComment.paper.paperID.toString() == comment.paperID._id.toString()) {
-                    prevComment.comments.push({
-                        commentBody: comment.commentBody,
-                        date: comment.date,
-                    })
-                    newComment = false
-                }
-            })
-            if (newComment) {
-                // no previous comments
-                commentData.push({
-                    paper: {
-                        paperID: comment.paperID._id,
-                        url: `/paper/${comment.paperID.arxivID}`,
-                        title: comment.paperID.title
-                    },
-                    comments: [{
-                        commentBody: comment.commentBody,
-                        date: comment.date
-                    }]
-                })
-            }
-        })
-        return commentData
-    },
-    notifyNewComment: async function (sender, paper) {
-        // Create notification for each engaged user
-        let usersID = await module.exports.getEngagedUsers(paper._id)
-        for (let i = 0; i < usersID.length; i++) {
-            const userID = usersID[i];
-            if (sender._id.toString() != userID) {
-                const notification = new Notification({
-                    receiverID: userID,
-                    sender: {
-                        id: sender._id.toString(),
-                        username: sender.username
-                    },
-                    date: Date.now(),
-                    paper: {
-                        title: paper.title,
-                        arxivID: paper.arxivID
-                    }
-                });
-                await notification.save()
-            }
-        }
-    },
-    getEngagedUsers: async function (paperID) {
-        // List of user ID's that have upvoted or commented on a paper
-        let comments = await Comment.find({ paperID: paperID })
-        let upvotes = await Upvote.find({ paperID: paperID })
-        users = []
-        comments.forEach(comment => {
-            let id = comment.userID.toString()
-            if (!users.includes(id)) {
-                users.push(id)
-            }
-        })
-        upvotes.forEach(upvote => {
-            let id = upvote.userID.toString()
-            if (!users.includes(id)) {
-                users.push(id)
-            }
-        })
-        return users
     }
-
 };

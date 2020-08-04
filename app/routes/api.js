@@ -8,12 +8,16 @@ const Notification = require('../models/Notification');
 const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const global = require('../global');
+const voteHelpers = require('../helpers/voteHelpers');
+const userHelper = require('../helpers/userHelpers');
+const searchHelper = require('../helpers/searchHelpers');
+const commentHelper = require('../helpers/commentHelpers');
 
 router.post('/api/init-user', ensureAuth, async (req, res) => {
     /* Oauth login redirects here for first time users to pick a useraname  */
     try {
         let newUser = await User.findByIdAndUpdate({ _id: req.user._id })
-        const userExists = await helpers.usernameTaken(req.body.username)
+        const userExists = await userHelper.usernameTaken(req.body.username)
         if (userExists) {
             /* re-render page with error if username taken*/
             res.render('init-user', {
@@ -48,7 +52,7 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
         const paper = await Paper.findById(req.params.paperid)
         paper.commentCount++
         await paper.save()
-        await helpers.notifyNewComment(req.user, paper) // Create notifications for other users
+        await commentHelper.notifyNewComment(req.user, paper) // Create notifications for other users
         res.status(200).redirect(req.get('Referrer') + '#comment-form')
     } catch (err) {
         console.error(err)
@@ -78,7 +82,7 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
             await newVote.save()
             res.status(200).end('new vote saved')
         }
-        await helpers.sumPaperVotes(req.body.paperID) //re-calculate total votes on paper
+        await voteHelpers.sumPaperVotes(req.body.paperID) //re-calculate total votes on paper
     } catch (err) {
         console.error(err)
     }
@@ -92,7 +96,7 @@ router.post('/simple-search', (req, res) => {
 
 router.post('/advanced-search', (req, res) => {
     /* Create arxiv query string and redirect to search page */
-    const queryString = helpers.objectToQuery(req.body)
+    const queryString = searchHelper.objectToQuery(req.body)
     res.redirect(`/search/${queryString}`)
 })
 

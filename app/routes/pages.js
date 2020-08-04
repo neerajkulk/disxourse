@@ -6,15 +6,20 @@ let Comment = require('../models/Comment');
 const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
+const voteHelper = require('../helpers/voteHelpers');
 const global = require('../global');
 const Notification = require('../models/Notification');
+const paperQueryHelper = require('../helpers/paperQueryHelpers');
+const userHelper = require('../helpers/userHelpers');
+const searchHelper = require('../helpers/searchHelpers');
+const commentHelper = require('../helpers/commentHelpers');
 
 
 router.get('/', async (req, res) => {
     try {
         /* Landing page */
         let myData = {
-            user: await helpers.getUserData(req.user),
+            user: await userHelper.getUserData(req.user),
         }
         res.render('front', { myData })
 
@@ -27,7 +32,7 @@ router.get('/about', async (req, res) => {
     /* About page */
     try {
         let myData = {
-            user: await helpers.getUserData(req.user)
+            user: await userHelper.getUserData(req.user)
         }
         res.render('about', { myData })
 
@@ -46,14 +51,14 @@ router.get('/feed/:cat/:filter/:page', async (req, res) => {
     try {
         const page = Number(req.params.page)
         const resultsPerPage = global.resultsPerPage
-        const papersQuery = await helpers.queryPapers(req.params.cat, req.params.filter, resultsPerPage, page)
+        const papersQuery = await paperQueryHelper.queryPapers(req.params.cat, req.params.filter, resultsPerPage, page)
         const paperData = await helpers.getPaperTemplateData(papersQuery, req.user)
         const myData = {
             title: helpers.sentencifyArxivCategory(req.params.cat),
             category: req.params.cat,
             filter: helpers.parseFilter(req.params.filter),
             papers: paperData,
-            user: await helpers.getUserData(req.user),
+            user: await userHelper.getUserData(req.user),
             pagination: helpers.paginateURLs(req.url),
         }
         res.render('main', {
@@ -72,15 +77,15 @@ router.get('/paper/:arxivid', async (req, res) => {
         let comments = []
         if (paper) {
             if (req.user) {
-                paper.userVote = await helpers.getUserPreviousVote(paper._id, req.user._id)
+                paper.userVote = await voteHelper.getUserPreviousVote(paper._id, req.user._id)
             }
             if (paper.commentCount != 0) {
                 comments = await Comment.find({ paperID: paper._id })
             }
             let myData = {
                 paper: paper,
-                user: await helpers.getUserData(req.user),
-                comments: helpers.makeCommentsThread(comments),
+                user: await userHelper.getUserData(req.user),
+                comments: commentHelper.makeCommentsThread(comments),
             }
             res.render('single', { myData })
         } else {
@@ -98,7 +103,7 @@ router.get('/search/:query', async (req, res) => {
     Otherwise add the paper in DB*/
     try {
         let results = []
-        const queryString = helpers.arxivQueryString(req.params.query)
+        const queryString = searchHelper.arxivQueryString(req.params.query)
         const parsed = await fetchPapers.QueryToJSON(queryString)
         for (let i = 0; i < parsed.length; i++) {
             let paper = fetchPapers.parseEntry(parsed[i])
@@ -115,8 +120,8 @@ router.get('/search/:query', async (req, res) => {
         const myData = {
             query: req.params.query,
             papers: paperData,
-            user: await helpers.getUserData(req.user),
-            queryObj: helpers.queryToObject(req.params.query),
+            user: await userHelper.getUserData(req.user),
+            queryObj: searchHelper.queryToObject(req.params.query),
         }
         res.render('search', {
             myData: myData
@@ -132,7 +137,7 @@ router.get('/user/:userID/notifications', ensureUser, async (req, res) => {
     try {
         const notifications = await Notification.find({ receiverID: req.user._id }).lean()
         const myData = {
-            user: await helpers.getUserData(req.user),
+            user: await userHelper.getUserData(req.user),
             notify: notifications,
         }
         res.render('user-notifications', { myData })
@@ -157,7 +162,7 @@ router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
         paperData = await helpers.getPaperTemplateData(paperData, req.user)
         const myData = {
             papers: paperData,
-            user: await helpers.getUserData(req.user)
+            user: await userHelper.getUserData(req.user)
         }
         res.render('user-upvotes', { myData })
     } catch (err) {
@@ -171,9 +176,9 @@ router.get('/user/:userID/recent-comments', ensureUser, async (req, res) => {
     if (req.params.userID.toString() != req.user._id.toString()) { res.redirect('/') } // Again this should be middleware
     try {
         const userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
-        const commentData = helpers.groupCommentsByPaper(userComments)
+        const commentData = commentHelper.groupCommentsByPaper(userComments)
         const myData = {
-            user: await helpers.getUserData(req.user),
+            user: await userHelper.getUserData(req.user),
             commentData: commentData,
         }
         res.render('user-comments', { myData })

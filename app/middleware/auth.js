@@ -1,4 +1,6 @@
 const helpers = require('../helpers/helpers');
+const userHelper = require('../helpers/userHelpers');
+
 module.exports = {
     ensureAuth: function (req, res, next) {
         if (req.isAuthenticated()) {
@@ -15,7 +17,7 @@ module.exports = {
         }
     },
     ensureUser: function (req, res, next) {
-        if (helpers.hasUsername(req.user)) {
+        if (userHelper.hasUsername(req.user)) {
             return next()
         } else {
             res.redirect('/')
