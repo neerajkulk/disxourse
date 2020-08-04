@@ -10,17 +10,16 @@ const global = require('../global');
 const Notification = require('../models/Notification');
 
 
-router.get('/', (req, res) => {
-    let myData = { user: helpers.hasUsername(req.user) }
+router.get('/', async (req, res) => {
+    let myData = {
+        user: await getUserData(req.user),
+    }
     res.render('front', { myData })
 })
 
 router.get('/about', async (req, res) => {
-    let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
-
     let myData = {
-        user: helpers.hasUsername(req.user),
-        unread: unread
+        user: await getUserData(req.user)
     }
     res.render('about', { myData })
 })
@@ -29,21 +28,30 @@ router.get('/init-user', ensureAuth, (req, res) => {
     res.render('init-user', { user: req.user })
 })
 
+async function getUserData(reqUser) {
+    let userData     // User data required to be rendered in templates
+    if (helpers.hasUsername(reqUser)) {
+        userData = helpers.hasUsername(reqUser)
+        userData.unread = await Notification.countDocuments({ receiverID: reqUser._id }) // number of unread notifications
+    } else {
+        userData = undefined
+    }
+    return userData
+}
+
 router.get('/feed/:cat/:filter/:page', async (req, res) => {
     try {
         let page = Number(req.params.page)
         let resultsPerPage = global.resultsPerPage
         let papersQuery = await helpers.queryPapers(req.params.cat, req.params.filter, resultsPerPage, page)
         let paperData = await helpers.getPaperTemplateData(papersQuery, req.user)
-        let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
         let myData = {
             title: helpers.sentencifyArxivCategory(req.params.cat),
             category: req.params.cat,
             filter: helpers.parseFilter(req.params.filter),
             papers: paperData,
-            user: helpers.hasUsername(req.user),
+            user: await getUserData(req.user),
             pagination: helpers.paginateURLs(req.url),
-            unread: unread
         }
         res.render('main', {
             myData: myData
@@ -68,12 +76,10 @@ router.get('/paper/:arxivid', async (req, res) => {
             if (paper.commentCount != 0) {
                 comments = await Comment.find({ paperID: paper._id })
             }
-            let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
             let myData = {
                 paper: paper,
-                user: user,
+                user: await getUserData(req.user),
                 comments: helpers.makeCommentsThread(comments),
-                unread: unread
             }
             res.render('single', { myData })
         } else {
@@ -89,7 +95,6 @@ router.get('/search/:query', async (req, res) => {
     let results = []
     let queryString = helpers.arxivQueryString(req.params.query)
     let parsed = await fetchPapers.QueryToJSON(queryString)
-    let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
     for (let i = 0; i < parsed.length; i++) {
         let paper = fetchPapers.parseEntry(parsed[i])
         let paperExists = await Paper.findOne({ arxivID: paper.arxivID }).lean()
@@ -105,9 +110,8 @@ router.get('/search/:query', async (req, res) => {
     let myData = {
         query: req.params.query,
         papers: paperData,
-        user: helpers.hasUsername(req.user),
+        user: await getUserData(req.user),
         queryObj: helpers.queryToObject(req.params.query),
-        unread: unread
     }
     res.render('search', {
         myData: myData
@@ -117,10 +121,8 @@ router.get('/search/:query', async (req, res) => {
 router.get('/user/:userID/notifications', ensureUser, async (req, res) => {
     // protect user route
     let notifications = await Notification.find({ receiverID: req.user._id })
-    let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
     const myData = {
-        user: req.user,
-        unread: notifications.length,
+        user: await getUserData(req.user),
         notify: notifications,
     }
     res.render('user-notifications', { myData })
@@ -137,11 +139,9 @@ router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
         }
     });
     paperData = await helpers.getPaperTemplateData(paperData, req.user)
-    let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
     let myData = {
         papers: paperData,
-        user: req.user,
-        unread: unread
+        user: await getUserData(req.user)
     }
     res.render('user-upvotes', { myData })
 })
@@ -150,11 +150,9 @@ router.get('/user/:userID/recent-comments', ensureUser, async (req, res) => {
     if (req.params.userID.toString() != req.user._id.toString()) { res.redirect('/') }
     let userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
     commentData = helpers.groupCommentsByPaper(userComments)
-    let unread = await Notification.countDocuments({ receiverID: req.user._id }) // number of unread notifications
     let myData = {
-        user: req.user,
+        user: await getUserData(req.user),
         commentData: commentData,
-        unread: unread
     }
     res.render('user-comments', { myData })
 })

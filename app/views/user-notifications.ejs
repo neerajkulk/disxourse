@@ -31,7 +31,7 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <div class="shadow">
-                        <%- include('partials/navbar',{user:myData.user,unread:myData.unread}) %>
+                        <%- include('partials/navbar',{user:myData.user}) %>
                     </div>
                 </div>
                 <div class="my-5"></div>
@@ -45,14 +45,14 @@
                     }
                 </style>
 
-                <% if (myData.unread == 0) {%>
+                <% if (myData.user.unread == 0) {%>
                 <div class="container">
                     <h4>No new notifications</h4>
                 </div>
                 <%} else {%>
 
                 <div class="container mb-4">
-                    <% for(let i=0; i < myData.unread; i++) { %>
+                    <% for(let i=0; i < myData.user.unread; i++) { %>
                     <div class="toast mx-auto" role="alert" aria-live="assertive" aria-atomic="true"
                         data-autohide="false">
                         <div class="toast-header">

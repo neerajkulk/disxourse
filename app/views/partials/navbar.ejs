@@ -47,8 +47,8 @@
 
                             <i class="fa fa-user" aria-hidden="true"></i>
                             <%= ` ${user.username} ` %>
-                            <% if (unread){ %>
-                            <span class="badge badge-danger"><%= unread %> </span>
+                            <% if (user.unread){ %>
+                            <span class="badge badge-danger"><%= user.unread %> </span>
                             <% } %>
                         </a>
                     </span>
