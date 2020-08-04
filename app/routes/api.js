@@ -8,7 +8,7 @@ const Notification = require('../models/Notification');
 const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const global = require('../global');
-const voteHelpers = require('../helpers/voteHelpers');
+const voteHelper = require('../helpers/voteHelpers');
 const userHelper = require('../helpers/userHelpers');
 const searchHelper = require('../helpers/searchHelpers');
 const commentHelper = require('../helpers/commentHelpers');
@@ -82,7 +82,7 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
             await newVote.save()
             res.status(200).end('new vote saved')
         }
-        await voteHelpers.sumPaperVotes(req.body.paperID) //re-calculate total votes on paper
+        await voteHelper.sumPaperVotes(req.body.paperID) //re-calculate total votes on paper
     } catch (err) {
         console.error(err)
     }

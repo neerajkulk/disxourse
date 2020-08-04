@@ -4,7 +4,7 @@ const Comment = require('../models/Comment');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 const global = require('../global');
-const voteHelpers = require('./voteHelpers');
+const voteHelper = require('./voteHelpers');
 const userHelper = require('./userHelpers');
 
 
@@ -53,7 +53,7 @@ module.exports = {
             paper = papers[index]
             paper.authors = module.exports.parseAuthors(paper.authors)
             if (user) {
-                paper.userVote = await voteHelpers.getUserPreviousVote(paper._id, user._id)
+                paper.userVote = await voteHelper.getUserPreviousVote(paper._id, user._id)
             }
         }
         return papers
