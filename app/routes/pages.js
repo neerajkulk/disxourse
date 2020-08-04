@@ -4,7 +4,7 @@ let Paper = require('../models/Paper');
 let Upvote = require('../models/Upvote');
 let Comment = require('../models/Comment');
 const fetchPapers = require('../fetchPapers');
-const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
+const { ensureAuth, ensureUser, ensureGuest, ensurePrivate } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const voteHelper = require('../helpers/voteHelpers');
 const global = require('../global');
@@ -131,9 +131,8 @@ router.get('/search/:query', async (req, res) => {
     }
 })
 
-router.get('/user/:userID/notifications', ensureUser, async (req, res) => {
+router.get('/user/:userID/notifications', ensurePrivate, async (req, res) => {
     /* Fetch new notifications for a user */
-    // TODO: protect user route(make private)
     try {
         const notifications = await Notification.find({ receiverID: req.user._id }).lean()
         const myData = {
@@ -147,7 +146,7 @@ router.get('/user/:userID/notifications', ensureUser, async (req, res) => {
 
 })
 
-router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
+router.get('/user/:userID/recent-upvotes', ensurePrivate, async (req, res) => {
     /* Get recently upvoted papers for a user*/
     try {
         if (req.params.userID.toString() != req.user._id.toString()) { res.redirect('/') }  // TODO: refactor this as middleware
@@ -171,9 +170,8 @@ router.get('/user/:userID/recent-upvotes', ensureUser, async (req, res) => {
 
 })
 
-router.get('/user/:userID/recent-comments', ensureUser, async (req, res) => {
+router.get('/user/:userID/recent-comments', ensurePrivate, async (req, res) => {
     /* Get recent comments for a user*/
-    if (req.params.userID.toString() != req.user._id.toString()) { res.redirect('/') } // Again this should be middleware
     try {
         const userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
         const commentData = commentHelper.groupCommentsByPaper(userComments)

@@ -2,6 +2,8 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
+* Fix remove linebreak when storing comments to DB. This is hacky! and doesnt allow people to use paragraphs.
+* Search for 'TODO' in code
 * treat partials like functions (the data it takes are arguements to the functions). It should be clear exactly what data each partial should take
 * make user in navbar different color so it's obvious for people to click on it 
 * get rid of current page in pagination
