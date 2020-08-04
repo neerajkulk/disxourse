@@ -2,20 +2,13 @@
     <nav aria-label="...">
         <ul class="pagination">
             <li class="page-item">
-                <a class="page-link" href=<%=  pagination.first %>>Newest</a>
+                <a class="page-link" href=<%=  pagination.first %>><i class="fa fa-home"></i></a>
             </li>
             <% if (pagination.prev != null) {%>
             <li class="page-item"><a class="page-link" href=<%= pagination.prev %>><i class="fa fa-arrow-left"
                         aria-hidden="true"></i>
                 </a></li>
             <% } %>
-
-            <li class="page-item active">
-                <span class="page-link">
-                    <%=  'Page ' + pagination.current.split('/').slice(-1).pop() %>
-                    <span class="sr-only">(current)</span>
-                </span>
-            </li>
             <% if (paperCount != 0) {%>
             <li class="page-item"><a class="page-link" href=<%=  pagination.next %>><i class="fa fa-arrow-right"
                         aria-hidden="true"></i>
