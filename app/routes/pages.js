@@ -7,7 +7,6 @@ const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const global = require('../global');
-const mongoose = require('mongoose');
 const Notification = require('../models/Notification');
 
 

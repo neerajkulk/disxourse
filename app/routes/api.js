@@ -43,55 +43,13 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
         await paper.save()
 
         // Notify past users of comment.
-        await notifyNewComment(req.user, paper)
+        await helpers.notifyNewComment(req.user, paper)
 
         res.status(200).redirect(req.get('Referrer') + '#comment-form')
     } catch (err) {
         console.error(err)
     }
 })
-
-async function notifyNewComment(sender, paper) {
-    let usersID = await getEngagedUsers(paper._id)
-    for (let i = 0; i < usersID.length; i++) {
-        const userID = usersID[i];
-        if (sender._id.toString() != userID) {
-            const notification = new Notification({
-                receiverID: userID,
-                sender: {
-                    id: sender._id.toString(),
-                    username: sender.username
-                },
-                date: Date.now(),
-                paper: {
-                    title: paper.title,
-                    arxivID: paper.arxivID
-                }
-            });
-            await notification.save()
-        }
-    }
-}
-
-async function getEngagedUsers(paperID) {
-    // TODO: refactor this better
-    let comments = await Comment.find({ paperID: paperID })
-    let upvotes = await Upvote.find({ paperID: paperID })
-    users = []
-    comments.forEach(comment => {
-        let id = comment.userID.toString()
-        if (!users.includes(id)) {
-            users.push(id)
-        }
-    })
-    upvotes.forEach(upvote => {
-        let id = upvote.userID.toString()
-        if (!users.includes(id)) {
-            users.push(id)
-        }
-    })
-    return users
-}
 
 router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
     try {

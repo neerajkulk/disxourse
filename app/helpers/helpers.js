@@ -246,6 +246,47 @@ module.exports = {
             }
         })
         return commentData
+    },
+    notifyNewComment: async function (sender, paper) {
+        // Create notification for each engaged user
+        let usersID = await module.exports.getEngagedUsers(paper._id)
+        for (let i = 0; i < usersID.length; i++) {
+            const userID = usersID[i];
+            if (sender._id.toString() != userID) {
+                const notification = new Notification({
+                    receiverID: userID,
+                    sender: {
+                        id: sender._id.toString(),
+                        username: sender.username
+                    },
+                    date: Date.now(),
+                    paper: {
+                        title: paper.title,
+                        arxivID: paper.arxivID
+                    }
+                });
+                await notification.save()
+            }
+        }
+    },
+    getEngagedUsers: async function (paperID) {
+        // List of user ID's that have upvoted or commented on a paper
+        let comments = await Comment.find({ paperID: paperID })
+        let upvotes = await Upvote.find({ paperID: paperID })
+        users = []
+        comments.forEach(comment => {
+            let id = comment.userID.toString()
+            if (!users.includes(id)) {
+                users.push(id)
+            }
+        })
+        upvotes.forEach(upvote => {
+            let id = upvote.userID.toString()
+            if (!users.includes(id)) {
+                users.push(id)
+            }
+        })
+        return users
     }
 
 };

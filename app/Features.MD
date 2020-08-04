@@ -2,6 +2,9 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
+* make user in navbar different color so it's obvious for people to click on it 
+* get rid of current page in pagination
+* you should be able to open the PDF in a seperate page
 * sort comments by date (Either add date object to upvotes or do an aggregation)
 * fixed sidebar does not scroll
 * make sure latex renders on all relevant pages

@@ -26,7 +26,10 @@
         <li class="nav-item">
             <a class="nav-link " href=<%= `/user/${user._id}/notifications` %>>
                 <i class="fa fa-bell"></i>
-                <span>Notifications <span class="badge badge-danger"><%= myData.unread %> </span>
+                <span>Notifications
+                    <% if (myData.unread){ %>
+                    <span class="badge badge-danger"><%= myData.unread %> </span>
+                    <% } %>
                 </span>
             </a>
         </li>
