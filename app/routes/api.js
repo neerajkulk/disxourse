@@ -10,41 +10,45 @@ const helpers = require('../helpers/helpers');
 const global = require('../global');
 
 router.post('/api/init-user', ensureAuth, async (req, res) => {
-    let newUser = await User.findByIdAndUpdate({ _id: req.user._id })
-    let userExists = await helpers.usernameTaken(req.body.username)
-    if (userExists) {
-        res.render('init-user', {
-            user: req.user,
-            userExists: userExists
-        })
-    }
-    else {
-        newUser.username = req.body.username
-        if (req.body.email) { newUser.email = req.body.email }
-        await newUser.save()
-        res.redirect('/')
+    /* Oauth login redirects here for first time users to pick a useraname  */
+    try {
+        let newUser = await User.findByIdAndUpdate({ _id: req.user._id })
+        const userExists = await helpers.usernameTaken(req.body.username)
+        if (userExists) {
+            /* re-render page with error if username taken*/
+            res.render('init-user', {
+                user: req.user,
+                userExists: userExists
+            })
+        }
+        else {
+            newUser.username = req.body.username
+            if (req.body.email) { newUser.email = req.body.email }
+            await newUser.save()
+            res.redirect('/')
+        }
+    } catch (err) {
+        console.error(err)
     }
 })
 
 router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
+    /* Recieve comment form and store in DB  */
     try {
-        let comment = new Comment({
+        const comment = new Comment({
             paperID: req.params.paperid,
             userID: req.user._id,
             username: req.user.username,
-            commentBody: helpers.removeLineBreak(req.body.commentBody),
+            commentBody: helpers.removeLineBreak(req.body.commentBody), //TODO: this remove line-break thing is kinda of hack
             date: Date.now(),
             parentID: req.body.parentID == '' ? null : req.body.parentID,
             depth: parseInt(req.body.depth)
         })
         await comment.save()
-        let paper = await Paper.findById(req.params.paperid)
+        const paper = await Paper.findById(req.params.paperid)
         paper.commentCount++
         await paper.save()
-
-        // Notify past users of comment.
-        await helpers.notifyNewComment(req.user, paper)
-
+        await helpers.notifyNewComment(req.user, paper) // Create notifications for other users
         res.status(200).redirect(req.get('Referrer') + '#comment-form')
     } catch (err) {
         console.error(err)
@@ -52,10 +56,9 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
 })
 
 router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
+    /* Take care of storing votes on papers in DB */
     try {
-        // Has the user voted on the paper before?
         let previousVote = await Upvote.findOne({ paperID: req.body.paperID, userID: req.user._id })
-
         if (previousVote) {
             if (req.body.vote == 0) {
                 await previousVote.deleteOne()
@@ -66,7 +69,7 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
                 res.status(200).send('previous vote updated')
             }
         } else {
-            let newVote = new Upvote({
+            const newVote = new Upvote({
                 paperID: req.body.paperID,
                 userID: req.user._id,
                 vote: req.body.vote,
@@ -75,24 +78,26 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
             await newVote.save()
             res.status(200).end('new vote saved')
         }
-        await helpers.sumPaperVotes(req.body.paperID)
+        await helpers.sumPaperVotes(req.body.paperID) //re-calculate total votes on paper
     } catch (err) {
         console.error(err)
     }
 })
 
-router.post('/advanced-search', (req, res) => {
-    const queryString = helpers.objectToQuery(req.body)
-    res.redirect(`/search/${queryString}`)
-})
-
 router.post('/simple-search', (req, res) => {
+    /* Create arxiv query string (advanced) and redirect to search page */
     let queryString = `search_query=all:${req.body.searchTerm}+AND+(${global.astroCategories})`
     res.redirect(`/search/${queryString}`)
 })
 
+router.post('/advanced-search', (req, res) => {
+    /* Create arxiv query string and redirect to search page */
+    const queryString = helpers.objectToQuery(req.body)
+    res.redirect(`/search/${queryString}`)
+})
 
 router.delete('/api/delete-notifs', ensureUser, async (req, res) => {
+    /* Delete notification from DB */
     try {
         await Notification.deleteMany({ receiverID: req.user._id })
         res.sendStatus(200)
