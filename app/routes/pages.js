@@ -134,7 +134,7 @@ router.get('/search/:query', async (req, res) => {
 router.get('/user/:userID/notifications', ensurePrivate, async (req, res) => {
     /* Fetch new notifications for a user */
     try {
-        const notifications = await Notification.find({ receiverID: req.user._id }).lean()
+        const notifications = await Notification.find({ receiverID: req.user._id }).sort({ date: -1 }).lean()
         const myData = {
             user: await userHelper.getUserData(req.user),
             notify: notifications,
