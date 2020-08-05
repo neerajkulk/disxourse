@@ -9,10 +9,6 @@ const userHelper = require('./userHelpers');
 
 
 module.exports = {
-    removeLineBreak: function (string) {
-        // https://stackoverflow.com/questions/10805125/how-to-remove-all-line-breaks-from-a-string
-        return string.replace(/(\r\n|\n|\r)/gm, " ")
-    },
     parseAuthors: function (authorList) {
         // Shorten list of authors
         let authorString = ''

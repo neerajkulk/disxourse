@@ -7,11 +7,16 @@ const Notification = require('../models/Notification');
 const global = require('../global');
 
 module.exports = {
+    formatComment: function (comment) {
+        /* replace \r\n linebreaks with <br> html tags */
+        comment.commentBody = comment.commentBody.replace(/\r\n/g, "<br>")
+        return comment
+    },
     makeCommentsThread: function (commentsDB) {
         /* Turn array of comments into a nested object by recursively matching parentID's */
         let comments = [] // store threads here
         for (let i = 0; i < commentsDB.length; i++) {
-            comment = commentsDB[i]
+            comment = module.exports.formatComment(commentsDB[i])
             comment.comments = []
             if (comment.parentID == null) {
                 comments.push(comment)
