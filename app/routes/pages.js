@@ -149,7 +149,6 @@ router.get('/user/:userID/notifications', ensurePrivate, async (req, res) => {
 router.get('/user/:userID/recent-upvotes', ensurePrivate, async (req, res) => {
     /* Get recently upvoted papers for a user*/
     try {
-        if (req.params.userID.toString() != req.user._id.toString()) { res.redirect('/') }  // TODO: refactor this as middleware
         const likedPapers = await Upvote.find({ userID: req.params.userID, vote: 1 })
             .sort({ date: -1 }).limit(30).populate('paperID').lean()
         let paperData = []
