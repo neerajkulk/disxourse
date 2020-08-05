@@ -1,4 +1,6 @@
 <!-- Form view to post a comment -->
+<!-- args: (comment,user) //refers to parent comment to which reply is being made to -->
+<!-- paperID is a global varable in threadedcomments.ejs -->
 
 <% if ( user == undefined) {%>
 <%- include('./comment-disabled') %>

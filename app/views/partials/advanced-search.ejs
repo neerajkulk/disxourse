@@ -1,24 +1,25 @@
+<!-- args: queryObj -->
 <form action="/advanced-search" method="POST">
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="author">Author</label>
             <input name="au" type="text" class="form-control" id="author" 
-                value='<%= myData.queryObj.au %>'>
+                value='<%= queryObj.au %>'>
         </div>
         <div class="form-group col-md-6">
             <label for="arxivID">arXiv ID</label>
             <input name="id_list" type="text" class="form-control" id="arxivID"
-                value='<%= myData.queryObj.id_list %>'>
+                value='<%= queryObj.id_list %>'>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="title">Title</label>
-            <input name="ti" type="text" class="form-control" id="title" value='<%= myData.queryObj.ti %>'>
+            <input name="ti" type="text" class="form-control" id="title" value='<%= queryObj.ti %>'>
         </div>
         <div class="form-group col-md-6">
             <label for="title">Keywords</label>
-            <input name="all" type="text" class="form-control" id="title" value='<%= myData.queryObj.all %>'>
+            <input name="all" type="text" class="form-control" id="title" value='<%= queryObj.all %>'>
         </div>
     </div>
     <button type="submit" class="btn btn-success"><i class="fa fa-search"></i></button>
