@@ -94,6 +94,7 @@ router.post('/mail-feedback', async (req, res) => {
     const nodemailer = require('nodemailer');
     const transporter = nodemailer.createTransport({
         service: 'gmail',
+        port: 465,
         secure: false,
         requireTLS: false,
         auth: {
