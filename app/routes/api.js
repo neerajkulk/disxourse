@@ -117,6 +117,7 @@ router.post('/mail-feedback', async (req, res) => {
         if (error) {
             myData.success = false
             res.render('feedback', { myData })
+            console.error(error)
         } else {
             myData.success = true
             res.render('feedback', { myData })
