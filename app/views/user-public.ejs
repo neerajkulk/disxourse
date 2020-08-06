@@ -52,36 +52,10 @@
 
         <!-- make this a partial -->
         <div class="container">
-            <% if (myData.commentData.length == 0) {%>
-            <h4>No comments found</h4>
-            <% } %>
-
-            <% for(let i=0; i < myData.commentData.length; i++) { %>
-            <!-- display all papers with comments -->
-            <div class="my-5">
-                <h3 class="mb-3">
-                    <a href=<%=  `${myData.commentData[i].paper.url}#comment-form` %>>
-                        <%= myData.commentData[i].paper.title %>
-                    </a>
-                </h3>
-
-                <% for(let j=0; j < myData.commentData[i].comments.length; j++) { %>
-                <!-- display all comments on a given paper -->
-
-                <div class="card my-3">
-                    <div class="card-header my-auto">
-                        <p class="comment-date float-right text-muted">
-                            <%= myData.commentData[i].comments[j].date %>
-                        </p>
-                        <h5 class="lead mr-1"><%= myData.user.username%></h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text"><%= myData.commentData[i].comments[j].commentBody %></p>
-                    </div>
-                </div>
-                <% } %>
-            </div>
-            <% } %>
+            <%- include('partials/user-commentData',{
+                commentData:myData.commentData,
+                user:myData.user
+            }) %>
         </div>
 
     </div>
