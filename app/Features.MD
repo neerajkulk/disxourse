@@ -2,6 +2,7 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
+* link to twitter profile, ORCID-ID and other media
 * tag other users so they get notifications @nrjklk
 * Establish some guidelines, or even rules, for comments
 * Do basic SEO (bare minimum, dont go down a rabbit hole here)

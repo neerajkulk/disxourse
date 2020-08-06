@@ -1,0 +1,99 @@
+<!-- User's public page for other users to see -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> <%= myData.user.username %> </title>
+    <%- include('partials/head') %>
+</head>
+
+
+<body>
+    <%- include('partials/navbar',{user:myData.user}) %>
+
+    <style>
+        .profile-header {
+            transform: translateY(3rem);
+        }
+    </style>
+    <div class="container mt-5" style="box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);">
+        <!-- copied from: https://bootstrapious.com/p/bootstrap-profile-page -->
+        <div class="px-5 bg-primary">
+            <div class="media align-items-end profile-header">
+                <div class="profile mr-3"></div>
+                <div class="media-body mb-5 text-white">
+                    <h1 class="mt-0 mb-0"><%= myData.user.username %></h1>
+                    <% var d = new Date(myData.user.createdAt) %>
+                    <h5 class="small mb-4"> User since <%= `${d.toLocaleDateString()}` %> </h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-light p-3 d-flex justify-content-end text-center">
+            <ul class="list-inline mb-0">
+                <li class="list-inline-item">
+                    <h5 class="font-weight-bold mb-0 d-block"><%= myData.commentCount %></h5><small class="text-muted">
+                        <i class="fa fa-comments mr-1"></i>Comments</small>
+                </li>
+                <li class="list-inline-item">
+                    <h5 class="font-weight-bold mb-0 d-block"><%= myData.voteCount %></h5><small class="text-muted"> <i
+                            class="fa fa-arrow-up mr-1"></i>Votes on papers</small>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="container my-5">
+        <h2>Recent comments</h2>
+        <hr>
+
+        <!-- make this a partial -->
+        <div class="container">
+            <% if (myData.commentData.length == 0) {%>
+            <h4>No comments found</h4>
+            <% } %>
+
+            <% for(let i=0; i < myData.commentData.length; i++) { %>
+            <!-- display all papers with comments -->
+            <div class="my-5">
+                <h3 class="mb-3">
+                    <a href=<%=  `${myData.commentData[i].paper.url}#comment-form` %>>
+                        <%= myData.commentData[i].paper.title %>
+                    </a>
+                </h3>
+
+                <% for(let j=0; j < myData.commentData[i].comments.length; j++) { %>
+                <!-- display all comments on a given paper -->
+
+                <div class="card my-3">
+                    <div class="card-header my-auto">
+                        <p class="comment-date float-right text-muted">
+                            <%= myData.commentData[i].comments[j].date %>
+                        </p>
+                        <h5 class="lead mr-1"><%= myData.user.username%></h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><%= myData.commentData[i].comments[j].commentBody %></p>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+            <% } %>
+        </div>
+
+    </div>
+
+
+    <%- include('partials/formatClientDate.ejs') %>
+
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <%- include('partials/bottomScripts') %>
+
+</body>
+
+</html>

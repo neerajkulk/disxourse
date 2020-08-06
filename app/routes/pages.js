@@ -144,6 +144,26 @@ router.get('/search/:query', async (req, res) => {
     }
 })
 
+router.get('/user-public/:userID', ensureUser, async (req, res) => {    
+    /* Other users see this public page for any user */
+    try {
+        const commentCount = await Comment.countDocuments({ userID: req.params.userID })
+        const voteCount = await Upvote.countDocuments({ userID: req.params.userID })
+
+        const userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
+        const commentData = commentHelper.groupCommentsByPaper(userComments)
+        const myData = {
+            user: await userHelper.getUserData(req.user),
+            commentCount: commentCount,
+            voteCount: voteCount,
+            commentData: commentData
+        }
+        res.render('user-public', { myData })
+    } catch (err) {
+        console.error(err)
+    }
+})
+
 router.get('/user/:userID/notifications', ensurePrivate, async (req, res) => {
     /* Fetch new notifications for a user */
     try {
