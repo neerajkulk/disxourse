@@ -48,6 +48,8 @@ module.exports = {
                     prevComment.comments.push({
                         commentBody: comment.commentBody,
                         date: comment.date,
+                        username: comment.username,
+                        userID: comment.userID
                     })
                     newComment = false
                 }
@@ -62,7 +64,9 @@ module.exports = {
                     },
                     comments: [{
                         commentBody: comment.commentBody,
-                        date: comment.date
+                        date: comment.date,
+                        username: comment.username,
+                        userID: comment.userID
                     }]
                 })
             }
