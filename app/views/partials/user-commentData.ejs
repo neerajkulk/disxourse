@@ -1,33 +1,35 @@
 <!-- Render user comments (grouped by paper)-->
-<!-- args: (commentData, user) -->
+<!-- args: (commentData) -->
 
 <% if (commentData.length == 0) {%>
-    <h4>No comments found</h4>
-    <% } %>
+<h4>No comments found</h4>
+<% } %>
 
-    <% for(let i=0; i < commentData.length; i++) { %>
-    <!-- display all papers with comments -->
-    <div class="my-5">
-        <h3 class="mb-3">
-            <a href=<%=  `${commentData[i].paper.url}#comment-form` %>>
-                <%= commentData[i].paper.title %>
+<% for(let i=0; i < commentData.length; i++) { %>
+<!-- display all papers with comments -->
+<div class="my-5">
+    <h3 class="mb-3">
+        <a href=<%=  `${commentData[i].paper.url}#comment-form` %>>
+            <%= commentData[i].paper.title %>
+        </a>
+    </h3>
+
+    <% for(let j=0; j < commentData[i].comments.length; j++) { %>
+    <!-- display all comments on a given paper -->
+
+    <div class="card my-3">
+        <div class="card-header my-auto">
+            <p class="comment-date float-right text-muted">
+                <%= commentData[i].comments[j].date %>
+            </p>
+            <a href=<%= `/user-public/${commentData[i].comments[j].userID}` %>>
+                <h5 class="lead mr-1"><%= commentData[i].comments[j].username%></h5>
             </a>
-        </h3>
-
-        <% for(let j=0; j < commentData[i].comments.length; j++) { %>
-        <!-- display all comments on a given paper -->
-
-        <div class="card my-3">
-            <div class="card-header my-auto">
-                <p class="comment-date float-right text-muted">
-                    <%= commentData[i].comments[j].date %>
-                </p>
-                <h5 class="lead mr-1"><%= user.username%></h5>
-            </div>
-            <div class="card-body">
-                <p class="card-text"><%= commentData[i].comments[j].commentBody %></p>
-            </div>
         </div>
-        <% } %>
+        <div class="card-body">
+            <p class="card-text"><%= commentData[i].comments[j].commentBody %></p>
+        </div>
     </div>
     <% } %>
+</div>
+<% } %>

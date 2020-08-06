@@ -61,8 +61,10 @@
                             <small class="text-muted comment-date"><%= myData.notify[i].date %> </small>
                         </div>
                         <div class="toast-body text-left">
-                            <%= `${myData.notify[i].sender.username} commented on `%> <a
-                                href=<%= `/paper/${myData.notify[i].paper.arxivID}` %>>
+                            <a href=<%= `/user-public/${myData.notify[i].sender.id}` %>>
+                                <%= `${myData.notify[i].sender.username}` %>
+                            </a>
+                            commented on <a href=<%= `/paper/${myData.notify[i].paper.arxivID}` %>>
                                 <%= myData.notify[i].paper.title %> </a>
                         </div>
                     </div>

@@ -5,7 +5,9 @@
     <div class="card">
         <div class="card-header my-auto">
             <p class="comment-date float-right"><%= comment.date %></p>
-            <h5 class="lead mr-1"><%= comment.username%></h5>
+            <a href=<%= `/user-public/${comment.userID}` %>>
+                <h5 class="lead mr-1"><%= comment.username%></h5>
+            </a>
         </div>
         <div class="card-body">
             <p class="card-text"><%- comment.commentBody %></p>
