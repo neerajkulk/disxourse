@@ -1,14 +1,15 @@
 const express = require('express')
 const router = express.Router()
-let Paper = require('../models/Paper');
-let Upvote = require('../models/Upvote');
-let Comment = require('../models/Comment');
+const User = require('../models/User');
+const Paper = require('../models/Paper');
+const Upvote = require('../models/Upvote');
+const Comment = require('../models/Comment');
+const Notification = require('../models/Notification');
 const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureUser, ensureGuest, ensurePrivate } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const voteHelper = require('../helpers/voteHelpers');
 const global = require('../global');
-const Notification = require('../models/Notification');
 const paperQueryHelper = require('../helpers/paperQueryHelpers');
 const userHelper = require('../helpers/userHelpers');
 const searchHelper = require('../helpers/searchHelpers');
@@ -144,7 +145,7 @@ router.get('/search/:query', async (req, res) => {
     }
 })
 
-router.get('/user-public/:userID', ensureUser, async (req, res) => {    
+router.get('/user-public/:userID', ensureUser, async (req, res) => {
     /* Other users see this public page for any user */
     try {
         const commentCount = await Comment.countDocuments({ userID: req.params.userID })
@@ -153,7 +154,8 @@ router.get('/user-public/:userID', ensureUser, async (req, res) => {
         const userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
         const commentData = commentHelper.groupCommentsByPaper(userComments)
         const myData = {
-            user: await userHelper.getUserData(req.user),
+            user: await userHelper.getUserData(req.user), // user who is logged
+            pageUser: await User.findById(req.params.userID).lean(), // user who's profile is being served
             commentCount: commentCount,
             voteCount: voteCount,
             commentData: commentData

@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> <%= myData.user.username %> </title>
+    <title> <%= myData.pageUser.username %> </title>
     <%- include('partials/head') %>
 </head>
 
@@ -24,8 +24,8 @@
             <div class="media align-items-end profile-header">
                 <div class="profile mr-3"></div>
                 <div class="media-body mb-5 text-white">
-                    <h1 class="mt-0 mb-0"><%= myData.user.username %></h1>
-                    <% var d = new Date(myData.user.createdAt) %>
+                    <h1 class="mt-0 mb-0"><%= myData.pageUser.username %></h1>
+                    <% var d = new Date(myData.pageUser.createdAt) %>
                     <h5 class="small mb-4"> User since <%= `${d.toLocaleDateString()}` %> </h5>
                 </div>
             </div>
@@ -52,10 +52,7 @@
 
         <!-- make this a partial -->
         <div class="container">
-            <%- include('partials/user-commentData',{
-                commentData:myData.commentData,
-                user:myData.user
-            }) %>
+            <%- include('partials/user-commentData',{commentData:myData.commentData}) %>
         </div>
 
     </div>
