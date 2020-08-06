@@ -33,7 +33,7 @@
             <p class="lead"> <%= papers[i].authors %> </p>
 
             <p class="text-muted"> <%= papers[i].abstract %> </p>
-            <a href=<%= `/paper/${papers[i].arxivID}#comments` %>>
+            <a href=<%= `/paper/${papers[i].arxivID}#comment-form` %>>
                 <% if ( papers[i].commentCount  > 0) { %>
                 <%= papers[i].commentCount%>
                 <%} %>
