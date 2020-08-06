@@ -41,6 +41,19 @@ router.get('/about', async (req, res) => {
     }
 })
 
+router.get('/feedback', async (req, res) => {
+    /* feedback form */
+    try {
+        let myData = {
+            user: await userHelper.getUserData(req.user)
+        }
+        res.render('feedback', { myData })
+
+    } catch (err) {
+        console.error(err)
+    }
+})
+
 router.get('/init-user', ensureAuth, (req, res) => {
     /* first time users register their username here */
     res.render('init-user', { user: req.user })

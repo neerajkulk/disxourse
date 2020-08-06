@@ -12,6 +12,8 @@ const voteHelper = require('../helpers/voteHelpers');
 const userHelper = require('../helpers/userHelpers');
 const searchHelper = require('../helpers/searchHelpers');
 const commentHelper = require('../helpers/commentHelpers');
+const dotenv = require('dotenv')
+dotenv.config({ path: '../config/config.env' })
 
 router.post('/api/init-user', ensureAuth, async (req, res) => {
     /* Oauth login redirects here for first time users to pick a useraname  */
@@ -86,6 +88,40 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
     } catch (err) {
         console.error(err)
     }
+})
+
+router.post('/mail-feedback', async (req, res) => {
+    const nodemailer = require('nodemailer');
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        secure: false,
+        requireTLS: false,
+        auth: {
+            user: 'disXourse@gmail.com',
+            pass: process.env.EMAILPASS
+        }
+    });
+
+    const mailOptions = {
+        from: 'disXourse@gmail.com',
+        to: 'nrjklk@gmail.com',
+        subject: `feedback from ${req.body.email}`,
+        text: req.body.feedback
+    };
+
+    let myData = {
+        user: await userHelper.getUserData(req.user),
+    }
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            myData.success = false
+            res.render('feedback', { myData })
+        } else {
+            myData.success = true
+            res.render('feedback', { myData })
+        }
+    });
 })
 
 router.post('/simple-search', (req, res) => {

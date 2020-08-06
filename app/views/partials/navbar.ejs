@@ -41,8 +41,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/about">About</a>
                 </li>
+                <% if (user) { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="/feedback">Feedback</a>
+                </li>
+                <% } %>
                 <form class="form-inline ml-1" action="/simple-search" method="POST">
-                    <input name='searchTerm' class="form-control mr-sm-2" type="search" placeholder="Search"
+                    <input name='searchTerm' class="form-control mr-sm-2" type="search" placeholder="Search for papers"
                         aria-label="Search" required>
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search"
                             aria-hidden="true"></i>
@@ -55,7 +60,6 @@
                     <% if (user) {%>
                     <span class="navbar-text mr-4">
                         <a class="nav-link" href=<%= `/user/${user._id}/recent-upvotes`%> style="color: #0275d8">
-
                             <i class="fa fa-user" aria-hidden="true"></i>
                             <%= ` ${user.username} ` %>
                             <% if (user.unread){ %>

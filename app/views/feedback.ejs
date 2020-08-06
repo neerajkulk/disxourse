@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Feedback </title>
+    <%- include('partials/head') %>
+</head>
+
+<body>
+    <%- include('partials/navbar',{user:myData.user}) %>
+
+    <div class="container">
+        <h1 class=" text-center display-3 my-5">Feedback </h1>
+
+        <% if (typeof myData.success != 'undefined'){ %>
+        <% if (myData.success == true) {%>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Thank you</strong> for the feedback!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% } else {%>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Whoops!</strong> Something went wrong. Please send us an email directly at disXourse@gmail.com.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <% } %>
+        <% } %>
+
+        <p>
+            We are interested to hear about your experience in using disXourse.
+        <ul>
+            <li>What do you NOT like about disXourse?</li>
+            <li>What do you like about disXourse?</li>
+            <li>Are there any features you would like us to add?</li>
+        </ul>
+        Please let us know in the form below. Your feedback is essential to help improve disXourse!
+        </p>
+
+
+        <form action="/mail-feedback" method="POST">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com" required
+                    value=<%= myData.user.email %>>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Feedback</label>
+                <textarea name='feedback' class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-send"></i></button>
+        </form>
+    </div>
+
+    <%- include('partials/bottomScripts') %>
+</body>
+
+</html>
