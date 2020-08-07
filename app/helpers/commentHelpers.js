@@ -7,16 +7,25 @@ const Notification = require('../models/Notification');
 const global = require('../global');
 
 module.exports = {
-    formatComment: function (comment) {
+    formatComment: async function (comment) {
         /* replace \r\n linebreaks with <br> html tags */
         comment.commentBody = comment.commentBody.replace(/\r\n/g, "<br>")
+        /* hyperlink mentions to user profiles */
+        const regex = /(?<=^|(?<=[^a-zA-Z0-9-_\.]))@([A-Za-z]+[A-Za-z0-9-_]+)/igm;
+        const mentions = comment.commentBody.match(regex)
+        if (mentions) {
+            for (let i = 0; i < mentions.length; i++) {
+                const mentionedUser = await User.findOne({ username: mentions[i].substring(1) }).lean()
+                comment.commentBody = comment.commentBody.replace(mentions[i], `<a href="/user-public/${mentionedUser._id}">${mentions[i]}</a>`)
+            }
+        }
         return comment
     },
-    makeCommentsThread: function (commentsDB) {
+    makeCommentsThread: async function (commentsDB) {
         /* Turn array of comments into a nested object by recursively matching parentID's */
         let comments = [] // store threads here
         for (let i = 0; i < commentsDB.length; i++) {
-            comment = module.exports.formatComment(commentsDB[i])
+            comment = await module.exports.formatComment(commentsDB[i])
             comment.comments = []
             if (comment.parentID == null) {
                 comments.push(comment)

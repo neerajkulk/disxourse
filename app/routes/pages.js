@@ -99,7 +99,7 @@ router.get('/paper/:arxivid', async (req, res) => {
             let myData = {
                 paper: paper,
                 user: await userHelper.getUserData(req.user),
-                comments: commentHelper.makeCommentsThread(comments),
+                comments: await commentHelper.makeCommentsThread(comments),
             }
             res.render('single', { myData })
         } else {
