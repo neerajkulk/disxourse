@@ -20,7 +20,7 @@ router.post('/api/init-user', ensureAuth, async (req, res) => {
     try {
         let newUser = await User.findByIdAndUpdate({ _id: req.user._id })
         const userExists = await userHelper.usernameTaken(req.body.username)
-        const valid = /^[a-z0-9_-]{1,16}$/igm.test(req.body.username)
+        const valid = /^[a-z0-9_]{1,16}$/igm.test(req.body.username)
         if (userExists) {
             /* re-render page with error if username taken*/
             res.render('init-user', {
@@ -57,11 +57,40 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
         paper.commentCount++
         await paper.save()
         await commentHelper.notifyNewComment(req.user, paper) // Create notifications for other users
+        await notifyMentions(comment, paper)
         res.status(200).redirect(req.get('Referrer') + '#comment-form')
     } catch (err) {
         console.error(err)
     }
 })
+
+
+async function notifyMentions(comment, paper) {
+    /* regex search for @users and send notifications to users */
+    // https://stackoverflow.com/questions/2304632/regex-for-twitter-username
+    const regex = /(?<=^|(?<=[^a-zA-Z0-9-_\.]))@([A-Za-z]+[A-Za-z0-9-_]+)/igm;
+    let mentions = comment.commentBody.match(regex)
+    if (mentions) {
+        for (let i = 0; i < mentions.length; i++) {
+            const username = mentions[i].substr(1); //remove @
+            const mentionedUser = await User.findOne({ username: username }).lean()
+            const notify = new Notification({
+                receiverID: mentionedUser._id,
+                sender: {
+                    id: comment.userID,
+                    username: comment.username
+                },
+                type: 'mention',
+                paper: {
+                    title: paper.title,
+                    arxivID: paper.arxivID
+                },
+                date: Date.now()
+            });
+            await notify.save()
+        }
+    }
+}
 
 router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
     /* Take care of storing votes on papers in DB */
