@@ -56,16 +56,32 @@
                     <div class="toast mx-auto" role="alert" aria-live="assertive" aria-atomic="true"
                         data-autohide="false">
                         <div class="toast-header">
+
+                            <% if (myData.notify[i].type == 'comment') {%>
                             <strong class="mr-auto"> <i class="fa fa-bell" style="color: #0275d8;"></i> New comment
                             </strong>
+                            <% } else if (myData.notify[i].type == 'mention') {%>
+                            <strong class="mr-auto"> <i class="fa fa-bell" style="color: #0275d8;"></i> New mention
+                            </strong>
+                            <% } %>
                             <small class="text-muted comment-date"><%= myData.notify[i].date %> </small>
+
                         </div>
                         <div class="toast-body text-left">
                             <a href=<%= `/user-public/${myData.notify[i].sender.id}` %>>
                                 <%= `${myData.notify[i].sender.username}` %>
                             </a>
+                            <% if (myData.notify[i].type == 'comment') {%>
+
                             commented on <a href=<%= `/paper/${myData.notify[i].paper.arxivID}` %>>
                                 <%= myData.notify[i].paper.title %> </a>
+
+                            <% } else if (myData.notify[i].type == 'mention') {%>
+
+                            mentioned you in a comment on <a href=<%= `/paper/${myData.notify[i].paper.arxivID}` %>>
+                                <%= myData.notify[i].paper.title %> </a>
+
+                            <% } %>
                         </div>
                     </div>
                     <% } %>
