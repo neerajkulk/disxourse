@@ -74,20 +74,22 @@ async function notifyMentions(comment, paper) {
         for (let i = 0; i < mentions.length; i++) {
             const username = mentions[i].substr(1); //remove @
             const mentionedUser = await User.findOne({ username: username }).lean()
-            const notify = new Notification({
-                receiverID: mentionedUser._id,
-                sender: {
-                    id: comment.userID,
-                    username: comment.username
-                },
-                type: 'mention',
-                paper: {
-                    title: paper.title,
-                    arxivID: paper.arxivID
-                },
-                date: Date.now()
-            });
-            await notify.save()
+            if (mentionedUser) {
+                const notify = new Notification({
+                    receiverID: mentionedUser._id,
+                    sender: {
+                        id: comment.userID,
+                        username: comment.username
+                    },
+                    type: 'mention',
+                    paper: {
+                        title: paper.title,
+                        arxivID: paper.arxivID
+                    },
+                    date: Date.now()
+                });
+                await notify.save()
+            }
         }
     }
 }

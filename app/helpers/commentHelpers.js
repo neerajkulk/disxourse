@@ -16,7 +16,9 @@ module.exports = {
         if (mentions) {
             for (let i = 0; i < mentions.length; i++) {
                 const mentionedUser = await User.findOne({ username: mentions[i].substring(1) }).lean()
-                comment.commentBody = comment.commentBody.replace(mentions[i], `<a href="/user-public/${mentionedUser._id}">${mentions[i]}</a>`)
+                if (mentionedUser) {
+                    comment.commentBody = comment.commentBody.replace(mentions[i], `<a href="/user-public/${mentionedUser._id}">${mentions[i]}</a>`)
+                }
             }
         }
         return comment
