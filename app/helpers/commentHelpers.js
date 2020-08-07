@@ -85,6 +85,7 @@ module.exports = {
                         id: sender._id.toString(),
                         username: sender.username
                     },
+                    type: 'comment',
                     date: Date.now(),
                     paper: {
                         title: paper.title,

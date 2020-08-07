@@ -15,6 +15,11 @@ let notificationSchema = mongoose.Schema({
             required: true
         }
     },
+    type: {
+        type: String,
+        required: true,
+        enum: ['comment', 'mention']
+    },
     date: {
         type: Date,
         default: Date.now(),
