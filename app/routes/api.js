@@ -12,22 +12,24 @@ const voteHelper = require('../helpers/voteHelpers');
 const userHelper = require('../helpers/userHelpers');
 const searchHelper = require('../helpers/searchHelpers');
 const commentHelper = require('../helpers/commentHelpers');
-const dotenv = require('dotenv')
-dotenv.config({ path: '../config/config.env' })
+const dotenv = require('dotenv');
+dotenv.config({ path: '../config/config.env' });
 
 router.post('/api/init-user', ensureAuth, async (req, res) => {
     /* Oauth login redirects here for first time users to pick a useraname  */
     try {
         let newUser = await User.findByIdAndUpdate({ _id: req.user._id })
         const userExists = await userHelper.usernameTaken(req.body.username)
+        const valid = /^[a-z0-9_-]{1,16}$/igm.test(req.body.username)
         if (userExists) {
             /* re-render page with error if username taken*/
             res.render('init-user', {
                 user: req.user,
                 userExists: userExists
             })
-        }
-        else {
+        } else if (!valid) {
+            res.render('init-user', { user: req.user, invalid: true })
+        } else {
             newUser.username = req.body.username
             if (req.body.email) { newUser.email = req.body.email }
             await newUser.save()

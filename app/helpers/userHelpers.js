@@ -28,7 +28,6 @@ module.exports = {
     usernameTaken: async function (username) {
         // Checks if username exists in DB
         let user = await User.findOne({ username: username })
-        console.log(user)
         if (user) {
             return true
         } else {
