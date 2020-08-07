@@ -145,7 +145,7 @@ router.get('/search/:query', async (req, res) => {
     }
 })
 
-router.get('/user-public/:userID', ensureUser, async (req, res) => {
+router.get('/user-public/:userID', async (req, res) => {
     /* Other users see this public page for any user */
     try {
         const commentCount = await Comment.countDocuments({ userID: req.params.userID })
