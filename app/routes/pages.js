@@ -151,7 +151,8 @@ router.get('/user-public/:userID', async (req, res) => {
         const commentCount = await Comment.countDocuments({ userID: req.params.userID })
         const voteCount = await Upvote.countDocuments({ userID: req.params.userID })
 
-        const userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
+        let userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
+        userComments = await commentHelper.formatComments(userComments)
         const commentData = commentHelper.groupCommentsByPaper(userComments)
         const myData = {
             user: await userHelper.getUserData(req.user), // user who is logged
@@ -207,7 +208,8 @@ router.get('/user/:userID/recent-upvotes', ensurePrivate, async (req, res) => {
 router.get('/user/:userID/recent-comments', ensurePrivate, async (req, res) => {
     /* Get recent comments for a user*/
     try {
-        const userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
+        let userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
+        userComments = await commentHelper.formatComments(userComments)
         const commentData = commentHelper.groupCommentsByPaper(userComments)
         const myData = {
             user: await userHelper.getUserData(req.user),

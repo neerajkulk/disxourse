@@ -21,6 +21,13 @@ module.exports = {
         }
         return comment
     },
+    formatComments: async function (comments) {
+        /* format an array of comments */
+        for (let i = 0; i < comments.length; i++) {
+            comments[i] = await module.exports.formatComment(comments[i])
+        }
+        return comments
+    },
     makeCommentsThread: async function (commentsDB) {
         /* Turn array of comments into a nested object by recursively matching parentID's */
         let comments = [] // store threads here
