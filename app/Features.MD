@@ -3,6 +3,7 @@ Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
 * link to twitter profile, ORCID-ID and other media
+* Add ad a progress bar based on donation.
 * Do basic SEO (bare minimum, dont go down a rabbit hole here)
 * Do i want a cleaner modern landing page
 * you should be able to open the PDF in a seperate page
@@ -18,6 +19,8 @@ Incentivize people to upvote/downvote and leave comments. Create a community
 * Should I minify JS and CSS files?
 
 ### Directions:
+* On a paper, we should be seeing if it cites other papers with a discussion. 
+* see relevent papers in single page
 * record group meetings and link to provide links to youtube videos
 * add voting on comments and creat a stack-overflow reputation system
 * autocomplete @ when tagging users
@@ -26,3 +29,6 @@ Incentivize people to upvote/downvote and leave comments. Create a community
 * delete button on comments?
 * if for some reason people dont want their paper on my page, there should be an option
 
+
+### misc
+* logo edited with: https://editor.freelogodesign.org/?lang=en&logo=1beaa5c6-f2ce-4c7c-958e-64a40bd12a4c

@@ -8,13 +8,123 @@
     <%- include('partials/head') %>
 </head>
 
+<style>
+    header.masthead {
+        position: relative;
+        background-color: #343a40;
+        background: url("../img/bg-masthead.jpg") no-repeat center center;
+        background-size: cover;
+        padding-top: 8rem;
+        padding-bottom: 8rem;
+    }
+
+    header.masthead .overlay {
+        position: absolute;
+        background-color: #212529;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0.3;
+    }
+
+    header.masthead h1 {
+        font-size: 2rem;
+    }
+
+    @media (min-width: 768px) {
+        header.masthead {
+            padding-top: 12rem;
+            padding-bottom: 12rem;
+        }
+
+        header.masthead h1 {
+            font-size: 3rem;
+        }
+    }
+
+    .showcase .showcase-text {
+        padding: 3rem;
+    }
+
+    .showcase .showcase-img {
+        min-height: 30rem;
+        background-size: cover;
+    }
+
+    @media (min-width: 768px) {
+        .showcase .showcase-text {
+            padding: 7rem;
+        }
+    }
+
+    .features-icons {
+        padding-top: 7rem;
+        padding-bottom: 7rem;
+    }
+
+    .features-icons .features-icons-item {
+        max-width: 20rem;
+    }
+
+    .features-icons .features-icons-item .features-icons-icon {
+        height: 7rem;
+    }
+
+    .features-icons .features-icons-item .features-icons-icon i {
+        font-size: 4.5rem;
+    }
+
+    .features-icons .features-icons-item:hover .features-icons-icon i {
+        font-size: 5rem;
+    }
+
+    .testimonials {
+        padding-top: 7rem;
+        padding-bottom: 7rem;
+    }
+
+    .testimonials .testimonial-item {
+        max-width: 18rem;
+    }
+
+    .testimonials .testimonial-item img {
+        max-width: 12rem;
+        box-shadow: 0px 5px 5px 0px #adb5bd;
+    }
+
+    .call-to-action {
+        position: relative;
+        background-color: #343a40;
+        background: url("../img/bg-masthead.jpg") no-repeat center center;
+        background-size: cover;
+        padding-top: 7rem;
+        padding-bottom: 7rem;
+    }
+
+    .call-to-action .overlay {
+        position: absolute;
+        background-color: #212529;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        opacity: 0.3;
+    }
+
+    footer.footer {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+</style>
+
 <body>
     <%- include('partials/navbar',{user:myData.user}) %>
     <div class="container-fluid blue-gradient-theme">
         <div class="row align-items-center h-75">
             <div class="col-sm-7">
-                <h1 class="display-2 text-right">disXourse</h1>
-                <p class="lead text-right"> Join the discussion about the latest arXiv papers in your field.</p>
+                <h1 class="display-4 text-right">disXourse</h1>
+                <h3 class="text-right"> Join the discussion about the latest arXiv papers in your field.</h3>
                 <a href="#info"> <button class="btn btn-outline-light mx-4 mt-4" style="float: right"> Learn
                         more <i class="fa fa-angle-down" aria-hidden="true"></i>
                     </button></a>
@@ -30,48 +140,46 @@
         </div>
     </div>
 
-    <div id="info"> </div>
-    <br><br><br>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="card mb-5 mb-lg-0 border-0">
-                    <div class="card-body">
-                        <h2 class="text-center"> <i class="fa fa-book"></i> <br>
-                            Read</h2>
-                        <p class="text-center text-muted"> Read the latest scientific papers right here on disXourse
-                        </p>
-                    </div>
+    <section class="showcase">
+        <div class="container-fluid p-0 my-5">
+            <div class="row no-gutters">
+
+                <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('img/read.svg');">
+                </div>
+                <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+                    <h2>Browse new papers</h2>
+                    <p class="lead mb-0">Stay up to
+                        date with what other researchers in your field are publishing! We fetch new papers daily across
+                        all categories of astrophysics.</p>
+
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="card mb-5 mb-lg-0 border-0">
-                    <div class="card-body">
-                        <h2 class="text-center"> <i class="fa fa-arrow-up"></i><br>
-                            Vote</h2>
-                        <p class="text-center text-muted"> Let others know what you think by voting on the best
-                            papers</p>
-                    </div>
+            <div class="row no-gutters">
+                <div class="col-lg-6 text-white showcase-img" style="background-image: url('img/upvote.svg');">
+                </div>
+                <div class="col-lg-6 my-auto showcase-text">
+                    <h2>Vote on papers</h2>
+                    <p class="lead mb-0"> Like a paper? Upvote it and let the scientific community know! The top papers
+                        are displayed first to help you find new relevant publications in your field. </p>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="card mb-5 mb-lg-0 border-0">
-                    <div class="card-body">
-                        <!-- <h3 class="card-title text-muted text-uppercase text-center">Read</h3> -->
-                        <h2 class="text-center"> <i class="fa fa-comments"></i> <br>
-                            Comment</h2>
-                        <p class="text-center text-muted"> Share your thoughts, ask questions and join the
-                            discussion with other researchers in your field.
-                        </p>
-                    </div>
+            <div class="row no-gutters">
+                <div class="col-lg-6 order-lg-2 text-white showcase-img"
+                    style="background-image: url('img/comment.svg');">
+                </div>
+                <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+                    <h2> Comment</h2>
+                    <p class="lead mb-0">
+                        Join the discussion! Leave a comment or ask a question on any paper.
+                        See what other researchers in your field are talking about. </p>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
 
     <hr>
     <h1 class="text-center my-5">What's your field of research?</h1>
-
 
     <section class="cat-card my-5">
         <div class="container">
@@ -136,6 +244,10 @@
                 </div> -->
             </div>
     </section>
+
+
+
+    <%- include('partials/footer') %>
 
     <%- include('partials/bottomScripts') %>
 
