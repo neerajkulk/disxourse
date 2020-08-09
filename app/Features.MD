@@ -2,6 +2,8 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
+* send a basic BIO to add to troy
+* want to help develop the website? Get in touch
 * link to twitter profile, ORCID-ID and other media
 * Add ad a progress bar based on donation.
 * Do basic SEO (bare minimum, dont go down a rabbit hole here)
