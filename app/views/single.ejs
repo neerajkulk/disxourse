@@ -39,7 +39,15 @@
   </div>
 
   <div class="container mt-5">
-    <a href=<%= `https://arxiv.org/pdf/${myData.paper.arxivID}.pdf` %> target="_blank" ><i class="fa fa-external-link-square" style="font-size: 25px;"></i></a>
+    <a href=<%= `https://arxiv.org/pdf/${myData.paper.arxivID}.pdf` %> target="_blank">
+      <button class="btn btn-outline-primary border-0">
+        PDF <i class="fa fa-share"></i></button>
+    </a>
+    <a class="twitter-share-button ml-5"
+      href="https://twitter.com/intent/tweet?text=<%=`Check out this paper on disXourse: disxourse.com/paper/${myData.paper.arxivID}`%>"
+      target="_blank">
+      <i class="fa fa-twitter" aria-hidden="true" style="font-size: 1.1em;"></i>
+    </a>
   </div>
 
   <div class="container my-5">
