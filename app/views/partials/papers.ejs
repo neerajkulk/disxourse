@@ -1,7 +1,7 @@
 <!-- args: (papers,user) -->
 
 <section class="container" id="papers">
-    
+
     <% if(papers.length == 0) {%>
     <h4> No papers found</h4>
     <% } %>
@@ -39,8 +39,9 @@
                 <%} %>
                 <i class="fa fa-comments-o mb-5" aria-hidden="true"> </i>
             </a>
-            <a class="twitter-share-button ml-5" style="display: none;"
-                href="https://twitter.com/intent/tweet?text=<%=`/paper/${papers[i].arxivID}`%>" target="_blank">
+            <a class="twitter-share-button ml-5"
+                href="https://twitter.com/intent/tweet?text=<%=`Check out this paper on disXourse: disxourse.com/paper/${papers[i].arxivID}`%>"
+                target="_blank">
                 <i class="fa fa-twitter" aria-hidden="true"></i>
             </a>
         </div>
