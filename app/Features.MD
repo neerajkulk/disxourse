@@ -2,16 +2,13 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
-* email forwarding should work 
-* make sure there's a backlink from patreon
-* want to help develop the website? Get in touch
-* link to twitter profile, ORCID-ID and other media
+* allow users to link to their twitter profile, ORCID-ID and other media
 * Add ad a progress bar based on donation.
 * Do basic SEO (bare minimum, dont go down a rabbit hole here)
 * weekly mail digest
 * delete papers if they have recieved no engangement after 30 days
 * Pre-2007 arxiv ID query is broken.
-* Before big launch have a DB backup incase I push some crappy code. 
+* If website is worth pursuing, figure out how to backup database 
 * Should I minify JS and CSS files?
 
 ### Directions:
