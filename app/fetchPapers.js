@@ -141,10 +141,11 @@ module.exports = {
             arxivID = arxivID.replace(":", "/") // pre-2007 arxivID's
             let queryString = `http://export.arxiv.org/api/query?id_list=${arxivID}`
             let parsed = await module.exports.QueryToJSON(queryString)
-            await module.exports.saveEntry(parsed)
+            if (parsed.length == 1) {
+                await module.exports.saveEntry(parsed[0])
+            }
         } catch (err) {
             console.err(err)
         }
     }
 }
-
