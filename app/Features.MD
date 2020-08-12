@@ -2,21 +2,15 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
-* send a basic BIO to add to troy
+* email forwarding should work 
+* make sure there's a backlink from patreon
 * want to help develop the website? Get in touch
 * link to twitter profile, ORCID-ID and other media
 * Add ad a progress bar based on donation.
 * Do basic SEO (bare minimum, dont go down a rabbit hole here)
-* Do i want a cleaner modern landing page
-* you should be able to open the PDF in a seperate page
 * weekly mail digest
 * delete papers if they have recieved no engangement after 30 days
 * Pre-2007 arxiv ID query is broken.
-* add content to about page
-* Fix twitter link once I have a domain name
-* add footer with some copyright shit
-* set up donation buttons
-* Add favicon 
 * Before big launch have a DB backup incase I push some crappy code. 
 * Should I minify JS and CSS files?
 
