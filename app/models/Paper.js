@@ -21,6 +21,10 @@ let paperSchema = mongoose.Schema({
         type: [String],
         required: true
     },
+    emails: {
+        type: [String],
+        default: undefined
+    },
     abstract: {
         type: String,
         required: true
@@ -34,13 +38,13 @@ let paperSchema = mongoose.Schema({
     category: {
         type: [String]
     },
-    voteScore:{
-        type:Number,
-        default:0
+    voteScore: {
+        type: Number,
+        default: 0
     },
-    commentCount:{
-        type:Number,
-        default:0
+    commentCount: {
+        type: Number,
+        default: 0
     }
 })
 
