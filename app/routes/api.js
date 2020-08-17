@@ -40,6 +40,23 @@ router.post('/api/init-user', ensureAuth, async (req, res) => {
     }
 })
 
+router.delete('/api/unsubscribe-author/', async (req, res) => {
+    try {
+        const paper = await Paper.findOne({ _id: req.body.paperID })
+        const index = paper.emails.indexOf(req.body.email);
+        paper.emails.splice(index, 1);
+        res.sendStatus(200)
+        paper.save()
+    } catch (err) {
+        console.error(err)
+    }
+
+})
+
+router.get('/api/unsubscribe-author/:paperID/:email', (req, res) => {
+    res.render('unsubscribe-author')
+})
+
 router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
     /* Recieve comment form and store in DB  */
     try {
@@ -66,23 +83,31 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
 })
 
 async function emailAuthors(paper, comment) {
-    await addAuthorEmail(paper)
-    if (Array.isArray(paper.emails)) {
-        const url = `https://disxourse.com/paper/${paper.arxivID}`
-        paper.emails.forEach(email => {
-            sendMail({
-                from: 'disxourse@gmail.com',
-                to: email,
-                subject: `New Comment on ${paper.title}`,
-                html:
-                    `<p> Hello! </p>
-                   <p>You have a new comment on "${paper.title}" </p> 
-                   <p> ${comment.username} commented:</p> 
-                   <p>"${comment.commentBody}"</p> 
-                   <br>
-                   <p> Continue the discussion on <a href="${url}"> ${url} </a> `
+    try {
+        await addAuthorEmail(paper)
+        if (Array.isArray(paper.emails)) {
+            const url = `https://disxourse.com/paper/${paper.arxivID}`
+            paper.emails.forEach(email => {
+                sendMail({
+                    from: 'disxourse@gmail.com',
+                    to: email,
+                    subject: `New Comment on ${paper.title}`,
+                    html:
+                        `<p> Hello! </p>
+                       <p>You have a new comment on "${paper.title}" </p> 
+                       <p> ${comment.username} commented:</p> 
+                       <p>"${comment.commentBody}"</p> 
+                       <p> Continue the discussion on <a href="${url}"> ${url} </a> 
+                       <br>
+                       <br>
+                       <p> To unsubscribe from future emails on this paper, click here: <a href="http://localhost:3000/api/unsubscribe-author/${paper._id}/${email}"> unsubscribe </a>  </p> 
+                       `
+                    //    TODO: change unsubscribe URL for production
+                })
             })
-        })
+        }
+    } catch (err) {
+        console.error(err)
     }
 }
 
@@ -97,13 +122,13 @@ async function addAuthorEmail(paper) {
     */
     try {
         if (paper.emails === undefined) {
-            let response = await crawler(pdfURL)
+            let response = await crawler(paper.pdfUrl)
             let emails = emailRegex(response.text)
             paper.emails = emails
             await paper.save()
         }
     } catch (err) {
-        console.error(errs)
+        console.error(err)
     }
 }
 
@@ -127,9 +152,7 @@ function sendMail(mailObj) {
     });
 
     transporter.sendMail(mailObj, (err, info) => {
-        console.log(err)
         console.log(info.envelope);
-        console.log(info.messageId);
     });
 }
 

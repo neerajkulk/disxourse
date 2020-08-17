@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsubscribe</title>
+    <%- include('partials/head') %>
+</head>
+
+<body>
+
+
+    <div class="container my-5">
+        <button onclick="unsubAuthor()" type="button" class="btn btn-danger btn-lg btn-block">Unsubscribe me</button>
+        <div class="my-5" id="message">
+
+        </div>
+    </div>
+
+
+
+    <script>
+        function unsubAuthor() {
+            const path = window.location.href.split('/')
+            const email = path[path.length - 1]
+            const paperID = path[path.length - 2]
+
+            const messageElem = document.getElementById('message')
+
+            fetch('/api/unsubscribe-author', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    paperID: paperID,
+                    email: email
+                })
+            }).then(res => {
+                if (res.status == 200) {
+                    messageElem.innerHTML = `
+                    <div class="alert alert-success" role="alert">
+                      ${email} will no longer recieve emails for this paper
+                    </div>
+                    `
+                } else {
+                    messageElem.innerHTML = `
+                    <div class="alert alert-warning" role="alert">
+                      Whoops something went wrong. Please email us directly at disxourse@gmail.com
+                    </div>
+                    `
+                }
+            })
+        }
+    </script>
+
+</body>
+
+</html>
