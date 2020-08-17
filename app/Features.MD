@@ -2,6 +2,8 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
+* add a delete button
+* reply to comment button looks horrible for guests
 * allow users to link to their twitter profile, ORCID-ID and other media
 * Add ad a progress bar based on donation.
 * Do basic SEO (bare minimum, dont go down a rabbit hole here)

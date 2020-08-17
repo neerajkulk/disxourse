@@ -1,6 +1,6 @@
 <!-- copied from https://github.com/ZsharE/threaded-comments-bootstrap -->
 <!-- view for a single comment in thread -->
-<!-- args:comment -->
+<!-- args:(comment,user) -->
 <div class="timeline-comment-wrapper">
     <div class="card">
         <div class="card-header my-auto">
@@ -17,6 +17,14 @@
                 <%- include('./post-comment',{comment:comment,user:user}) %></div>
             <button style="border: none;" id=<%= `reply-btn-${comment._id}` %> type="button"
                 class="btn btn-outline-primary btn-sm"><i class="fa fa-reply"></i> Reply</button>
+
+            <% if (user) {%>
+            <% if (user._id.toString() == comment.userID.toString()) {%>
+            <button id=<%= `delete-comment-${comment._id}` %> class="btn btn-outline-danger border-0"><i
+                    class="fa fa-trash"></i></button>
+            <% }%>
+            <% }%>
+
         </div>
     </div>
 </div>
@@ -38,4 +46,33 @@
             }
         })
     }
+
+
+    // Script to delete comment:
+    linkDeleteButton(commentID)
+    function linkDeleteButton(commentID) {
+        const button = document.getElementById(`delete-comment-${commentID}`)
+        button.addEventListener('click', () => {
+            var confirmed = confirm("Are you sure you want to delete your comment?");
+            if (confirmed) {
+                fetch('/api/comment', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        commentID: commentID,
+                        paperID: paperID
+                    })
+                }).then(res => {
+                    if (res.status == 200) {
+                        location.reload()
+                    }
+                })
+            }
+        })
+
+    }
+
+
 </script>

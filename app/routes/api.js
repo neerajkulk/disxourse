@@ -12,6 +12,8 @@ const voteHelper = require('../helpers/voteHelpers');
 const userHelper = require('../helpers/userHelpers');
 const searchHelper = require('../helpers/searchHelpers');
 const commentHelper = require('../helpers/commentHelpers');
+const mailHelper = require('../helpers/mailHelpers');
+
 const dotenv = require('dotenv');
 dotenv.config({ path: '../config/config.env' });
 
@@ -57,6 +59,18 @@ router.get('/api/unsubscribe-author/:paperID/:email', (req, res) => {
     res.render('unsubscribe-author')
 })
 
+router.delete('/api/comment', async (req, res) => {
+    try {
+        const paper = await Paper.findOne({ _id: req.body.paperID })
+        await Comment.deleteOne({ _id: req.body.commentID })
+        paper.commentCount--
+        await paper.save()
+        res.sendStatus(200)
+    } catch (err) {
+        console.error(err)
+    }
+})
+
 router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
     /* Recieve comment form and store in DB  */
     try {
@@ -76,92 +90,15 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
         await paper.save()
         await commentHelper.notifyNewComment(req.user, paper) // Create notifications for other users
         await notifyMentions(comment, paper)
-        await emailAuthors(paper, comment)
+        await mailHelper.emailAuthors(paper, comment)
     } catch (err) {
         console.error(err)
     }
 })
 
-async function emailAuthors(paper, comment) {
-    try {
-        await addAuthorEmail(paper)
-        if (Array.isArray(paper.emails)) {
-            const url = `https://disxourse.com/paper/${paper.arxivID}`
-            paper.emails.forEach(email => {
-                sendMail({
-                    from: 'disxourse@gmail.com',
-                    to: email,
-                    subject: `New Comment on ${paper.title}`,
-                    html:
-                        `<p> Hello! </p>
-                       <p>You have a new comment on "${paper.title}" </p> 
-                       <p> ${comment.username} commented:</p> 
-                       <p>"${comment.commentBody}"</p> 
-                       <p> Continue the discussion on <a href="${url}"> ${url} </a> 
-                       <br>
-                       <br>
-                       <p> To unsubscribe from future emails on this paper, click here: <a href="http://localhost:3000/api/unsubscribe-author/${paper._id}/${email}"> unsubscribe </a>  </p> 
-                       `
-                    //    TODO: change unsubscribe URL for production
-                })
-            })
-        }
-    } catch (err) {
-        console.error(err)
-    }
-}
-
-// emails can be undefined, null or an array
-
-async function addAuthorEmail(paper) {
-    /* scrape email of corresponding author from pdf link
-    paper.emails can be:
-    1) undefined (never scraped for emails)
-    2) null (scraped but no emails found)
-    3) array (array of emails found)
-    */
-    try {
-        if (paper.emails === undefined) {
-            let response = await crawler(paper.pdfUrl)
-            let emails = emailRegex(response.text)
-            paper.emails = emails
-            await paper.save()
-        }
-    } catch (err) {
-        console.error(err)
-    }
-}
-
-const aws = require('aws-sdk');
-const nodemailer = require('nodemailer');
-
-aws.config.update({
-    region: process.env.AWS_region,
-    accessKeyId: process.env.AWS_accessKeyId,
-    secretAccessKey: process.env.AWS_secretAccessKey
-});
 
 
 
-function sendMail(mailObj) {
-
-    let transporter = nodemailer.createTransport({
-        SES: new aws.SES({
-            apiVersion: '2010-12-01'
-        })
-    });
-
-    transporter.sendMail(mailObj, (err, info) => {
-        console.log(info.envelope);
-    });
-}
-
-
-const crawler = require('crawler-request');
-
-function emailRegex(text) {
-    return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
-}
 
 
 async function notifyMentions(comment, paper) {
