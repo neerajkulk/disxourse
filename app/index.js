@@ -9,12 +9,15 @@ const MongoStore = require('connect-mongo')(session)
 const ejs = require('ejs');
 const mongoose = require('mongoose')
 
-// Passport
 const passport = require('passport')
 require('./config/passport')(passport)
 
 const connectDB = require('./config/db')
 connectDB()
+
+// AWS required for SES (email service)
+const AWSconfig = require('./config/aws')
+AWSconfig()
 
 const app = express()
 const PORT = process.env.PORT || 3000
