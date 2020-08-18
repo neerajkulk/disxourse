@@ -9,7 +9,7 @@ module.exports = {
             if (Array.isArray(paper.emails)) {
                 const url = `https://disxourse.com/paper/${paper.arxivID}`
                 paper.emails.forEach(email => {
-                    module.exports.sendMail({
+                    module.exports.sendMailSES({
                         from: 'disxourse@gmail.com',
                         to: email,
                         subject: `New Comment on ${paper.title}`,
@@ -49,7 +49,7 @@ module.exports = {
             console.error(err)
         }
     },
-    sendMail: function (mailObj) {
+    sendMailSES: function (mailObj) {
         /* takes in object and sends it as an email */
         let transporter = nodemailer.createTransport({
             SES: new aws.SES({
@@ -57,6 +57,21 @@ module.exports = {
             })
         });
 
+        transporter.sendMail(mailObj, (err, info) => {
+            console.log(info.envelope);
+        });
+    },
+    sendMailGmail: function (mailObj) {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            port: 465,
+            secure: false,
+            requireTLS: false,
+            auth: {
+                user: 'disXourse@gmail.com',
+                pass: process.env.EMAILPASS
+            }
+        });
         transporter.sendMail(mailObj, (err, info) => {
             console.log(info.envelope);
         });
