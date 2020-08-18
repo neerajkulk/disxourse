@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const nodemailer = require('nodemailer');
 const Paper = require('../models/Paper');
 const User = require('../models/User');
 const Upvote = require('../models/Upvote');
@@ -90,7 +91,9 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
         await paper.save()
         await commentHelper.notifyNewComment(req.user, paper) // Create notifications for other users
         await notifyMentions(comment, paper)
-        await mailHelper.emailAuthors(paper, comment)
+        if (process.env.ENV == 'PROD' && req.body.emailAuthors == 'true') {
+            await mailHelper.emailAuthors(paper, comment)
+        }
     } catch (err) {
         console.error(err)
     }
@@ -160,7 +163,6 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
 })
 
 router.post('/mail-feedback', async (req, res) => {
-    const nodemailer = require('nodemailer');
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         port: 465,
