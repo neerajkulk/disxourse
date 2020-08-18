@@ -52,7 +52,7 @@ app.use('/', require('./routes/auth'))
 app.use('/', require('./routes/api'))
 app.use('/', require('./routes/pages'))
 
-app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mode at http://localhost:${PORT}`))
+app.listen(PORT, () => console.log(`Server running in ${process.env.ENV} mode at http://localhost:${PORT}`))
 
 // cron jobs
 const getNewPapers = require('./cron/getNewPapers')
