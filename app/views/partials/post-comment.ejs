@@ -23,7 +23,19 @@
                     <label for=<%=`comment-${paperID}`%>></label>
                     <textarea name="commentBody" class="form-control" id=<%=`comment-${paperID}`%> rows="4"
                         placeholder="Ask a question or leave a comment!" required></textarea>
-                    <input type="submit" value="Submit" class="btn btn-success mt-3">
+                    <div class="form-row align-items-center mt-3">
+                        <div class="col-auto">
+                            <input type="submit" value="Submit" class="btn btn-success">
+                        </div>
+                        <div class="col-auto ml-4 mt-1">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" name="emailAuthors" value="true" checked>
+                                <label class="form-check-label" for="emailAuthors">
+                                    Notify Author(s)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
