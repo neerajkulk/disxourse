@@ -59,6 +59,9 @@ module.exports = {
 
         transporter.sendMail(mailObj, (err, info) => {
             console.log(info.envelope);
+            if (err) {
+                console.error(err)
+            }
         });
     },
     sendMailGmail: function (mailObj) {
