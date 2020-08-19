@@ -158,5 +158,13 @@ module.exports = {
             }
         })
         return users
+    },
+    hasChildren: async function (paperID, commentID) {
+        /* return boolean depending on whether comment has a reply */
+        let child = await Comment.findOne({ paperID: paperID, parentID: commentID })
+        if (child) {
+            return true
+        } else { return false }
     }
+
 }

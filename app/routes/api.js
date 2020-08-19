@@ -76,7 +76,7 @@ router.delete('/api/comment', async (req, res) => {
         paper.commentCount--
         await paper.save()
 
-        const isParent = await hasChildren(req.body.paperID, req.body.commentID)
+        const isParent = await commentHelper.hasChildren(req.body.paperID, req.body.commentID)
         if (isParent) {
             let comment = await Comment.findOne({ _id: req.body.commentID })
             comment.commentBody = "<span class = 'text-muted'> [<i>User has deleted this comment</i>] </span>"
@@ -89,14 +89,6 @@ router.delete('/api/comment', async (req, res) => {
         console.error(err)
     }
 })
-
-async function hasChildren(paperID, commentID) {
-    /* return boolean depending on whether comment has a reply */
-    let child = await Comment.findOne({ paperID: paperID, parentID: commentID })
-    if (child) {
-        return true
-    } else { return false }
-}
 
 router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
     /* Recieve comment form and store in DB  */
