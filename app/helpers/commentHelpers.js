@@ -118,7 +118,7 @@ module.exports = {
 
                 /* send out notification emails */
                 let user = await User.findOne({ _id: userID })
-                if (user.email && user.emailNotify == true) {
+                if (user && user.email && user.emailNotify == true) {
                     const url = `${helper.getBaseUrl()}/paper/${paper.arxivID}`
                     mailHelper.sendMailSES({
                         from: 'disxourse@gmail.com',
