@@ -60,10 +60,14 @@ router.get('/api/unsubscribe-author/:paperID/:email', (req, res) => {
 })
 
 router.put('/api/unsubscribe-user', async (req, res) => {
-    let user = await User.findOne({ _id: req.body.userID })
-    user.emailNotify = false;
-    user.save()
-    res.sendStatus(200)
+    try {
+        let user = await User.findOne({ _id: req.body.userID })
+        user.emailNotify = false;
+        user.save()
+        res.sendStatus(200)
+    } catch (err) {
+        console.error(err)
+    }
 })
 
 router.get('/api/unsubscribe-user/:userID/:email', (req, res) => {
@@ -125,29 +129,33 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
 async function notifyMentions(comment, paper) {
     /* regex search for @users and send notifications to users */
     // https://stackoverflow.com/questions/2304632/regex-for-twitter-username
-    const regex = /(?<=^|(?<=[^a-zA-Z0-9-_\.]))@([A-Za-z]+[A-Za-z0-9-_]+)/igm;
-    let mentions = comment.commentBody.match(regex)
-    if (mentions) {
-        for (let i = 0; i < mentions.length; i++) {
-            const username = mentions[i].substr(1); //remove @
-            const mentionedUser = await User.findOne({ username: username }).lean()
-            if (mentionedUser) {
-                const notify = new Notification({
-                    receiverID: mentionedUser._id,
-                    sender: {
-                        id: comment.userID,
-                        username: comment.username
-                    },
-                    type: 'mention',
-                    paper: {
-                        title: paper.title,
-                        arxivID: paper.arxivID
-                    },
-                    date: Date.now()
-                });
-                await notify.save()
+    try {
+        const regex = /(?<=^|(?<=[^a-zA-Z0-9-_\.]))@([A-Za-z]+[A-Za-z0-9-_]+)/igm;
+        let mentions = comment.commentBody.match(regex)
+        if (mentions) {
+            for (let i = 0; i < mentions.length; i++) {
+                const username = mentions[i].substr(1); //remove @
+                const mentionedUser = await User.findOne({ username: username }).lean()
+                if (mentionedUser) {
+                    const notify = new Notification({
+                        receiverID: mentionedUser._id,
+                        sender: {
+                            id: comment.userID,
+                            username: comment.username
+                        },
+                        type: 'mention',
+                        paper: {
+                            title: paper.title,
+                            arxivID: paper.arxivID
+                        },
+                        date: Date.now()
+                    });
+                    await notify.save()
+                }
             }
         }
+    } catch (err) {
+        console.error(err)
     }
 }
 
@@ -181,38 +189,42 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
 })
 
 router.post('/mail-feedback', async (req, res) => {
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        port: 465,
-        secure: false,
-        requireTLS: false,
-        auth: {
-            user: 'disXourse@gmail.com',
-            pass: process.env.EMAILPASS
+    try {
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            port: 465,
+            secure: false,
+            requireTLS: false,
+            auth: {
+                user: 'disXourse@gmail.com',
+                pass: process.env.EMAILPASS
+            }
+        });
+
+        const mailOptions = {
+            from: 'disXourse@gmail.com',
+            to: 'nrjklk@gmail.com',
+            subject: `feedback from ${req.body.email}`,
+            text: req.body.feedback
+        };
+
+        let myData = {
+            user: await userHelper.getUserData(req.user),
         }
-    });
 
-    const mailOptions = {
-        from: 'disXourse@gmail.com',
-        to: 'nrjklk@gmail.com',
-        subject: `feedback from ${req.body.email}`,
-        text: req.body.feedback
-    };
-
-    let myData = {
-        user: await userHelper.getUserData(req.user),
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                myData.success = false
+                res.render('feedback', { myData })
+                console.error(error)
+            } else {
+                myData.success = true
+                res.render('feedback', { myData })
+            }
+        });
+    } catch (err) {
+        console.error(err)
     }
-
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            myData.success = false
-            res.render('feedback', { myData })
-            console.error(error)
-        } else {
-            myData.success = true
-            res.render('feedback', { myData })
-        }
-    });
 })
 
 router.post('/simple-search', (req, res) => {

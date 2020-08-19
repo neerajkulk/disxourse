@@ -51,18 +51,22 @@ module.exports = {
     },
     sendMailSES: function (mailObj) {
         /* takes in object and sends it as an email */
-        let transporter = nodemailer.createTransport({
-            SES: new aws.SES({
-                apiVersion: '2010-12-01'
-            })
-        });
+        try {
+            let transporter = nodemailer.createTransport({
+                SES: new aws.SES({
+                    apiVersion: '2010-12-01'
+                })
+            });
 
-        transporter.sendMail(mailObj, (err, info) => {
-            console.log(info.envelope);
-            if (err) {
-                console.error(err)
-            }
-        });
+            transporter.sendMail(mailObj, (err, info) => {
+                console.log(info.envelope);
+                if (err) {
+                    console.error(err)
+                }
+            });
+        } catch (err) {
+            console.error(err)
+        }
     },
     sendMailGmail: function (mailObj) {
         const transporter = nodemailer.createTransport({
