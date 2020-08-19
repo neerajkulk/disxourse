@@ -6,6 +6,7 @@ const Notification = require('../models/Notification');
 
 const global = require('../global');
 const mailHelper = require('./mailHelpers')
+const helper = require('./helpers')
 
 module.exports = {
     formatComment: async function (comment) {
@@ -118,7 +119,7 @@ module.exports = {
                 /* send out notification emails */
                 let user = await User.findOne({ _id: userID })
                 if (user.email && user.emailNotify == true) {
-                    const url = `https://disxourse.com/paper/${paper.arxivID}`
+                    const url = `${helper.getBaseUrl()}/paper/${paper.arxivID}`
                     mailHelper.sendMailSES({
                         from: 'disxourse@gmail.com',
                         to: user.email,
@@ -131,9 +132,8 @@ module.exports = {
                             <p> Continue the discussion on <a href="${url}"> ${url} </a> 
                             <br>
                             <br>
-                            <p> To unsubscribe from future emails, click here: <a href="http://localhost:3000/api/unsubscribe-user/${user._id}/${user.email}"> unsubscribe </a>  </p> 
+                            <p> To unsubscribe from future emails, click here: <a href="${helper.getBaseUrl()}/api/unsubscribe-user/${user._id}/${user.email}"> unsubscribe </a>  </p> 
                             `
-                        //    TODO: change unsubscribe URL for production
                     })
                 }
 

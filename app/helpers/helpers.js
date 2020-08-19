@@ -7,8 +7,17 @@ const global = require('../global');
 const voteHelper = require('./voteHelpers');
 const userHelper = require('./userHelpers');
 
+const dotenv = require('dotenv')
+dotenv.config({ path: '../config/config.env' })
 
 module.exports = {
+    getBaseUrl: function () {
+        if (process.env.ENV == 'PROD') {
+            return 'https://disxourse.com'
+        } else {
+            return `http://localhost:${process.env.PORT}`
+        }
+    },
     parseAuthors: function (authorList) {
         // Shorten list of authors
         let authorString = ''

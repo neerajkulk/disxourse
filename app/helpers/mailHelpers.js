@@ -1,13 +1,14 @@
 const crawler = require('crawler-request');
 const nodemailer = require('nodemailer');
 const aws = require('aws-sdk');
+const helper = require('./helpers')
 
 module.exports = {
     emailAuthors: async function (paper, comment) {
         try {
             await module.exports.addAuthorEmail(paper)
             if (Array.isArray(paper.emails)) {
-                const url = `https://disxourse.com/paper/${paper.arxivID}`
+                const url = `${helper.getBaseUrl()}/paper/${paper.arxivID}`
                 paper.emails.forEach(email => {
                     module.exports.sendMailSES({
                         from: 'disxourse@gmail.com',
@@ -21,9 +22,8 @@ module.exports = {
                            <p> Continue the discussion on <a href="${url}"> ${url} </a> 
                            <br>
                            <br>
-                           <p> To unsubscribe from future emails on this paper, click here: <a href="http://localhost:3000/api/unsubscribe-author/${paper._id}/${email}"> unsubscribe </a>  </p> 
+                           <p> To unsubscribe from future emails on this paper, click here: <a href="${helper.getBaseUrl()}/api/unsubscribe-author/${paper._id}/${email}"> unsubscribe </a>  </p> 
                            `
-                        //    TODO: change unsubscribe URL for production
                     })
                 })
             }
