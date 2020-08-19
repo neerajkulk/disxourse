@@ -2,7 +2,6 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
-* TODO: change unsubscribe URL for production
 * make emails look nice. There should be disxourse logo in email
 * fully test delete features, email author and mail comments
 * reply to comment button looks horrible for guests
