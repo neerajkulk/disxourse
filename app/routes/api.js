@@ -7,7 +7,6 @@ const Upvote = require('../models/Upvote');
 const Comment = require('../models/Comment');
 const Notification = require('../models/Notification');
 const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
-const helpers = require('../helpers/helpers');
 const global = require('../global');
 const voteHelper = require('../helpers/voteHelpers');
 const userHelper = require('../helpers/userHelpers');
@@ -74,14 +73,30 @@ router.get('/api/unsubscribe-user/:userID/:email', (req, res) => {
 router.delete('/api/comment', async (req, res) => {
     try {
         const paper = await Paper.findOne({ _id: req.body.paperID })
-        await Comment.deleteOne({ _id: req.body.commentID })
         paper.commentCount--
         await paper.save()
+
+        const isParent = await hasChildren(req.body.paperID, req.body.commentID)
+        if (isParent) {
+            let comment = await Comment.findOne({ _id: req.body.commentID })
+            comment.commentBody = "<span class = 'text-muted'> [<i>User has deleted this comment</i>] </span>"
+            await comment.save()
+        } else {
+            await Comment.deleteOne({ _id: req.body.commentID })
+        }
         res.sendStatus(200)
     } catch (err) {
         console.error(err)
     }
 })
+
+async function hasChildren(paperID, commentID) {
+    /* return boolean depending on whether comment has a reply */
+    let child = await Comment.findOne({ paperID: paperID, parentID: commentID })
+    if (child) {
+        return true
+    } else { return false }
+}
 
 router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
     /* Recieve comment form and store in DB  */
