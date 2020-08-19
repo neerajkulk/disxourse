@@ -29,6 +29,11 @@ const UserSchema = new mongoose.Schema({
     },
     email: {
         type: String
+    },
+    emailNotify: {
+        type: Boolean,
+        default: true,
+        required: true
     }
 })
 
