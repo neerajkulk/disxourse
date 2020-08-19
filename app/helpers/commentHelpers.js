@@ -5,6 +5,7 @@ const User = require('../models/User');
 const Notification = require('../models/Notification');
 
 const global = require('../global');
+const mailHelper = require('./mailHelpers')
 
 module.exports = {
     formatComment: async function (comment) {
@@ -91,12 +92,13 @@ module.exports = {
         })
         return commentData
     },
-    notifyNewComment: async function (sender, paper) {
+    notifyNewComment: async function (sender, paper, comment) {
         /* Create notification for each engaged user when a new comment is posted */
         let usersID = await module.exports.getEngagedUsers(paper._id)
         for (let i = 0; i < usersID.length; i++) {
             const userID = usersID[i];
-            if (sender._id.toString() != userID) {
+            if (sender._id.toString() != userID) { // don't send notifications to yourself
+                /* save notification to DB */
                 const notification = new Notification({
                     receiverID: userID,
                     sender: {
@@ -111,6 +113,30 @@ module.exports = {
                     }
                 });
                 await notification.save()
+
+
+                /* send out notification emails */
+                let user = await User.findOne({ _id: userID })
+                if (user.email && user.emailNotify == true) {
+                    const url = `https://disxourse.com/paper/${paper.arxivID}`
+                    mailHelper.sendMailSES({
+                        from: 'disxourse@gmail.com',
+                        to: user.email,
+                        subject: `New Comment on ${paper.title}`,
+                        html:
+                            `<p> Hello! </p>
+                            <p>You have a new comment on "${paper.title}" </p> 
+                            <p> ${comment.username} commented:</p> 
+                            <p>"${comment.commentBody}"</p> 
+                            <p> Continue the discussion on <a href="${url}"> ${url} </a> 
+                            <br>
+                            <br>
+                            <p> To unsubscribe from future emails, click here: <a href="http://localhost:3000/api/unsubscribe-user/${user._id}/${user.email}"> unsubscribe </a>  </p> 
+                            `
+                        //    TODO: change unsubscribe URL for production
+                    })
+                }
+
             }
         }
     },
