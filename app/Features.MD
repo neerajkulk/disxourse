@@ -2,7 +2,9 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
-* add a delete button
+* TODO: change unsubscribe URL for production
+* make emails look nice. There should be disxourse logo in email
+* fully test delete features, email author and mail comments
 * reply to comment button looks horrible for guests
 * allow users to link to their twitter profile, ORCID-ID and other media
 * Add ad a progress bar based on donation.

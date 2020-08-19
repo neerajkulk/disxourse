@@ -1,3 +1,13 @@
+* adding a new field:
+https://stackoverflow.com/questions/7714216/add-new-field-to-every-document-in-a-mongodb-collection
+db.users.update(
+  {},
+  { $set: {"emailNotify": true} },
+  false,
+  true
+)
+
+
 * Delete comment count from papers. Used when dropping the comments collection
 db.papers.updateMany({},{$set:{"commentCount":0}})
 
