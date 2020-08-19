@@ -60,6 +60,17 @@ router.get('/api/unsubscribe-author/:paperID/:email', (req, res) => {
     res.render('unsubscribe-author')
 })
 
+router.put('/api/unsubscribe-user', async (req, res) => {
+    let user = await User.findOne({ _id: req.body.userID })
+    user.emailNotify = false;
+    user.save()
+    res.sendStatus(200)
+})
+
+router.get('/api/unsubscribe-user/:userID/:email', (req, res) => {
+    res.render('unsubscribe-user')
+})
+
 router.delete('/api/comment', async (req, res) => {
     try {
         const paper = await Paper.findOne({ _id: req.body.paperID })
@@ -89,7 +100,7 @@ router.post('/api/comment/:paperid', ensureUser, async (req, res) => {
         const paper = await Paper.findById(req.params.paperid)
         paper.commentCount++
         await paper.save()
-        await commentHelper.notifyNewComment(req.user, paper) // Create notifications for other users
+        await commentHelper.notifyNewComment(req.user, paper, comment) // Create notifications for other users
         await notifyMentions(comment, paper)
         if (process.env.ENV == 'PROD' && req.body.emailAuthors == 'true') {
             await mailHelper.emailAuthors(paper, comment)
