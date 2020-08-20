@@ -7,6 +7,12 @@ db.users.update(
   true
 )
 
+* remove a field from one document
+db.papers.update(
+    {"_id" : ObjectId("5f3e951def5268799c6e8cf7")},
+    {$unset:{emails:undefined}}
+    )
+
 
 * Delete comment count from papers. Used when dropping the comments collection
 db.papers.updateMany({},{$set:{"commentCount":0}})
