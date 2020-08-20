@@ -1,4 +1,4 @@
-* adding a new field:
+* adding a new field or update existing fields:
 https://stackoverflow.com/questions/7714216/add-new-field-to-every-document-in-a-mongodb-collection
 db.users.update(
   {},

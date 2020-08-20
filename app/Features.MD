@@ -2,7 +2,7 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
-* update landing page to say you can now notify authors
+* add profile page where users can choose their email notification settings
 * make emails look nice. There should be disxourse logo in email
 * fully test delete features, email author and mail comments
 * reply to comment button looks horrible for guests
