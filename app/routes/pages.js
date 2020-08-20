@@ -148,10 +148,11 @@ router.get('/search/:query', async (req, res) => {
 router.get('/user-public/:userID', async (req, res) => {
     /* Other users see this public page for any user */
     try {
-        const commentCount = await Comment.countDocuments({ userID: req.params.userID })
         const voteCount = await Upvote.countDocuments({ userID: req.params.userID })
 
         let userComments = await Comment.find({ userID: req.params.userID }).sort({ date: -1 }).limit(30).populate('paperID').lean()
+        userComments = userComments.filter(comment => comment.paperID != null) // de-referenced papers (should not happen)
+        const commentCount = userComments.length
         userComments = await commentHelper.formatComments(userComments)
         const commentData = commentHelper.groupCommentsByPaper(userComments)
         const myData = {
