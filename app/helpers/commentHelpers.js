@@ -133,8 +133,7 @@ module.exports = {
                             <br>
                             <br>
                             <p>disXourse is an online forum to discuss and ask questions on new astronomy papers. 
-                            You received this email because a user requested to notify you of their comment.  
-                            To unsubscribe from future emails about this paper, click here: 
+                            To unsubscribe from future emails, click here: 
                             <a href="${helper.getBaseUrl()}/api/unsubscribe-user/${user._id}/${user.email}"> unsubscribe </a> </p> 
                             `
                     })

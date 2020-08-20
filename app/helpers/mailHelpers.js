@@ -22,7 +22,9 @@ module.exports = {
                            <p> Continue the discussion on <a href="${url}"> ${url} </a> 
                            <br>
                            <br>
-                           <p> To unsubscribe from future emails on this paper, click here: <a href="${helper.getBaseUrl()}/api/unsubscribe-author/${paper._id}/${email}"> unsubscribe </a>  </p> 
+                           <p>disXourse is an online forum to discuss and ask questions on new astronomy papers. 
+                           You received this email because a user requested to notify you of their comment.  
+                           To unsubscribe from future emails on this paper, click here: <a href="${helper.getBaseUrl()}/api/unsubscribe-author/${paper._id}/${email}"> unsubscribe </a>  </p> 
                            `
                     })
                 })
