@@ -6,13 +6,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title> <%= myData.paper.title%> </title>
   <%- include('partials/head') %>
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@disXourse" />
+  <meta name="twitter:title" content="<%= myData.paper.title %>>" />
+  <meta name="twitter:description"
+    content="Join the discussion at <%= `disxourse.com/paper/${myData.paper.arxivID}`%>" />
+  <meta name="twitter:image" content="https://farm6.staticflickr.com/5510/14338202952_93595258ff_z.jpg" />
 </head>
 
 
 <body>
   <%- include('partials/navbar',{user:myData.user}) %>
 
-  <div class="container mt-5 mb-5">
+  <div class=" container mt-5 mb-5">
     <div class="row">
       <div class="col-sm-1">
         <% if (myData.user){%>
