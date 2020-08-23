@@ -2,6 +2,7 @@
 Incentivize people to upvote/downvote and leave comments. Create a community
 
 ### Next Steps:
+* create twitter cards so it looks nice 
 * add profile page where users can choose their email notification settings
 * make emails look nice. There should be disxourse logo in email
 * fully test delete features, email author and mail comments
