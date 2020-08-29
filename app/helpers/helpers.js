@@ -20,7 +20,16 @@ module.exports = {
     },
     parseAuthors: function (authorList) {
         // Shorten list of authors
+        const maxAuthors = 10
         let authorString = ''
+
+        if (authorList.length < maxAuthors) {
+            authorString = authorList.join(',  ')
+        } else {
+            authorString = authorList.slice(0, maxAuthors).join(',  ') + ' and Collaborators'
+        }
+        return authorString
+
         switch (authorList.length) {
             case 1:
                 authorString = authorList[0]
