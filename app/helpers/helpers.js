@@ -48,6 +48,8 @@ module.exports = {
                 return 'Instrumentation and Methods for Astrophysics'
             case 'astro-ph.SR':
                 return 'Solar and Stellar Astrophysics'
+            case 'astro-all':
+                return 'All Astrophysics'
             default:
                 return 'Not valid'
         }
