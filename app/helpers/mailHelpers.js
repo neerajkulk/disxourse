@@ -15,8 +15,8 @@ module.exports = {
                 paper.emails.forEach(email => {
                     module.exports.sendMailSES({
                         from: 'disxourse@gmail.com',
-                        to: 'disxourse@gmail.com',
-                        subject: `New Comment on ${paper.title} --delete ${email}`,
+                        to: email,
+                        subject: `New Comment on ${paper.title}`,
                         html:
                             `<p> Hello! </p>
                            <p>You have a new comment on "${paper.title}" </p> 
