@@ -66,10 +66,10 @@ module.exports = {
             const alreadyExists = await Paper.findOne({ arxivID: paper.arxivID })
             if (!alreadyExists) {
                 await paper.save()
-                console.log(`${paper.arxivID} has been added`)
+                //console.log(`${paper.arxivID} has been added`)
                 return true
             } else {
-                console.log(`${paper.arxivID} already exists`)
+                //console.log(`${paper.arxivID} already exists`)
                 return false
             }
         } catch (err) {
@@ -102,7 +102,7 @@ module.exports = {
                 let currentQueryNewPapers = 0
 
                 let queryString = baseURL + `&start=${startIndex}&max_results=${querySize}&sortBy=submittedDate&sortOrder=descending`
-                console.log('fetching papers from: \n' + queryString)
+                //console.log('fetching papers from: \n' + queryString)
                 let parsed
 
                 // I think sometimes the arxiv API doesn't work and I have to try again. IDK why?
@@ -116,7 +116,7 @@ module.exports = {
                     if (saved) { currentQueryNewPapers++ }
                 }
                 totalPapersAdded += currentQueryNewPapers
-                console.log(`\n *** Added ${currentQueryNewPapers} new papers from current query *** \n`)
+                //console.log(`\n *** Added ${currentQueryNewPapers} new papers from current query *** \n`)
 
                 if (earlyExit && currentQueryNewPapers == 0) {
                     console.log('\n \n ----------- All up to date ---------- \n \n')
