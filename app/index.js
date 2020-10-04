@@ -61,33 +61,3 @@ const getNewPapers = require('./cron/getNewPapers')
 // Load papers at start
 const fetchPapers = require('./fetchPapers')
 //fetchPapers.updateDB(startIndex = 0, maxIndex = 100, querySize = 100, earlyExit = false)
-
-
-// const fs = require('fs');
-// const download = require('download');
-// const pdf = require('pdf-parse');
-
-
-// function mailRegex(text) {
-//     return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
-// }
-
-// async function scrapeEmails(pdfURL) {
-//     const randFname = Math.floor(Math.random() * 100000) + 1
-//     const data = await download(pdfURL);
-//     fs.writeFileSync(`./paper-${randFname}.pdf`, data);
-//     let dataBuffer = fs.readFileSync(`./paper-${randFname}.pdf`);
-//     let pdfdata = await pdf(dataBuffer)
-
-//     fs.unlink(`./paper-${randFname}.pdf`, (err) => {
-//         if (err) {
-//             console.error(err)
-//             return
-//         }
-//     })
-//     return mailRegex(pdfdata.text)
-// }
-
-// scrapeEmails('https://arxiv.org/pdf/2007.09369.pdf').then(x => { console.log(x) })
-// //scrapeEmails('https://arxiv.org/pdf/2008.12779.pdf').then(x => { console.log(x) })
-
