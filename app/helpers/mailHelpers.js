@@ -1,4 +1,7 @@
-const crawler = require('crawler-request');
+const fs = require('fs');
+const download = require('download');
+const pdf = require('pdf-parse');
+
 const nodemailer = require('nodemailer');
 const aws = require('aws-sdk');
 const helper = require('./helpers')
@@ -12,8 +15,8 @@ module.exports = {
                 paper.emails.forEach(email => {
                     module.exports.sendMailSES({
                         from: 'disxourse@gmail.com',
-                        to: email,
-                        subject: `New Comment on ${paper.title}`,
+                        to: 'disxourse@gmail.com',
+                        subject: `New Comment on ${paper.title} --delete ${email}`,
                         html:
                             `<p> Hello! </p>
                            <p>You have a new comment on "${paper.title}" </p> 
@@ -33,6 +36,23 @@ module.exports = {
             console.error(err)
         }
     },
+    scrapeEmails: async function (pdfURL) {
+        const randFname = Math.floor(Math.random() * 100000)
+        const data = await download(pdfURL);
+        fs.writeFileSync(`./paper-${randFname}.pdf`, data); //save pdf to disk
+        let dataBuffer = fs.readFileSync(`./paper-${randFname}.pdf`); // read pdf from disk
+        let pdfdata = await pdf(dataBuffer)
+
+        // delete pdf
+        fs.unlink(`./paper-${randFname}.pdf`, (err) => {
+            if (err) {
+                console.error(err)
+                return
+            }
+        })
+
+        return module.exports.emailRegex(pdfdata.text)
+    },
     addAuthorEmail: async function addAuthorEmail(paper) {
         /* scrape email of corresponding author from pdf link
         paper.emails can be:
@@ -42,8 +62,7 @@ module.exports = {
         */
         try {
             if (paper.emails === undefined) {
-                let response = await crawler(paper.pdfUrl)
-                let emails = module.exports.emailRegex(response.text)
+                let emails = await module.exports.scrapeEmails(paper.pdfUrl)
                 paper.emails = emails
                 await paper.save()
             }
