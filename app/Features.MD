@@ -1,7 +1,12 @@
 # Overarching goal:
 Incentivize people to upvote/downvote and leave comments. Create a community
 
+# bugs:
+* all astrophysics is not sorted by upvotes
+
 ### Next Steps:
+* Think about adding a group features that allows a journal club
+* Scrape twitter for posts and threads that have a link to the arxiv papers. Add them as embedded tweets in paper
 * add profile page where users can choose their email notification settings
 * make emails look nice. There should be disxourse logo in email
 * allow users to link to their twitter profile, ORCID-ID and other media

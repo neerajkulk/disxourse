@@ -5,6 +5,7 @@ const Paper = require('../models/Paper');
 const Upvote = require('../models/Upvote');
 const Comment = require('../models/Comment');
 const Notification = require('../models/Notification');
+const Group = require('../models/Group');
 const fetchPapers = require('../fetchPapers');
 const { ensureAuth, ensureUser, ensureGuest, ensurePrivate } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
@@ -222,5 +223,42 @@ router.get('/user/:userID/recent-comments', ensurePrivate, async (req, res) => {
     }
 })
 
+router.get('/group/:name', async (req, res) => {
+    // See what papers other people have upvoted on?
+    const group = await Group.findOne({ name: req.params.name })
+    let papersVoted = []
+
+    for (let i = 0; i < group.members.length; i++) {
+        upvotes = await Upvote.find({ userID: group.members[i] })
+        .populate('paperID')
+        .populate('userID')
+        upvotes.forEach(vote => {
+            let paperExists = false;
+
+            /* check if paper has already been added to array */
+            for (let i = 0; i < papersVoted.length; i++) {
+                const paper = papersVoted[i].paper;
+                if (paper._id.toString() == vote.paperID._id.toString()) {
+                    papersVoted[i].votes.push({
+                        user: vote.userID.username,
+                        vote: vote.vote
+                    })
+                    paperExists = true
+                    break
+                }
+            }
+            if (!paperExists) {
+                papersVoted.push({
+                    paper: vote.paperID,
+                    votes: [{
+                        user: vote.userID.username,
+                        vote: vote.vote
+                    }]
+                })
+            }
+        })
+    }
+    res.json(papersVoted)
+})
 
 module.exports = router
