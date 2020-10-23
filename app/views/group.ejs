@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>insert title</title>
+    <%- include('partials/head') %>
+    <%- include('partials/twitter-card') %>
+</head>
+
+
+<body>
+    <%- //include('partials/navbar',{user:myData.user}) %>
+    <h1 class="container-fluid text-center display-4 pt-5"> Group papers </h1>
+
+    <!-- TODO: refactor the common html stuff between this and the papers partials -->
+    <div class="container">
+        <% for(let i=0; i < papersVoted.length; i++) { %>
+        <% paperID =papersVoted[i].paper._id%>
+        <div class="row" id="<%= paperID %>">
+            <div class="col-sm-1">
+                <div class="dropdown show">
+                    <% if (papersVoted[i].paper.voteScore >= 0) {%>
+                    <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <%= papersVoted[i].paper.voteScore %>
+                    </a>
+                    <% } else { %>
+                    <a class="btn btn-danger dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <%= papersVoted[i].paper.voteScore %>
+                    </a>
+                    <% } %>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <% for (let v=0; v < papersVoted[i].votes.length; v++){ %>
+                        <% if (papersVoted[i].votes[v].vote == 1) {%>
+                        <a class="dropdown-item" href="#"> <i class="fa fa-arrow-up upvote"></i>
+                            <%= papersVoted[i].votes[v].user %></a>
+                        <% } else { %>
+                        <a class="dropdown-item" href="#"> <i class="fa fa-arrow-down downvote"></i>
+                            <%= papersVoted[i].votes[v].user %></a>
+                        <% } %>
+                        <% } %>
+
+                        <!-- <a class="dropdown-item" href="#"> <i class="fa fa-arrow-up upvote"></i> nrjklk</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-arrow-up upvote"></i> nrjklk</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-arrow-down downvote"></i> joe</a> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-11">
+                <h3>
+                    <a href=<%= `/paper/${papersVoted[i].paper.arxivID}` %>> <%= papersVoted[i].paper.title %> </a>
+                </h3>
+                <p class="ml-5 text-muted float-right"> <%= papersVoted[i].paper.published.toDateString() %> </p>
+                <p class="lead"> <%= papersVoted[i].paper.authors %> </p>
+
+                <p class="text-muted"> <%= papersVoted[i].paper.abstract %> </p>
+                <a href=<%= `/paper/${papersVoted[i].paper.arxivID}#comment-form` %>>
+                    <% if ( papersVoted[i].paper.commentCount  > 0) { %>
+                    <%= papersVoted[i].paper.commentCount%>
+                    <%} %>
+                    <i class="fa fa-comments-o mb-5" aria-hidden="true"> </i>
+                </a>
+                <a class="twitter-share-button ml-5"
+                    href="https://twitter.com/intent/tweet?text=<%=`Check out this paper on disXourse: disxourse.com/paper/${papersVoted[i].paper.arxivID}`%>"
+                    target="_blank">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+        <% } %>
+    </div>
+
+    <%- include('partials/bottomScripts') %>
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

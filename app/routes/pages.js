@@ -227,14 +227,12 @@ router.get('/group/:name', async (req, res) => {
     // See what papers other people have upvoted on?
     const group = await Group.findOne({ name: req.params.name })
     let papersVoted = []
-
     for (let i = 0; i < group.members.length; i++) {
         upvotes = await Upvote.find({ userID: group.members[i] })
         .populate('paperID')
         .populate('userID')
         upvotes.forEach(vote => {
             let paperExists = false;
-
             /* check if paper has already been added to array */
             for (let i = 0; i < papersVoted.length; i++) {
                 const paper = papersVoted[i].paper;
@@ -258,7 +256,8 @@ router.get('/group/:name', async (req, res) => {
             }
         })
     }
-    res.json(papersVoted)
+    myData = {papersVoted:papersVoted}
+    res.render('group',myData)
 })
 
 module.exports = router
