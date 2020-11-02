@@ -224,13 +224,19 @@ router.get('/user/:userID/recent-comments', ensurePrivate, async (req, res) => {
 })
 
 router.get('/group/:name', async (req, res) => {
-    // See what papers other people have upvoted on?
-    const group = await Group.findOne({ name: req.params.name })
+    /* TODO: add middleware so only people group memebrs can access this endpoint */
+    const group = await Group.findOne({ name: req.params.name }).lean()
+
+    var date = new Date();
+    date.setDate(date.getDate() - 7) /* Hardcoded search upvotes from a week ago */
+
+
     let papersVoted = []
     for (let i = 0; i < group.members.length; i++) {
-        upvotes = await Upvote.find({ userID: group.members[i] })
-        .populate('paperID')
-        .populate('userID')
+        upvotes = await Upvote.find({ userID: group.members[i], date: { "$gte": date } })
+            .populate('paperID')
+            .populate('userID')
+            .lean()
         upvotes.forEach(vote => {
             let paperExists = false;
             /* check if paper has already been added to array */
@@ -238,7 +244,7 @@ router.get('/group/:name', async (req, res) => {
                 const paper = papersVoted[i].paper;
                 if (paper._id.toString() == vote.paperID._id.toString()) {
                     papersVoted[i].votes.push({
-                        user: vote.userID.username,
+                        username: vote.userID.username,
                         vote: vote.vote
                     })
                     paperExists = true
@@ -249,15 +255,27 @@ router.get('/group/:name', async (req, res) => {
                 papersVoted.push({
                     paper: vote.paperID,
                     votes: [{
-                        user: vote.userID.username,
+                        username: vote.userID.username,
                         vote: vote.vote
                     }]
                 })
             }
         })
     }
-    myData = {papersVoted:papersVoted}
-    res.render('group',myData)
+
+    papersVoted.sort((a, b) => b.paper.voteScore - a.paper.voteScore)
+
+    papersVoted.forEach(paper => {
+        paper.paper.authors = helpers.parseAuthors(paper.paper.authors)
+    })
+
+    myData = {
+        papersVoted: papersVoted,
+        user: await userHelper.getUserData(req.user),
+        group: group
+    }
+    res.render('group', myData)
+})
 })
 
 module.exports = router
