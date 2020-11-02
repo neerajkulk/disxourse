@@ -4,23 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>insert title</title>
+    <title> <%= group.name %></title>
     <%- include('partials/head') %>
     <%- include('partials/twitter-card') %>
 </head>
 
 
 <body>
-    <%- //include('partials/navbar',{user:myData.user}) %>
-    <h1 class="container-fluid text-center display-4 pt-5"> Group papers </h1>
+    <%- include('partials/navbar',{user:myData.user}) %>
+    <h1 class="container-fluid text-center display-4 pt-5"> <%= group.name %> group </h1>
 
     <!-- TODO: refactor the common html stuff between this and the papers partials -->
-    <div class="container">
+    <div class="container mt-4">
         <% for(let i=0; i < papersVoted.length; i++) { %>
         <% paperID =papersVoted[i].paper._id%>
         <div class="row" id="<%= paperID %>">
             <div class="col-sm-1">
-                <div class="dropdown show">
+                <div class="dropdown show mt-3">
                     <% if (papersVoted[i].paper.voteScore >= 0) {%>
                     <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -36,10 +36,10 @@
                         <% for (let v=0; v < papersVoted[i].votes.length; v++){ %>
                         <% if (papersVoted[i].votes[v].vote == 1) {%>
                         <a class="dropdown-item" href="#"> <i class="fa fa-arrow-up upvote"></i>
-                            <%= papersVoted[i].votes[v].user %></a>
+                            <%= papersVoted[i].votes[v].username %></a>
                         <% } else { %>
                         <a class="dropdown-item" href="#"> <i class="fa fa-arrow-down downvote"></i>
-                            <%= papersVoted[i].votes[v].user %></a>
+                            <%= papersVoted[i].votes[v].username %></a>
                         <% } %>
                         <% } %>
 
