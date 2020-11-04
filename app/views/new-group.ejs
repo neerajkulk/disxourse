@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test </title>
+    <%- include('partials/head') %>
+    <%- include('partials/twitter-card') %>
+</head>
+
+
+<body>
+    <%- include('partials/navbar',{user:myData.user}) %>
+    <h1 class="container-fluid text-center display-4 pt-5"> New group </h1>
+
+    <div class="container">
+        <form action="/api/new-group" method="POST">
+            <div class="form-group row">
+                <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Group Name:</label>
+                <div class="col-sm-10">
+                    <input required type="text" class="form-control form-control-lg" id="colFormLabelLg"
+                        placeholder="My group's name" name="name">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Create group</button>
+        </form>
+
+        <% if (myData.url) {%>
+        <div class="alert alert-success" role="alert">
+            Success! Share this url with others to join your group<br>
+            <a href=<%= myData.url %>><%= myData.url %> </a>
+        </div>
+        <p><%= myData.id %></p>
+        <% } %>
+    </div>
+
+
+
+
+    <%- include('partials/bottomScripts') %>
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>

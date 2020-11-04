@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> <%= group.name %></title>
+    <title> <%= myData.group.name %></title>
     <%- include('partials/head') %>
     <%- include('partials/twitter-card') %>
 </head>
@@ -12,10 +12,11 @@
 
 <body>
     <%- include('partials/navbar',{user:myData.user}) %>
-    <h1 class="container-fluid text-center display-4 pt-5"> <%= group.name %> group </h1>
+    <h1 class="container-fluid text-center display-4 pt-5"> <%= myData.group.name %> group </h1>
 
     <!-- TODO: refactor the common html stuff between this and the papers partials -->
     <div class="container mt-4">
+        <% papersVoted = myData.papersVoted %> 
         <% for(let i=0; i < papersVoted.length; i++) { %>
         <% paperID =papersVoted[i].paper._id%>
         <div class="row" id="<%= paperID %>">

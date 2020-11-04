@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test </title>
+    <%- include('partials/head') %>
+    <%- include('partials/twitter-card') %>
+</head>
+
+
+<body>
+    <%- include('partials/navbar',{user:myData.user}) %>
+    <h1 class="container-fluid text-center display-4 pt-5"> My groups </h1>
+
+    <div class="container">
+        <a href="/new-group">
+            <button type="button" class="btn btn-primary my-3"> <i class="fa fa-plus"></i> New group</button>
+        </a>
+
+        <div class="list-group">
+            <% for(var i=0; i < myData.groups.length; i++) { %>
+            <a href="/group/<%=myData.groups[i]._id%>"
+                class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1"><%= myData.groups[i].name %> </h5>
+                </div>
+                <p class="mb-1">Members: <%=myData.groups[i].members.join(', ') %></p>
+            </a>
+            <% } %>
+        </div>
+    </div>
+
+    <%- include('partials/bottomScripts') %>
+
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</body>
+
+</html>
