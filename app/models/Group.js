@@ -10,10 +10,10 @@ let groupSchema = mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'Users'
     }],
-    admins: [{
-        type: mongoose.Types.ObjectId,
-        ref: 'Users'
-    }]
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    }
 })
 
 module.exports = mongoose.model('Groups', groupSchema);
