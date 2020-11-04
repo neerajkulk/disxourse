@@ -223,59 +223,114 @@ router.get('/user/:userID/recent-comments', ensurePrivate, async (req, res) => {
     }
 })
 
-router.get('/group/:name', async (req, res) => {
-    /* TODO: add middleware so only people group memebrs can access this endpoint */
-    const group = await Group.findOne({ name: req.params.name }).lean()
-
-    var date = new Date();
-    date.setDate(date.getDate() - 7) /* Hardcoded search upvotes from a week ago */
-
-
-    let papersVoted = []
-    for (let i = 0; i < group.members.length; i++) {
-        upvotes = await Upvote.find({ userID: group.members[i], date: { "$gte": date } })
-            .populate('paperID')
-            .populate('userID')
-            .lean()
-        upvotes.forEach(vote => {
-            let paperExists = false;
-            /* check if paper has already been added to array */
-            for (let i = 0; i < papersVoted.length; i++) {
-                const paper = papersVoted[i].paper;
-                if (paper._id.toString() == vote.paperID._id.toString()) {
-                    papersVoted[i].votes.push({
-                        username: vote.userID.username,
-                        vote: vote.vote
-                    })
-                    paperExists = true
-                    break
-                }
-            }
-            if (!paperExists) {
-                papersVoted.push({
-                    paper: vote.paperID,
-                    votes: [{
-                        username: vote.userID.username,
-                        vote: vote.vote
-                    }]
+router.get('/group/:id', ensureUser, async (req, res) => {
+    /* Show voted papers by group members. Sort paper list by votes */
+    try {
+        const group = await Group.findById(req.params.id).lean()
+        if (group.members.map(id => id.toString()).includes(req.user.id.toString())) {
+            let date = new Date();
+            date.setDate(date.getDate() - 7) /* Hardcoded search upvotes from a week ago */
+            let papersVoted = []
+            for (let i = 0; i < group.members.length; i++) {
+                upvotes = await Upvote.find({ userID: group.members[i], date: { "$gte": date } })
+                    .populate('paperID')
+                    .populate('userID')
+                    .lean()
+                upvotes.forEach(vote => {
+                    let paperExists = false;
+                    /* check if paper has already been added to array */
+                    for (let i = 0; i < papersVoted.length; i++) {
+                        const paper = papersVoted[i].paper;
+                        if (paper._id.toString() == vote.paperID._id.toString()) {
+                            papersVoted[i].votes.push({
+                                username: vote.userID.username,
+                                vote: vote.vote
+                            })
+                            paperExists = true
+                            break
+                        }
+                    }
+                    if (!paperExists) {
+                        papersVoted.push({
+                            paper: vote.paperID,
+                            votes: [{
+                                username: vote.userID.username,
+                                vote: vote.vote
+                            }]
+                        })
+                    }
                 })
             }
-        })
+            papersVoted.sort((a, b) => b.paper.voteScore - a.paper.voteScore)
+            papersVoted.forEach(paper => {
+                paper.paper.authors = helpers.parseAuthors(paper.paper.authors)
+            })
+            const myData = {
+                papersVoted: papersVoted,
+                user: await userHelper.getUserData(req.user),
+                group: group
+            }
+            res.render('group', { myData })
+        } else {
+            res.redirect('/')
+        }
+
+    } catch (err) {
+        console.error(err)
     }
+})
 
-    papersVoted.sort((a, b) => b.paper.voteScore - a.paper.voteScore)
+router.get('/groups-main', ensureUser, async (req, res) => {
+    /* main page for groups. Show list of groups user belongs to */
+    try {
+        let groups = await Group.find({ members: req.user._id })
+            .populate('members', 'username -_id')
 
-    papersVoted.forEach(paper => {
-        paper.paper.authors = helpers.parseAuthors(paper.paper.authors)
-    })
+        /* format group fields */
+        if (groups.length != 0) {
+            groups.forEach((group, i, groups) => {
+                groups[i].members.forEach((user, i, members) => { members[i] = user.username })
+            })
+        }
 
-    myData = {
-        papersVoted: papersVoted,
-        user: await userHelper.getUserData(req.user),
-        group: group
+        const myData = {
+            user: await userHelper.getUserData(req.user),
+            groups: groups
+        }
+        res.render('group-main', { myData })
+    } catch (err) {
+        console.error(err)
     }
-    res.render('group', myData)
 })
+
+router.get('/new-group', ensureUser, async (req, res) => {
+    /* Create a new group. Once group has been created, url to join group is rendered */
+    try {
+        const myData = {
+            user: await userHelper.getUserData(req.user),
+        }
+        res.render('new-group', { myData })
+    } catch (err) {
+        console.error(err)
+    }
 })
+
+router.get('/join-group/:id', ensureUser, async (req, res) => {
+    /* Adds user as a group member and redirects to main group page */
+    try {
+        const group = await Group.findById(req.params.id)
+
+        if (group.members.includes(req.user._id)) {
+            // No duplicates
+        } else {
+            group.members.push(req.user._id)
+            await group.save()
+        }
+        res.redirect('/groups-main')
+    } catch (err) {
+        console.error(err)
+    }
+})
+
 
 module.exports = router
