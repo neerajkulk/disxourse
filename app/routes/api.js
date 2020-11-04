@@ -6,8 +6,10 @@ const User = require('../models/User');
 const Upvote = require('../models/Upvote');
 const Comment = require('../models/Comment');
 const Notification = require('../models/Notification');
+const Group = require('../models/Group');
 const { ensureAuth, ensureUser, ensureGuest } = require('../middleware/auth')
 const global = require('../global');
+const helper = require('../helpers/helpers');
 const voteHelper = require('../helpers/voteHelpers');
 const userHelper = require('../helpers/userHelpers');
 const searchHelper = require('../helpers/searchHelpers');
@@ -247,7 +249,28 @@ router.delete('/api/delete-notifs', ensureUser, async (req, res) => {
     } catch (err) {
         console.error(err)
     }
-
 })
+
+router.post('/api/new-group', ensureUser, async (req, res) => {
+    /* create new group with user and render sharable url for other users to join */
+    try {
+        const group = new Group({
+            name: req.body.name,
+            members: [req.user._id],
+            createdAt: Date.now()
+        })
+        await group.save()
+
+        const myData = {
+            user: await userHelper.getUserData(req.user),
+            url: `${helper.getBaseUrl()}/join-group/${group._id}`
+        }
+        res.render('new-group', { myData })
+    } catch (err) {
+        console.error(err)
+    }
+})
+
+
 
 module.exports = router
