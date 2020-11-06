@@ -2,11 +2,16 @@ const helpers = require('../helpers/helpers');
 const userHelper = require('../helpers/userHelpers');
 
 module.exports = {
+    storeReq: function (req, res, next) {
+        /* store url of request to use as callback for OAuth. */
+        req.session.returnTo = req.originalUrl
+        return next()
+    },
     ensureAuth: function (req, res, next) {
         if (req.isAuthenticated()) {
             return next()
         } else {
-            res.redirect('/')
+            res.redirect('/auth/google')
         }
     },
     ensureGuest: function (req, res, next) {
@@ -20,7 +25,7 @@ module.exports = {
         if (userHelper.hasUsername(req.user)) {
             return next()
         } else {
-            res.redirect('/')
+            res.redirect('/auth/google');
         }
     },
     ensurePrivate: function (req, res, next) {
