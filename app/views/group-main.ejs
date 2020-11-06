@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>test </title>
+    <title> Groups </title>
     <%- include('partials/head') %>
     <%- include('partials/twitter-card') %>
 </head>
@@ -12,12 +12,30 @@
 
 <body>
     <%- include('partials/navbar',{user:myData.user}) %>
-    <h1 class="container-fluid text-center display-4 pt-5"> My groups </h1>
 
-    <div class="container">
-        <a href="/new-group">
-            <button type="button" class="btn btn-primary my-3"> <i class="fa fa-plus"></i> New group</button>
-        </a>
+    <div class="container mt-5">
+
+        <div class="jumbotron">
+            <h1 class="display-4">Groups</h1>
+            <p class="lead"> Organize papers in your group </p>
+            <hr class="my-4">
+            <p>
+                In a group, you can see all the votes of the other group members over the past week. Groups are a great
+                way to organize
+                weekly journal clubs and decide on what
+                papers to discuss!
+            </p>
+            <p class="lead">
+
+                <a href="/new-group">
+                    <button type="button" class="btn btn-primary my-3"> <i class="fa fa-plus"></i> Create a new
+                        group</button>
+                </a>
+            </p>
+        </div>
+
+        <h4 class="my-3">Your groups:</h4>
+
 
         <div class="list-group">
             <% for(var i=0; i < myData.groups.length; i++) { %>

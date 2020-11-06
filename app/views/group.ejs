@@ -12,7 +12,7 @@
 
 <body>
     <%- include('partials/navbar',{user:myData.user}) %>
-    <h1 class="container-fluid text-center display-4 pt-5"> <%= myData.group.name %> group </h1>
+    <h1 class="container-fluid text-center display-4 pt-5"> <%= myData.group.name %> </h1>
 
     <!-- TODO: refactor the common html stuff between this and the papers partials -->
     <div class="container mt-4">
@@ -44,9 +44,6 @@
                         <% } %>
                         <% } %>
 
-                        <!-- <a class="dropdown-item" href="#"> <i class="fa fa-arrow-up upvote"></i> nrjklk</a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-arrow-up upvote"></i> nrjklk</a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-arrow-down downvote"></i> joe</a> -->
                     </div>
                 </div>
             </div>
