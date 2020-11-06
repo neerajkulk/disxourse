@@ -18,38 +18,36 @@ module.exports = {
         While I only serve astro papers, this solution is okay. But if I want to expand to all of arXiv, 
         categories should be defined for each user and feed is personalized for the user. 
         Grep 'astro-all' when refactoring this */
+
         if (category == 'astro-all') {
-            results = await Paper.find({
-                $or: [
-                    { category: 'astro-ph.CO' },
-                    { category: 'astro-ph.EP' },
-                    { category: 'astro-ph.GA' },
-                    { category: 'astro-ph.HE' },
-                    { category: 'astro-ph.IM' },
-                    { category: 'astro-ph.SR' },
-                ]
-            })
-                .sort({ published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
-            return results
+            query = {
+                $or: [{ category: 'astro-ph.CO' },
+                { category: 'astro-ph.EP' },
+                { category: 'astro-ph.GA' },
+                { category: 'astro-ph.HE' },
+                { category: 'astro-ph.IM' },
+                { category: 'astro-ph.SR' }]
+            }
+        } else {
+            query = { category: category }
         }
 
         /* single arXiv categories */
         switch (filter) {
             case 'newest':
-                results = await Paper.find({ category: category }).sort({ published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
+                results = await Paper.find(query).sort({ published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
                 break;
             case 'top-week':
                 d.setDate(d.getDate() - 8);
-                query = { category: category, published: { "$gte": d } }
+                query.published = { "$gte": d }
                 results = await Paper.find(query).sort({ voteScore: -1, published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
                 break
             case 'top-month':
                 d.setDate(d.getDate() - 31);
-                query = { category: category, published: { "$gte": d } }
+                query.published = { "$gte": d }
                 results = await Paper.find(query).sort({ voteScore: -1, published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
                 break
             case 'top-all':
-                query = { category: category }
                 results = await Paper.find(query).sort({ voteScore: -1, published: -1 }).skip(resultsPerPage * page).limit(resultsPerPage).lean()
                 break
             default:
