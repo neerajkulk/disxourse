@@ -7,7 +7,7 @@ const Comment = require('../models/Comment');
 const Notification = require('../models/Notification');
 const Group = require('../models/Group');
 const fetchPapers = require('../fetchPapers');
-const { ensureAuth, ensureUser, ensureGuest, ensurePrivate } = require('../middleware/auth')
+const { ensureAuth, ensureUser, storeReq, ensureGuest, ensurePrivate } = require('../middleware/auth')
 const helpers = require('../helpers/helpers');
 const voteHelper = require('../helpers/voteHelpers');
 const global = require('../global');
@@ -17,7 +17,7 @@ const searchHelper = require('../helpers/searchHelpers');
 const commentHelper = require('../helpers/commentHelpers');
 
 
-router.get('/', async (req, res) => {
+router.get('/', storeReq, async (req, res) => {
     try {
         /* Landing page */
         let myData = {
@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
     }
 })
 
-router.get('/about', async (req, res) => {
+router.get('/about', storeReq, async (req, res) => {
     /* About page */
     try {
         let myData = {
@@ -43,7 +43,7 @@ router.get('/about', async (req, res) => {
     }
 })
 
-router.get('/feedback', async (req, res) => {
+router.get('/feedback', storeReq, async (req, res) => {
     /* feedback form */
     try {
         let myData = {
@@ -61,7 +61,7 @@ router.get('/init-user', ensureAuth, (req, res) => {
     res.render('init-user', { user: req.user })
 })
 
-router.get('/feed/:cat/:filter/:page', async (req, res) => {
+router.get('/feed/:cat/:filter/:page', storeReq, async (req, res) => {
     /* primary feed of papers based on category,filter*/
     try {
         const page = Number(req.params.page)
@@ -84,7 +84,7 @@ router.get('/feed/:cat/:filter/:page', async (req, res) => {
     }
 })
 
-router.get('/paper/:arxivid', async (req, res) => {
+router.get('/paper/:arxivid', storeReq, async (req, res) => {
     /* single paper */
     try {
         const query = { arxivID: req.params.arxivid }
@@ -112,7 +112,7 @@ router.get('/paper/:arxivid', async (req, res) => {
     }
 });
 
-router.get('/search/:query', async (req, res) => {
+router.get('/search/:query', storeReq, async (req, res) => {
     /* Handle paper search. Send search query to arXiv. 
     If paper already exists in DB return it. 
     Otherwise add the paper in DB*/
@@ -146,7 +146,7 @@ router.get('/search/:query', async (req, res) => {
     }
 })
 
-router.get('/user-public/:userID', async (req, res) => {
+router.get('/user-public/:userID', storeReq, async (req, res) => {
     /* Other users see this public page for any user */
     try {
         const voteCount = await Upvote.countDocuments({ userID: req.params.userID })
@@ -280,7 +280,7 @@ router.get('/group/:id', ensureUser, async (req, res) => {
     }
 })
 
-router.get('/groups-main', ensureUser, async (req, res) => {
+router.get('/groups-main', storeReq, ensureUser, async (req, res) => {
     /* main page for groups. Show list of groups user belongs to */
     try {
         let groups = await Group.find({ members: req.user._id })
@@ -303,7 +303,7 @@ router.get('/groups-main', ensureUser, async (req, res) => {
     }
 })
 
-router.get('/new-group', ensureUser, async (req, res) => {
+router.get('/new-group', storeReq, ensureUser, async (req, res) => {
     /* Create a new group. Once group has been created, url to join group is rendered */
     try {
         const myData = {
@@ -315,7 +315,7 @@ router.get('/new-group', ensureUser, async (req, res) => {
     }
 })
 
-router.get('/join-group/:id', ensureUser, async (req, res) => {
+router.get('/join-group/:id', storeReq, ensureUser, async (req, res) => {
     /* Adds user as a group member and redirects to main group page */
     try {
         const group = await Group.findById(req.params.id)
