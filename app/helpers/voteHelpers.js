@@ -19,15 +19,17 @@ module.exports = {
         /* Compute net upvotes of a paper by summing up all votes */
         try {
             let paper = await Paper.findById(paperID)
-
-            let sum = 0
             let paperVotes = await Upvote.find({ paperID: paperID })
-            paperVotes.forEach(voteObj => { sum += voteObj.vote })
-            paper.voteScore = sum
+            paper.voteScore = module.exports.addVotes(paperVotes)
             await paper.save()
 
         } catch (err) {
             console.error(err)
         }
     },
+    addVotes: function (voteArray) {
+        let sum = 0
+        voteArray.forEach(vote => { sum += vote.vote })
+        return sum
+    }
 }

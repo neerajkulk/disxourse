@@ -261,10 +261,16 @@ router.get('/group/:id', ensureUser, async (req, res) => {
                     }
                 })
             }
-            papersVoted.sort((a, b) => b.paper.voteScore - a.paper.voteScore)
             papersVoted.forEach(paper => {
+                /* Parse authors */
                 paper.paper.authors = helpers.parseAuthors(paper.paper.authors)
             })
+            papersVoted.forEach(paper => {
+                /* Recalculate voteScore using only users in group */
+                paper.paper.voteScore = voteHelper.addVotes(paper.votes)
+            })
+            papersVoted.sort((a, b) => b.paper.voteScore - a.paper.voteScore) /* Sort by upvotes */
+
             const myData = {
                 papersVoted: papersVoted,
                 user: await userHelper.getUserData(req.user),
@@ -296,7 +302,7 @@ router.get('/groups-main', storeReq, ensureUser, async (req, res) => {
         const myData = {
             user: await userHelper.getUserData(req.user),
             groups: groups,
-            baseURL:helpers.getBaseUrl()
+            baseURL: helpers.getBaseUrl()
         }
         res.render('group-main', { myData })
     } catch (err) {
