@@ -20,7 +20,7 @@
         <% for(let i=0; i < papersVoted.length; i++) { %>
         <% paperID =papersVoted[i].paper._id%>
         <div class="row" id="<%= paperID %>">
-            <div class="col-sm-1">
+            <div class="col-md-1">
                 <div class="dropdown show mt-3">
                     <% if (papersVoted[i].paper.voteScore >= 0) {%>
                     <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-11">
+            <div class="col-md-11">
                 <h3>
                     <a href=<%= `/paper/${papersVoted[i].paper.arxivID}` %>> <%= papersVoted[i].paper.title %> </a>
                 </h3>
