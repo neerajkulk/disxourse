@@ -36,19 +36,35 @@
 
         <h4 class="my-3">Your groups:</h4>
 
+        <% for(var i=0; i < myData.groups.length; i++) { %>
 
-        <div class="list-group">
-            <% for(var i=0; i < myData.groups.length; i++) { %>
-            <a href="/group/<%=myData.groups[i]._id%>"
-                class="list-group-item list-group-item-action flex-column align-items-start">
-                <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1"><%= myData.groups[i].name %> </h5>
-                </div>
-                <p class="mb-1">Members: <%=myData.groups[i].members.join(', ') %></p>
-            </a>
-            <% } %>
+        <div class="row my-4">
+            <div class="col-md-10">
+                <a href="/group/<%=myData.groups[i]._id%>"
+                    class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1"><%= myData.groups[i].name %> </h5>
+                    </div>
+                    <p class="mb-1">Members: <%=myData.groups[i].members.join(', ') %></p>
+                </a>
+            </div>
+            <div class="col-md-2 mt-3">
+                <button type="button" class="btn btn-success" data-toggle="popover"
+                    title="Share this link to let others join your group" data-content="<%=`
+                    ${myData.baseURL}/join-group/${myData.groups[i]._id}
+                    `%>">Add <i class="fa fa-user-plus"></i></button>
+            </div>
         </div>
+        <% } %>
+
     </div>
+
+
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+    </script>
 
     <%- include('partials/bottomScripts') %>
 

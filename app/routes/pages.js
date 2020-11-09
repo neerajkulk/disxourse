@@ -295,7 +295,8 @@ router.get('/groups-main', storeReq, ensureUser, async (req, res) => {
 
         const myData = {
             user: await userHelper.getUserData(req.user),
-            groups: groups
+            groups: groups,
+            baseURL:helpers.getBaseUrl()
         }
         res.render('group-main', { myData })
     } catch (err) {
