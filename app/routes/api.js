@@ -37,7 +37,7 @@ router.post('/api/init-user', ensureAuth, async (req, res) => {
             newUser.username = req.body.username
             if (req.body.email) { newUser.email = req.body.email }
             await newUser.save()
-            res.redirect('/')
+            res.redirect(req.session.returnTo || '/')
         }
     } catch (err) {
         console.error(err)
