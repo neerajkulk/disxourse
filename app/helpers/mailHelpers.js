@@ -89,21 +89,6 @@ module.exports = {
             console.error(err)
         }
     },
-    sendMailGmail: function (mailObj) {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            port: 465,
-            secure: false,
-            requireTLS: false,
-            auth: {
-                user: 'disXourse@gmail.com',
-                pass: process.env.EMAILPASS
-            }
-        });
-        transporter.sendMail(mailObj, (err, info) => {
-            console.log(info.envelope);
-        });
-    },
     emailRegex: function (text) {
         return text.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
     }

@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const aws = require('aws-sdk');
 const nodemailer = require('nodemailer');
 const Paper = require('../models/Paper');
 const User = require('../models/User');
@@ -193,18 +194,13 @@ router.post('/api/vote/:paperid', ensureUser, async (req, res) => {
 router.post('/mail-feedback', async (req, res) => {
     try {
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            port: 465,
-            secure: false,
-            requireTLS: false,
-            auth: {
-                user: 'disXourse@gmail.com',
-                pass: process.env.EMAILPASS
-            }
+            SES: new aws.SES({
+                apiVersion: '2010-12-01'
+            })
         });
 
         const mailOptions = {
-            from: 'disXourse@gmail.com',
+            from: 'disxourse@gmail.com',
             to: 'nrjklk@gmail.com',
             subject: `feedback from ${req.body.email}`,
             text: req.body.feedback
