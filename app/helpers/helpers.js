@@ -105,5 +105,30 @@ module.exports = {
                 break
         }
         return outString
+    },
+    parseDurationFilter: function (days) {
+        days = Number(days)
+        let outString = ''
+        switch (days) {
+            case 1:
+                outString = 'Past Day'
+                break;
+            case 2:
+                outString = 'Past 2 Days'
+                break;
+            case 7:
+                outString = 'Past Week'
+                break;
+            case 14:
+                outString = 'Past 2 Weeks'
+                break;
+            case 31:
+                outString = 'Past Month'
+                break;
+            default:
+                outString = `Past ${days} days`
+                break;
+        }
+        return outString
     }
 };

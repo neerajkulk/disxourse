@@ -16,7 +16,21 @@
 
     <!-- TODO: refactor the common html stuff between this and the papers partials -->
     <div class="container mt-4">
-        <% papersVoted = myData.papersVoted %> 
+        <div class="dropdown mb-5">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <%= myData.duration %>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href=<%= `/group/${myData.group._id}/1` %>>Past Day</a>
+                <a class="dropdown-item" href=<%= `/group/${myData.group._id}/2` %>>Past 2 Days</a>
+                <a class="dropdown-item" href=<%= `/group/${myData.group._id}/7` %>>Past Week</a>
+                <a class="dropdown-item" href=<%= `/group/${myData.group._id}/14` %>>Past 2 Weeks</a>
+                <a class="dropdown-item" href=<%= `/group/${myData.group._id}/31` %>>Past Month</a>
+            </div>
+        </div>
+
+        <% papersVoted = myData.papersVoted %>
         <% for(let i=0; i < papersVoted.length; i++) { %>
         <% paperID =papersVoted[i].paper._id%>
         <div class="row" id="<%= paperID %>">

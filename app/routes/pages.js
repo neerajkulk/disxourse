@@ -223,13 +223,13 @@ router.get('/user/:userID/recent-comments', ensurePrivate, async (req, res) => {
     }
 })
 
-router.get('/group/:id', ensureUser, async (req, res) => {
+router.get('/group/:id/:days', ensureUser, async (req, res) => {
     /* Show voted papers by group members. Sort paper list by votes */
     try {
         const group = await Group.findById(req.params.id).lean()
         if (group.members.map(id => id.toString()).includes(req.user.id.toString())) {
             let date = new Date();
-            date.setDate(date.getDate() - 7) /* Hardcoded search upvotes from a week ago */
+            date.setDate(date.getDate() - req.params.days)
             let papersVoted = []
             for (let i = 0; i < group.members.length; i++) {
                 upvotes = await Upvote.find({ userID: group.members[i], date: { "$gte": date } })
@@ -274,7 +274,8 @@ router.get('/group/:id', ensureUser, async (req, res) => {
             const myData = {
                 papersVoted: papersVoted,
                 user: await userHelper.getUserData(req.user),
-                group: group
+                group: group,
+                duration: helpers.parseDurationFilter(req.params.days),
             }
             res.render('group', { myData })
         } else {
