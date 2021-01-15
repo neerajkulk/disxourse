@@ -1,6 +1,6 @@
 # disXourse
 
-**disXourse.com** was built to create a platform/community around discussing the latest arXiv papers with researchers in your field. The main goal of this website is to advance the concept of a journal club into something that is multi-institutional and connects researchers from all over the world. disXourse allows researchers to vote and comment on papers. This repository contains the source code for [disxourse.com](https://www.disxourse.com)
+**[disxourse.com](https://www.disxourse.com)** was built to create a platform/community around discussing the latest arXiv papers with researchers in your field. The main goal of this website is to advance the concept of a journal club into something that is multi-institutional and connects researchers from all over the world. disXourse allows researchers to vote and comment on papers. This repository contains the source code for [disxourse.com](https://www.disxourse.com)
 
 
 ## Code
