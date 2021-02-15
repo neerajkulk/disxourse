@@ -1,11 +1,4 @@
-const Paper = require('../models/Paper');
-const Upvote = require('../models/Upvote');
-const Comment = require('../models/Comment');
-const User = require('../models/User');
-const Notification = require('../models/Notification');
-const global = require('../global');
 const voteHelper = require('./voteHelpers');
-const userHelper = require('./userHelpers');
 
 const dotenv = require('dotenv')
 dotenv.config({ path: '../config/config.env' })
@@ -23,23 +16,10 @@ module.exports = {
         const maxAuthors = 10
         let authorString = ''
 
-        if (authorList.length < maxAuthors) {
+        if (authorList.length <= maxAuthors) {
             authorString = authorList.join(',  ')
         } else {
             authorString = authorList.slice(0, maxAuthors).join(',  ') + ' and Collaborators'
-        }
-        return authorString
-
-        switch (authorList.length) {
-            case 1:
-                authorString = authorList[0]
-                break;
-            case 2:
-                authorString = `${authorList[0]} and ${authorList[1]}`
-                break
-            default:
-                authorString = authorString = `${authorList[0]} and collaborators`
-                break;
         }
         return authorString
     },

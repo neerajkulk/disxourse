@@ -1,9 +1,5 @@
 const Paper = require('../models/Paper');
 const Upvote = require('../models/Upvote');
-const Comment = require('../models/Comment');
-const User = require('../models/User');
-const Notification = require('../models/Notification');
-const global = require('../global');
 
 module.exports = {
     getUserPreviousVote: async function (paperID, userID) {
