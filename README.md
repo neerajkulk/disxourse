@@ -61,4 +61,11 @@ Let me know if you have any problems!
 
 <br /> <br /> 
 
->If you like using disXourse, please consider contributing. Make a pull request or consider donating on  [patreon](https://www.patreon.com/disxourse). This will help cover server hosting costs and allow me to keep developing the site.
+>If you like using disXourse, please consider contributing. 
+- Make a pull request
+- consider donating on  [patreon](https://www.patreon.com/disxourse) 
+- send me some bitcoin at 3LBfRBxQNB9ALHDFiyU1kfx9tdbvGwVRgZ
+
+ This will help cover server hosting costs and allow me to keep developing the site.
+
+
